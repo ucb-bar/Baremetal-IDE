@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include "syscall.h"
-#include "encoding.h"
+#include "rv_encoding.h"
 
 long _sysconf(int name)
 {

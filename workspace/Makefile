@@ -53,13 +53,13 @@ INCLUDES  += -I$(BSP_DIR)$(CHIP)/inc
 # A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_bootrom.S
 # A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_startup.S
 
-A_SOURCES += $(BSP_DIR)$(CHIP)/startup/crt0.S
+A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_startup.S
 # A_SOURCES += $(BSP_DIR)$(CHIP)/startup/crtmain-argv.S
-A_SOURCES += $(BSP_DIR)$(CHIP)/startup/crtmain.S
+# A_SOURCES += $(BSP_DIR)$(CHIP)/startup/crtmain.S
 A_SOURCES += $(BSP_DIR)$(CHIP)/startup/init.S
 
 # C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_system.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_system.c
 # C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_core.c
 # C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_clint.c
 # C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_plic.c
@@ -102,8 +102,12 @@ TARGET_VERILOG = $(BUILD_DIR)$(TARGET).out
 ARCH = rv64imafdc
 ABI = lp64d
 CODEMODEL = medany
-# LD_SCRIPT = $(BSP_DIR)$(CHIP)/$(CHIP).ld
-LD_SCRIPT = $(BSP_DIR)$(CHIP)/htif.ld
+
+ifeq ($(USE_HTIF), 1)
+LD_SCRIPT = $(BSP_DIR)$(CHIP)/$(CHIP)_htif.ld
+else
+LD_SCRIPT = $(BSP_DIR)$(CHIP)/$(CHIP).ld
+endif
 
 # -mcmodel=medany -Wl,--start-group -lc_nano -lgloss_htif -Wl,--end-group -lgcc -static -nostartfiles -dT htif.ld
 SPECFLAGS = --specs="nano.specs"
@@ -125,6 +129,9 @@ LFLAGS  = -static
 LFLAGS += -nostartfiles
 # LFLAGS += -nostdlib
 # LFLAGS += -u _printf_float
+ifdef STACK_SIZE
+LFLAGS += -Xlinker --defsym=__stack_size=$(STACK_SIZE)
+endif
 LFLAGS += -T $(LD_SCRIPT)
 
 
@@ -182,8 +189,6 @@ upload: $(TARGET_BIN)
 
 .PHONY: dump
 dump:
-	$(OD) -d $(TARGET_ELF)
-	
-.PHONY: dump-header
-dump-header:
-	$(OD) -h $(TARGET_ELF)
+	$(OD) -d $(TARGET_ELF) > $(BUILD_DIR)disassemble.S
+	$(OD) -h $(TARGET_ELF) > $(BUILD_DIR)sections.out
+	$(OD) -t $(TARGET_ELF) > $(BUILD_DIR)symbol_table.out

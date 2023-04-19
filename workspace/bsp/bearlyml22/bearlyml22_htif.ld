@@ -10,8 +10,15 @@ MEMORY {
 }
 
 SECTIONS {
-  /* Keep under a power of 2 to reserve space for TCB */
-  PROVIDE (__stack_size_min = 24K);
+  /* Default boot hart */
+  PROVIDE (__boot_hart = 0);
+  
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 24K;
+  PROVIDE(__stack_size = __stack_size);
+
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 128K;
+  PROVIDE(__heap_size = __heap_size);
+  
 
   /*
   .bootrom (NOLOAD) : {
@@ -25,35 +32,27 @@ SECTIONS {
 
   .text : {
     *(.text.init)
+    *(.text.trap_vector)
     *(.text.unlikely .text.unlikely.*)
     *(.text.startup .text.startup.*)
     *(.text .text.*)
+    
+    KEEP (*(.init))
+    KEEP (*(.fini))
+    
     *(.gnu.linkonce.t.*)
   }> DRAM
   PROVIDE (_etext = .);
 
-  /* Static Thread Local Storage template */
-  .tdata : {
-    PROVIDE_HIDDEN (__tdata_start = .);
-    *(.tdata .tdata.*)
-    *(.gnu.linkonce.td.*)
-    PROVIDE_HIDDEN (__tdata_end = .);
-  }> DRAM
-  PROVIDE (__tdata_size = SIZEOF (.tdata));
-
-  .tbss (NOLOAD) : {
-    PROVIDE_HIDDEN (__tbss_start = .);
-    PROVIDE_HIDDEN (__tbss_offset = ABSOLUTE (__tbss_start - __tdata_start));
-    *(.tbss .tbss.*)
-    *(.gnu.linkonce.tb.*)
-    *(.tcommon)
-    PROVIDE_HIDDEN (__tbss_end = .);
-  }> DRAM
-  PROVIDE (__tbss_size = SIZEOF (.tbss));
-
   .rodata : {
     *(.rodata .rodata.*)
     *(.gnu.linkonce.r.*)
+    . = ALIGN(8);
+    *(.srodata.cst16)
+    *(.srodata.cst8)
+    *(.srodata.cst4)
+    *(.srodata.cst2)
+    *(.srodata .srodata.*)
   }> DRAM
 
   .preinit_array : {
@@ -106,14 +105,28 @@ SECTIONS {
     PROVIDE (__global_pointer$ = . + 0x800);
     *(.sdata .sdata.*)
     *(.gnu.linkonce.s.*)
-    *(.srodata.cst16)
-    *(.srodata.cst8)
-    *(.srodata.cst4)
-    *(.srodata.cst2)
-    *(.srodata .srodata.*)
   }> DRAM
 
+  /* Static Thread Local Storage template */
+  .tdata : {
+    PROVIDE_HIDDEN (__tdata_start = .);
+    *(.tdata .tdata.*)
+    *(.gnu.linkonce.td.*)
+    PROVIDE_HIDDEN (__tdata_end = .);
+  }> DRAM
+  PROVIDE (__tdata_size = SIZEOF (.tdata));
+
   PROVIDE (_edata = .);
+
+  .tbss (NOLOAD) : {
+    PROVIDE_HIDDEN (__tbss_start = .);
+    PROVIDE_HIDDEN (__tbss_offset = ABSOLUTE (__tbss_start - __tdata_start));
+    *(.tbss .tbss.*)
+    *(.gnu.linkonce.tb.*)
+    *(.tcommon)
+    PROVIDE_HIDDEN (__tbss_end = .);
+  }> DRAM
+  PROVIDE (__tbss_size = SIZEOF (.tbss));
 
   .bss : ALIGN (8) {
     PROVIDE_HIDDEN (__bss_start = .);
@@ -127,20 +140,33 @@ SECTIONS {
 
   . = ALIGN (8);
   PROVIDE (_end = .);
+  PROVIDE(__end = .);
 
   /* Reserve heap space */
-  PROVIDE(__heap_size = 128K);
-  . += __heap_size;
-  . = ALIGN (4K);
-  PROVIDE (__heap_end = .);
+  .heap (NOLOAD) : ALIGN(8) {
+    . += __heap_size;
+    . = ALIGN(4K);
+  }> DRAM
 
-  /* Place Thread Control Block (TCB) at bottom of hart stack */
-  PROVIDE (__tcb_size = __tbss_end - __tdata_start);
-  PROVIDE (__stack_align = MAX (ALIGNOF (.tdata), 0x10));
-  PROVIDE (__stack_start = ALIGN (__stack_align));
-  PROVIDE (__stack_shift = LOG2CEIL( ALIGN (__stack_size_min + __tcb_size, __stack_align)));
-  PROVIDE (__stack_size = 1 << __stack_shift);
+  PROVIDE(__heap_start = ADDR(.heap));
+  PROVIDE(__heap_end = ADDR(.heap) + SIZEOF(.heap));
+  
+  .stack (NOLOAD) : ALIGN(16) {
+    . += __stack_size * 5; /* Hart 0 */
+    PROVIDE(_sp = .);
+  }> DRAM
 
-  /* Default boot hart */
-  PROVIDE (__boot_hart = 0);
+  PROVIDE(__stack_start = ADDR(.stack));
+  PROVIDE(__stack_end = ADDR(.stack) + SIZEOF(.stack));
+
+  PROVIDE(__stack_shift = LOG2CEIL(__stack_size));
+
+  /* C++ exception handling information is
+   * not useful with our current runtime environment,
+   * and it consumes flash space. Discard it until
+   * we have something that can use it
+   */
+  /DISCARD/ : {
+	  *(.eh_frame .eh_frame.*)
+  }
 }

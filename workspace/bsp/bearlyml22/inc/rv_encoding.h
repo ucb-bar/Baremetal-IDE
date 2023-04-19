@@ -162,49 +162,6 @@
 #define RISCV_PGSHIFT 12
 #define RISCV_PGSIZE (1 << RISCV_PGSHIFT)
 
-#ifndef __ASSEMBLER__
-
-#ifdef __GNUC__
-
-#define read_csr(reg) __extension__ ({ unsigned long __tmp; \
-  __asm__ __volatile__ ("csrr %0, " #reg : "=r"(__tmp)); \
-  __tmp; })
-
-#define write_csr(reg, val) __extension__ ({ \
-  if (__builtin_constant_p(val) && (unsigned long)(val) < 32) \
-    __asm__ __volatile__ ("csrw " #reg ", %0" :: "i"(val)); \
-  else \
-    __asm__ __volatile__ ("csrw " #reg ", %0" :: "r"(val)); })
-
-#define swap_csr(reg, val) __extension__ ({ unsigned long __tmp; \
-  if (__builtin_constant_p(val) && (unsigned long)(val) < 32) \
-    __asm__ __volatile__ ("csrrw %0, " #reg ", %1" : "=r"(__tmp) : "i"(val)); \
-  else \
-    __asm__ __volatile__ ("csrrw %0, " #reg ", %1" : "=r"(__tmp) : "r"(val)); \
-  __tmp; })
-
-#define set_csr(reg, bit) __extension__ ({ unsigned long __tmp; \
-  if (__builtin_constant_p(bit) && (unsigned long)(bit) < 32) \
-    __asm__ __volatile__ ("csrrs %0, " #reg ", %1" : "=r"(__tmp) : "i"(bit)); \
-  else \
-    __asm__ __volatile__ ("csrrs %0, " #reg ", %1" : "=r"(__tmp) : "r"(bit)); \
-  __tmp; })
-
-#define clear_csr(reg, bit) __extension__ ({ unsigned long __tmp; \
-  if (__builtin_constant_p(bit) && (unsigned long)(bit) < 32) \
-    __asm__ __volatile__ ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "i"(bit)); \
-  else \
-    __asm__ __volatile__ ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "r"(bit)); \
-  __tmp; })
-
-#define rdtime() read_csr(time)
-#define rdcycle() read_csr(cycle)
-#define rdinstret() read_csr(instret)
-
-#endif
-
-#endif
-
 #endif
 
 #endif

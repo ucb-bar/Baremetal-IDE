@@ -99,9 +99,8 @@ int main(int argc, char *argv[]) {
  * 
  * Multi-threaded programs should provide their own implementation.
  */
-void  __attribute__ ((weak,noreturn)) __main(void)
-{
-    for (;;) {
-        __asm__ __volatile__ ("wfi");
-    }
+void __attribute__((weak, noreturn)) __main(void) {
+  while (1) {
+   asm volatile ("wfi");
+  }
 }
