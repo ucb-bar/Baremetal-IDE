@@ -55,7 +55,7 @@
   * @brief  The application entry point.
   * @retval int
   */
-int main(int argc, char *argv[]) {
+int main(int argc, char **argv) {
   /* USER CODE BEGIN 1 */
   
 	/* USER CODE END 1 */
@@ -75,6 +75,15 @@ int main(int argc, char *argv[]) {
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
   printf("hello world!\n");
+  
+  int i;
+  for (i = 0; i < argc; i++) {
+    printf("argv[%d]: %p %s\n", i, (void *)(argv + i), argv[i]);
+  }
+
+  uint8_t *ptr = malloc(10);
+  printf("malloc: %p\n", ptr);
+  free(ptr);
   
   /* USER CODE END 2 */
 

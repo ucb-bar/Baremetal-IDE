@@ -251,9 +251,9 @@ bss_init_exit:
 boot_manager:
   call system_init
 
-  # li a0, 1            /* argc = 1 */
-  # la a1, argv         /* argv = { "", NULL } */
-  # LOAD a2, environ    /* envp */
+  li a0, 1            /* argc = 1 */
+  la a1, argv         /* argv = { "", NULL } */
+  LOAD a2, environ    /* envp */
   
   /* Call main function */
   call main
@@ -271,13 +271,13 @@ infinite_loop:
   j infinite_loop
 
 
-# .section .rodata
-# .align 3
-# argv:
-#   .dc.a name
-#   .dc.a 0
-# name:
-#   .asciz "chipyard"
+.section .rodata
+.align 3
+argv:
+  .dc.a name
+  .dc.a 0
+name:
+  .asciz "chipyard"
 
 /* Define _init() and _fini() for compatibility */
 .global _init
