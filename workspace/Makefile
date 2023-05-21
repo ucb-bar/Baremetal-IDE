@@ -6,7 +6,7 @@
 
 TARGET ?= firmware
 
-CHIP ?= bearlyml22
+CHIP ?= demosoc
 
 #################################
 # RISCV Toolchain
