@@ -43,7 +43,7 @@
       });
 
       $("select.ui.dropdown").dropdown();
-      $(".topmenu.ui.dropdown").dropdown({
+      $(".navbar.ui.dropdown").dropdown({
         "action": "select"
       });
     ;
@@ -139,6 +139,9 @@
         let gpio_char = String.fromCharCode(97+i);
         generated_src += `\n  new chipyard.config.WithGPIO(address = ${$("#gui_chipconfig_gpio_"+gpio_char+"_address").val()}, width = ${$("#gui_chipconfig_gpio_"+gpio_char+"_width").val()}) ++`;
       }
+      
+      generated_src += `\n  new chipyard.config.WithBootROM ++                                // use default bootrom`;
+      generated_src += `\n`;
       generated_src += `\n`;
 
       generated_src += `
@@ -178,17 +181,18 @@
 
       generated_src += `\n
   // The HarnessBinders control generation of hardware in the TestHarness
-  new chipyard.harness.WithUARTAdapter ++                       // add UART adapter to display UART on stdout, if uart is present
-  new chipyard.harness.WithBlackBoxSimMem ++                    // add SimDRAM DRAM model for axi4 backing memory, if axi4 mem is enabled
-  new chipyard.harness.WithSimSerial ++                         // add external serial-adapter and RAM
-  new chipyard.harness.WithSimDebug ++                          // add SimJTAG or SimDTM adapters if debug module is enabled
-  new chipyard.harness.WithGPIOTiedOff ++                       // tie-off chiptop GPIOs, if GPIOs are present
-  new chipyard.harness.WithSimSPIFlashModel ++                  // add simulated SPI flash memory, if SPI is enabled
-  new chipyard.harness.WithSimAXIMMIO ++                        // add SimAXIMem for axi4 mmio port, if enabled
-  new chipyard.harness.WithTieOffInterrupts ++                  // tie-off interrupt ports, if present
-  new chipyard.harness.WithTieOffL2FBusAXI ++                   // tie-off external AXI4 master, if present
-  new chipyard.harness.WithCustomBootPinPlusArg ++
-  new chipyard.harness.WithClockAndResetFromHarness ++
+  new chipyard.harness.WithUARTAdapter ++                          // add UART adapter to display UART on stdout, if uart is present
+  new chipyard.harness.WithBlackBoxSimMem ++                       // add SimDRAM DRAM model for axi4 backing memory, if axi4 mem is enabled
+  new chipyard.harness.WithSimTSIOverSerialTL ++                   // add external serial-adapter and RAM
+  new chipyard.harness.WithSimDebug ++                             // add SimJTAG or SimDTM adapters if debug module is enabled
+  new chipyard.harness.WithGPIOTiedOff ++                          // tie-off chiptop GPIOs, if GPIOs are present
+  new chipyard.harness.WithSimSPIFlashModel ++                     // add simulated SPI flash memory, if SPI is enabled
+  new chipyard.harness.WithSimAXIMMIO ++                           // add SimAXIMem for axi4 mmio port, if enabled
+  new chipyard.harness.WithTieOffInterrupts ++                     // tie-off interrupt ports, if present
+  new chipyard.harness.WithTieOffL2FBusAXI ++                      // tie-off external AXI4 master, if present
+  new chipyard.harness.WithCustomBootPinPlusArg ++                 // drive custom-boot pin with a plusarg, if custom-boot-pin is present
+  new chipyard.harness.WithClockAndResetFromHarness ++             // all Clock/Reset I/O in ChipTop should be driven by harnessClockInstantiator
+  new chipyard.harness.WithAbsoluteFreqHarnessClockInstantiator ++ // generate clocks in harness with unsynthesizable ClockSourceAtFreqMHz
 
   // The IOBinders instantiate ChipTop IOs to match desired digital IOs
   // IOCells are generated for "Chip-like" IOs, while simulation-only IOs are directly punched through
@@ -207,20 +211,22 @@
   new chipyard.iobinders.WithExtInterruptIOCells ++
   new chipyard.iobinders.WithCustomBootPin ++
 
-  // Default behavior is to use a divider-only clock-generator
-  // This works in VCS, Verilator, and FireSim/
-  // This should get replaced with a PLL-like config instead
-  new chipyard.clocking.WithDividerOnlyClockGenerator ++
+  // By default, punch out IOs to the Harness
+  new chipyard.clocking.WithPassthroughClockGenerator ++
 
+  new testchipip.WithCustomBootPin ++                               // add a custom-boot-pin to support pin-driven boot address
+  new testchipip.WithBootAddrReg ++                                 // add a boot-addr-reg for configurable boot address
+  new testchipip.WithSerialTLClientIdBits(4) ++                     // support up to 1 << 4 simultaneous requests from serialTL port
   new testchipip.WithSerialTLWidth(32) ++                           // fatten the serialTL interface to improve testing performance
   new testchipip.WithDefaultSerialTL ++                             // use serialized tilelink port to external serialadapter/harnessRAM
-  new chipyard.config.WithBootROM ++                                // use default bootrom
+  new chipyard.config.WithDebugModuleAbstractDataWords(8) ++        // increase debug module data capacity
   new chipyard.config.WithL2TLBs(1024) ++                           // use L2 TLBs
   new chipyard.config.WithNoSubsystemDrivenClocks ++                // drive the subsystem diplomatic clocks from ChipTop instead of using implicit clocks
   new chipyard.config.WithInheritBusFrequencyAssignments ++         // Unspecified clocks within a bus will receive the bus frequency if set
   new chipyard.config.WithPeripheryBusFrequencyAsDefault ++         // Unspecified frequencies with match the pbus frequency (which is always set)
   new chipyard.config.WithMemoryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++              // MBus frequency
   new chipyard.config.WithPeripheryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++           // PBus frequency
+  new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++      // Default 2 memory channels
   new freechips.rocketchip.subsystem.WithClockGateModel ++          // add default EICG_wrapper clock gate model
   new freechips.rocketchip.subsystem.WithJtagDTM ++                 // set the debug module to expose a JTAG port
   new freechips.rocketchip.subsystem.WithNoMMIOPort ++              // no top-level MMIO master port (overrides default set in rocketchip)
@@ -228,9 +234,8 @@
   new freechips.rocketchip.subsystem.WithInclusiveCache ++          // use Sifive L2 cache
   new freechips.rocketchip.subsystem.WithNExtTopInterrupts(0) ++    // no external interrupts
   new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++ // leave the bus clocks undriven by sbus
-  new freechips.rocketchip.subsystem.WithDTS("ucb-bar, chipyard", Nil) ++ // custom device name for DTS
-
   new freechips.rocketchip.subsystem.WithCoherentBusTopology ++     // hierarchical buses including sbus/mbus/pbus/fbus/cbus/l2
+  new freechips.rocketchip.subsystem.WithDTS("ucb-bar, chipyard", Nil) ++ // custom device name for DTS
   new freechips.rocketchip.system.BaseConfig                        // "base" rocketchip system
 )`;
       generated_src += `\n`;
@@ -244,16 +249,16 @@
   <div class="ui large top fixed menu">
     <div class="ui container">
       <a class="header item" href="#">
-        Chipyard SoC Designer
+        SoC Designer
       </a>
-      <div class="ui topmenu dropdown link item">
+      <div class="ui navbar dropdown link item">
         Project
         <div class="menu">
           <a class="item" href="https://ucb-bar.github.io/Baremetal-IDE">SoC Config</a>
           <a class="item" href="https://ucb-bar.github.io/Baremetal-IDE/clock_tree">Clock Config</a>
         </div>
       </div>
-      <div class="ui topmenu dropdown link item">
+      <div class="ui navbar dropdown link item">
         Generate
         <div class="menu">
           <div id="ui_menu_generate_rtl_code" class="item">Generate RTL</div>
@@ -353,6 +358,12 @@
             <div class="field">
               <label>MBus Frequency (MHz)</label>
               <input class="monitored" id="gui_chipconfig_memory_mbus_freq" type="number" value="100.00">
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_bootrom_m" type="checkbox" checked="true" disabled="disabled">
+                <label>BootROM</label>
+              </div>
             </div>
             
             <h4 class="ui dividing header">Periphery Bus</h4>
