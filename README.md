@@ -12,4 +12,16 @@ make build USE_HTIF=1
 make bin
 ```
 
+#### Debug the SoC
 
+Terminal 1
+
+```bash
+openocd.exe -f .\demosoc.cfg
+```
+
+Terminal 2
+
+```bash
+riscv64-unknown-elf-gdb.exe --eval-command="target extended-remote localhost:3333"
+```

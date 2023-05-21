@@ -180,13 +180,18 @@ hex: $(TARGET_HEX)
 
 verilog: $(TARGET_VERILOG)
 
-# openocd currently only supports 32 bit target, thus we need to use binary loader
-upload: $(TARGET_BIN)
-	@openocd -f ./debug/$(CHIP).cfg -c "program $(TARGET_BIN) 0x20000000 reset exit"
-
 .PHONY: dump
 dump:
 	$(OD) -d $(TARGET_ELF) > $(BUILD_DIR)disassemble.S
 	$(OD) -h $(TARGET_ELF) > $(BUILD_DIR)sections.out
 	$(OD) -t $(TARGET_ELF) > $(BUILD_DIR)symbol_table.out
+
+# openocd currently only supports 32 bit target, thus we need to use binary loader
+.PHONY: upload
+upload: $(TARGET_BIN)
+	@openocd -f ./debug/$(CHIP).cfg -c "program $(TARGET_BIN) 0x20000000 reset exit"
+
+.PHONY: debug
+debug: $(TARGET_BIN)	
+	@openocd -f ./debug/$(CHIP).cfg & $(DG) --eval-command="target extended-remote localhost:3333"
 

@@ -1,4 +1,29 @@
-#include "asm.h"
+/**
+ * @file startup.S
+ * @brief RISC-V Architecture Definitions and Operations
+ *
+ * This file contains assembly code specific to the RISC-V architecture.
+ * It includes trap vectors, register initialization, stack setup, BSS segment initialization,
+ * and the boot manager responsible for calling initialization routines and the main function.
+ *
+ * The trap_vector section sets up a trap frame and invokes the trap_handler.
+ * The _start section initializes registers, initializes the FPU if present, initializes global and thread pointers,
+ * sets up the stack pointer, initializes the trap vector, initializes TLS, zeros the BSS segment,
+ * and calls global constructors before entering the boot_manager or boot_other section.
+ *
+ * The boot_manager section is executed by the designated boot hart and calls system_init,
+ * initializes command line arguments (argc, argv, envp), and calls the main function.
+ *
+ * The boot_other section is executed by non-boot harts and calls the __main function before exiting.
+ *
+ * @note This file contains assembly code specific to the RISC-V architecture and should be included
+ *       as part of the startup or initialization code.
+ *
+ * @author -T.K.-
+ * @date 2023-05-20
+ */
+
+#include "rv_arch.h"
 #include "rv_encoding.h"
 
 .align 2
@@ -226,9 +251,9 @@ bss_init_exit:
 boot_manager:
   call system_init
 
-  # li a0, 1            /* argc = 1 */
-  # la a1, argv         /* argv = { "", NULL } */
-  # LOAD a2, environ    /* envp */
+  li a0, 1            /* argc = 1 */
+  la a1, argv         /* argv = { "", NULL } */
+  LOAD a2, environ    /* envp */
   
   /* Call main function */
   call main
@@ -246,10 +271,19 @@ infinite_loop:
   j infinite_loop
 
 
-# .section .rodata
-# .align 3
-# argv:
-#   .dc.a name
-#   .dc.a 0
-# name:
-#   .asciz "chipyard"
+.section .rodata
+.align 3
+argv:
+  .dc.a name
+  .dc.a 0
+name:
+  .asciz "chipyard"
+
+/* Define _init() and _fini() for compatibility */
+.global _init
+.type _init, @function
+.global _fini
+.type _fini, @function
+_init:
+_fini:
+  ret
