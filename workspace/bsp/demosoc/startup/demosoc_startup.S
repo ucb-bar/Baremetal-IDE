@@ -278,3 +278,12 @@ infinite_loop:
 #   .dc.a 0
 # name:
 #   .asciz "chipyard"
+
+/* Define _init() and _fini() for compatibility */
+.global _init
+.type _init, @function
+.global _fini
+.type _fini, @function
+_init:
+_fini:
+  ret

@@ -1,9 +1,9 @@
 
 #include <stdint.h>
+#include <string.h>
 
 #include "rv_common.h"
 #include "syscall.h"
-
 
 __attribute__((weak)) void HAL_MachineSoftwareInterruptCallback(uint32_t hart_id) {
 //   { // debug message
@@ -164,6 +164,17 @@ void system_init(uint32_t hartid) {
   return;
 }
 
+void __init_tls(void) {
+  register char *__thread_self __asm__ ("tp");
+  extern char __tdata_start[];
+  extern char __tbss_offset[];
+  extern char __tdata_size[];
+  extern char __tbss_size[];
+
+  memcpy(__thread_self, __tdata_start, (size_t)__tdata_size);
+  memset(__thread_self + (size_t)__tbss_offset, 0, (size_t)__tbss_size);
+}
+
 void trap_handler(uintptr_t m_epc, uintptr_t m_cause, uintptr_t m_tval, uintptr_t regs[32]) {
 
   // /* Extract low-order bits of exception code as positive int */
@@ -173,7 +184,6 @@ void trap_handler(uintptr_t m_epc, uintptr_t m_cause, uintptr_t m_tval, uintptr_
   // _exit(code);
   // __builtin_unreachable();
 
-  
   switch (m_cause) {
     case 0x00000000:      // instruction address misaligned
       InstructionAddressMisalign_Exception_Handler();

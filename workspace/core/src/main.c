@@ -76,10 +76,6 @@ int main(int argc, char *argv[]) {
   /* USER CODE BEGIN 2 */
   printf("hello world!\n");
   
-  int i;
-  for (i = 0; i < argc; i++) {
-    printf("argv[%d]: %p %s\n", i, (void *)(argv + i), argv[i]);
-  }
   /* USER CODE END 2 */
 
   /* Infinite loop */

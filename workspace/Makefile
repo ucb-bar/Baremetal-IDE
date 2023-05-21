@@ -54,9 +54,6 @@ INCLUDES  += -I$(BSP_DIR)$(CHIP)/inc
 # A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_startup.S
 
 A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_startup.S
-# A_SOURCES += $(BSP_DIR)$(CHIP)/startup/crtmain-argv.S
-# A_SOURCES += $(BSP_DIR)$(CHIP)/startup/crtmain.S
-A_SOURCES += $(BSP_DIR)$(CHIP)/startup/init.S
 
 # C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal.c
 C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_system.c
