@@ -9,8 +9,11 @@
   *   __boot_hart
   *   __stack_size
   *   __heap_size
+  *   __text_start
+  *   __text_load_start
   *   __text_end
   *   __data_start
+  *   __data_load_start
   *   __preinit_array_start
   *   __preinit_array_end
   *   __init_array_start
@@ -72,6 +75,7 @@ SECTIONS {
 
   /* Section containing the program */
   .text : ALIGN(4) {
+    PROVIDE(__text_start = .);
     *(.text.init)
     *(.text.trap_vector)
     *(.text.unlikely .text.unlikely.*)
@@ -98,7 +102,7 @@ SECTIONS {
     *(.gnu.linkonce.t.*)
     PROVIDE(__text_end = .);
   }> DRAM
-  
+  PROVIDE(__text_load_start = LOADADDR(.text));
 
   /* Section containing read-only data */
   .rodata : {
@@ -144,6 +148,7 @@ SECTIONS {
     KEEP(*(.fini_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
     PROVIDE_HIDDEN(__fini_array_end = .);
   }> DRAM
+  PROVIDE(__data_load_start = LOADADDR(.data));
 
   /* Section for initialized small data */
   .sdata : {

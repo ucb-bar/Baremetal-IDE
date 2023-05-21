@@ -9,6 +9,7 @@
   *   __boot_hart
   *   __stack_size
   *   __heap_size
+  *   __text_start
   *   __text_end
   *   __data_start
   *   __preinit_array_start
@@ -72,6 +73,7 @@ SECTIONS {
 
   /* Section containing the program */
   .text : ALIGN(4) {
+    PROVIDE(__text_start = .);
     *(.text.init)
     *(.text.trap_vector)
     *(.text.unlikely .text.unlikely.*)

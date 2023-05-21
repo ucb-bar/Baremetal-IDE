@@ -9,8 +9,11 @@
   *   __boot_hart
   *   __stack_size
   *   __heap_size
+  *   __text_start
+  *   __text_load_start
   *   __text_end
   *   __data_start
+  *   __data_load_start
   *   __preinit_array_start
   *   __preinit_array_end
   *   __init_array_start
@@ -44,7 +47,10 @@ OUTPUT_ARCH("riscv")
 ENTRY(_start)
 
 MEMORY {
-  BOOTROM (rx):   ORIGIN = 0x00010000, LENGTH = 128K
+  LIBIFROM (rwx): ORIGIN = 0x00020000, LENGTH = 64K
+  LIBIFRAM (rwx): ORIGIN = 0x00030000, LENGTH = 64K
+  SRAM (rwx):     ORIGIN = 0x08000000, LENGTH = 16K
+  FLASH (rwx):    ORIGIN = 0x20000000, LENGTH = 128M
   DRAM (rwx):     ORIGIN = 0x80000000, LENGTH = 16384M
 }
 
@@ -53,11 +59,11 @@ SECTIONS {
   PROVIDE(__boot_hart = 0);
   
   /* Default stack size */
-  __stack_size = DEFINED(__stack_size) ? __stack_size : 24K;
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 1K;
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
-  __heap_size = DEFINED(__heap_size) ? __heap_size : 128K;
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 2K;
   PROVIDE(__heap_size = __heap_size);
   
   /*
@@ -72,6 +78,7 @@ SECTIONS {
 
   /* Section containing the program */
   .text : ALIGN(4) {
+    PROVIDE(__text_start = .);
     *(.text.init)
     *(.text.trap_vector)
     *(.text.unlikely .text.unlikely.*)
@@ -97,8 +104,8 @@ SECTIONS {
     
     *(.gnu.linkonce.t.*)
     PROVIDE(__text_end = .);
-  }> DRAM
-  
+  }> FLASH
+  PROVIDE(__text_load_start = LOADADDR(.text));
 
   /* Section containing read-only data */
   .rodata : {
@@ -111,12 +118,7 @@ SECTIONS {
     *(.srodata.cst4)
     *(.srodata.cst2)
     *(.srodata .srodata.*)
-  }> DRAM
-
-  /* Host-Target Interface */
-  .htif : ALIGN(0x40) {
-    *(.htif)
-  }> DRAM
+  }> FLASH
 
   /* Section for initialized data */
   .data : ALIGN(8) {
@@ -143,14 +145,15 @@ SECTIONS {
     KEEP(*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
     KEEP(*(.fini_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
     PROVIDE_HIDDEN(__fini_array_end = .);
-  }> DRAM
+  }> SRAM AT> FLASH
+  PROVIDE(__data_load_start = LOADADDR(.data));
 
   /* Section for initialized small data */
   .sdata : {
     PROVIDE(__global_pointer$ = . + 0x800);
     *(.sdata .sdata.*)
     *(.gnu.linkonce.s.*)
-  }> DRAM
+  }> SRAM AT> FLASH
 
   /* Section for initialized thread-local small data */
   .tdata : {
@@ -159,7 +162,7 @@ SECTIONS {
     *(.gnu.linkonce.td.*)
     PROVIDE_HIDDEN(__tdata_end = .);
     PROVIDE(__data_end = .);
-  }> DRAM
+  }> SRAM AT> FLASH
   PROVIDE(__tdata_size = SIZEOF(.tdata));
 
   /* Section for zero-initialized thread-local uninitialized data */
@@ -170,7 +173,7 @@ SECTIONS {
     *(.gnu.linkonce.tb.*)
     *(.tcommon)
     PROVIDE_HIDDEN(__tbss_end = .);
-  }> DRAM
+  }> SRAM
   PROVIDE(__tbss_size = SIZEOF(.tbss));
 
   /* Section for zero-initialized uninitialized data */
@@ -178,7 +181,7 @@ SECTIONS {
     PROVIDE_HIDDEN(__bss_start = .);
     *(.sbss .sbss.*)
     *(.gnu.linkonce.sb.*)
-  }> DRAM
+  }> SRAM
   
   /* Section for uninitialized data */
   .bss (NOLOAD) : ALIGN(8) {
@@ -186,7 +189,7 @@ SECTIONS {
     *(.gnu.linkonce.b.*)
     *(COMMON)
     PROVIDE_HIDDEN(__bss_end = .);
-  }> DRAM
+  }> SRAM
 
   . = ALIGN(8);
   PROVIDE(__end = .);
@@ -197,7 +200,7 @@ SECTIONS {
     . += __heap_size;
     . = ALIGN(4K);
     PROVIDE_HIDDEN(__heap_end = .);
-  }> DRAM
+  }> SRAM
   
   /* Reserve stack space */
   .stack (NOLOAD) : ALIGN(16) {
@@ -205,7 +208,7 @@ SECTIONS {
     . += __stack_size * 5; /* Hart 0 */
     PROVIDE(_sp = .);
     PROVIDE_HIDDEN(__stack_end = .);
-  }> DRAM
+  }> SRAM
 
   PROVIDE(__stack_shift = LOG2CEIL(__stack_size));
 
