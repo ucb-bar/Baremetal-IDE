@@ -75,13 +75,13 @@ int main(int argc, char **argv) {
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
 
-  GPIO_InitTypeDef GPIO_init_config;
-  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
-  GPIO_init_config.pull = GPIO_PULL_NONE;
-  GPIO_init_config.drive_strength = GPIO_DS_STRONG;
-  HAL_GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+  // GPIO_InitTypeDef GPIO_init_config;
+  // GPIO_init_config.mode = GPIO_MODE_OUTPUT;
+  // GPIO_init_config.pull = GPIO_PULL_NONE;
+  // GPIO_init_config.drive_strength = GPIO_DS_STRONG;
+  // HAL_GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
-  HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
+  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
 
 
 
@@ -96,11 +96,11 @@ int main(int argc, char **argv) {
   printf("malloc: %p\n", ptr);
   free(ptr);
 
-  HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
+  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
 
-  HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
+  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
 
-  HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
+  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
   
   /* USER CODE END 2 */
 
