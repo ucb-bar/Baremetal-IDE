@@ -139,6 +139,7 @@ LFLAGS += -T $(LD_SCRIPT)
 
 # default target
 build: $(TARGET_ELF)
+	@echo "[Build] $(TARGET_ELF) built for target \"$(CHIP)\""
 
 $(TARGET_BIN): $(TARGET_ELF)
 	$(CP) -O binary $< $@
