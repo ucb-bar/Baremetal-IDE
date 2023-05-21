@@ -51,19 +51,17 @@ C_SOURCES  = $(wildcard $(SRC_DIR)*.c) $(wildcard $(SRC_DIR)*/*.c)
 # BSP sources
 INCLUDES  += -I$(BSP_DIR)$(CHIP)/inc
 # A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_bootrom.S
-# A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_startup.S
-
 A_SOURCES += $(BSP_DIR)$(CHIP)/startup/$(CHIP)_startup.S
 
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal.c
 C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_system.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_core.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_clint.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_plic.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_gpio.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_i2c.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_rcc.c
-# C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_uart.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_core.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_clint.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_plic.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_gpio.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_i2c.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_rcc.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_uart.c
 
 # LIB sources
 INCLUDES  += $(foreach LIBRARY_NAME,$(LIBRARIES),-I$(LIB_DIR)$(LIBRARY_NAME)/inc)
@@ -182,10 +180,11 @@ verilog: $(TARGET_VERILOG)
 
 # openocd currently only supports 32 bit target, thus we need to use binary loader
 upload: $(TARGET_BIN)
-	@openocd -f ./debug/bearlyml.cfg -c "program $(TARGET_BIN) 0x20000000 reset exit"
+	@openocd -f ./debug/$(CHIP).cfg -c "program $(TARGET_BIN) 0x20000000 reset exit"
 
 .PHONY: dump
 dump:
 	$(OD) -d $(TARGET_ELF) > $(BUILD_DIR)disassemble.S
 	$(OD) -h $(TARGET_ELF) > $(BUILD_DIR)sections.out
 	$(OD) -t $(TARGET_ELF) > $(BUILD_DIR)symbol_table.out
+
