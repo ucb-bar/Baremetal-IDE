@@ -174,14 +174,14 @@ SECTIONS {
   PROVIDE(__tbss_size = SIZEOF(.tbss));
 
   /* Section for zero-initialized uninitialized data */
-  .sbss : ALIGN(8) {
+  .sbss (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__bss_start = .);
     *(.sbss .sbss.*)
     *(.gnu.linkonce.sb.*)
   }> DRAM
   
   /* Section for uninitialized data */
-  .bss : ALIGN(8) {
+  .bss (NOLOAD) : ALIGN(8) {
     *(.bss .bss.*)
     *(.gnu.linkonce.b.*)
     *(COMMON)
