@@ -24,6 +24,7 @@ extern "C" {
 #include "demosoc_hal_i2c.h"
 #include "demosoc_hal_plic.h"
 #include "demosoc_hal_rcc.h"
+#include "demosoc_hal_spi.h"
 #include "demosoc_hal_uart.h"
 
 #define HXTAL_FREQ    100000000                   // Hz

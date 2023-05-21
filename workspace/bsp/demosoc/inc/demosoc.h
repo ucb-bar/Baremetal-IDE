@@ -250,9 +250,6 @@ typedef struct {
 
 
 /* Memory Map Definition */
-#define DEBUG_CONTROLLER_BASE   0x00000000
-#define ERROR_DEVICE_BASE   0x00003000
-#define BOOT_SEL_BASE   0x00003000
 #define DEBUG_CONTROLLER_BASE   0x00000000U
 #define PLL_BASE                0x00002000U
 #define ERROR_DEVICE_BASE       0x00003000U

@@ -61,6 +61,7 @@ C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_plic.c
 C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_gpio.c
 C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_i2c.c
 C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_rcc.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_spi.c
 C_SOURCES += $(BSP_DIR)$(CHIP)/src/$(CHIP)_hal_uart.c
 
 # LIB sources
