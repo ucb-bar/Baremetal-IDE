@@ -1,7 +1,7 @@
 
 #include <stdint.h>
 
-#include "rv_core.h"
+#include "rv_common.h"
 #include "syscall.h"
 
 
