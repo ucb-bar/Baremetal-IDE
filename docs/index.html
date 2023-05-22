@@ -144,7 +144,6 @@ typedef struct {
       generated_src += `\n#define RCC_BASE                0x10011000U`;
       generated_src += `\n#define GPIO_BASE               0x10011000U`;
       generated_src += `\n#define UART_BASE               0x10012000U`;
-
       generated_src += `\n`;
 
       for (let i=0; i<$("#gpio_list").find(".fields").length; i+=1) {
@@ -155,7 +154,6 @@ typedef struct {
       for (let i=0; i<$("#uart_list").find(".fields").length; i+=1) {
         generated_src += `\n#define UART${i}_BASE              (UART_BASE + 0x${i}000)`;
       }
-      
       generated_src += `\n`;
 
       
@@ -167,6 +165,7 @@ typedef struct {
       for (let i=0; i<$("#uart_list").find(".fields").length; i+=1) {
         generated_src += `\n#define UART${i}                   ((UART_TypeDef *)UART${i}_BASE)`;
       }
+      generated_src += `\n`;
       
       generated_src += `
 #ifdef __cplusplus
