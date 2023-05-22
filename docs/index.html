@@ -91,11 +91,93 @@
         downloadFile("ChipConfig.scala", code_textarea.getValue());
       });
       $("#ui_menu_generate_baremetal_code").click(function() {
-        downloadFile("demosocconfig.h", "test");
+        var code = generateBaremetalCode();
+        downloadFile("demosocconfig.h", code);
       });
 
       updateCode();
     });
+
+    var generateBaremetalCode = function() {
+      var generated_src = `#ifndef __DEMOSOC_H
+#define __DEMOSOC_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "rv_common.h"
+`;
+
+      generated_src += `      
+typedef struct {
+  __IO uint32_t TXDATA;                         /** Transmit data register */
+  __I  uint32_t RXDATA;                         /** Receive data register */
+  __IO uint32_t TXCTRL;                         /** Transmit control register */
+  __IO uint32_t RXCTRL;                         /** Receive control register */
+  __IO uint32_t IE;                             /** UART interrupt enable */
+  __I  uint32_t IP;                             /** UART interrupt pending */
+  __IO uint32_t DIV;                            /** Baud rate divisor */
+} UART_TypeDef;
+`;
+
+      generated_src += `
+typedef struct {
+  __I  uint32_t INPUT_VAL;                      /** pin value */
+  __IO uint32_t INPUT_EN;                       /** pin input enable */
+  __IO uint32_t OUTPUT_EN;                      /** Pin output enable */
+  __IO uint32_t OUTPUT_VAL;                     /** Output value */
+  __IO uint32_t PUE;                            /** Internal pull-up enable */
+  __IO uint32_t DS;                             /** Pin drive strength */
+  __IO uint32_t RISE_IE;                        /** Rise interrupt enable */
+  __IO uint32_t RISE_IP;                        /** Rise interrupt pending */
+  __IO uint32_t FALL_IE;                        /** Fall interrupt enable */
+  __IO uint32_t FALL_IP;                        /** Fall interrupt pending */
+  __IO uint32_t HIGH_IE;                        /** High interrupt pending */
+  __IO uint32_t HIGH_IP;                        /** High interrupt pending */
+  __IO uint32_t LOW_IE;                         /** Low interrupt pending */
+  __IO uint32_t LOW_IP;                         /** Low interrupt pending */
+  __IO uint32_t OUT_XOR;                        /** Output XOR (invert) */
+} GPIO_TypeDef;
+`;
+
+      generated_src += `\n#define RCC_BASE                0x10011000U`;
+      generated_src += `\n#define GPIO_BASE               0x10011000U`;
+      generated_src += `\n#define UART_BASE               0x10012000U`;
+
+      generated_src += `\n`;
+
+      for (let i=0; i<$("#gpio_list").find(".fields").length; i+=1) {
+        let gpio_char = String.fromCharCode(65+i);
+        generated_src += `\n#define GPIO${gpio_char}_BASE              (GPIO_BASE + 0x${i}000)`;
+      }
+
+      for (let i=0; i<$("#uart_list").find(".fields").length; i+=1) {
+        generated_src += `\n#define UART${i}_BASE              (UART_BASE + 0x${i}000)`;
+      }
+      
+      generated_src += `\n`;
+
+      
+      for (let i=0; i<$("#gpio_list").find(".fields").length; i+=1) {
+        let gpio_char = String.fromCharCode(65+i);
+        generated_src += `\n#define GPIO${gpio_char}                   ((GPIO_TypeDef *)GPIO${gpio_char}_BASE)`;
+      }
+
+      for (let i=0; i<$("#uart_list").find(".fields").length; i+=1) {
+        generated_src += `\n#define UART${i}                   ((UART_TypeDef *)UART${i}_BASE)`;
+      }
+      
+      generated_src += `
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __DEMOSOC_H */
+`;
+  
+      return generated_src;
+    }
 
     var downloadFile = function(filename, content) {
       //create a file and put the content, name and type
@@ -116,42 +198,97 @@
 
     var updateCode = function() {
       var generated_src = `class DemoSoCConfig extends Config(`
-
+      generated_src += `\n  // ====== Simulation Harness ====== //`;
+      generated_src += `
+  // The HarnessBinders control generation of hardware in the TestHarness
+  new chipyard.harness.WithUARTAdapter ++                          // add UART adapter to display UART on stdout, if uart is present
+  new chipyard.harness.WithBlackBoxSimMem ++                       // add SimDRAM DRAM model for axi4 backing memory, if axi4 mem is enabled
+  new chipyard.harness.WithSimTSIOverSerialTL ++                   // add external serial-adapter and RAM
+  new chipyard.harness.WithSimDebug ++                             // add SimJTAG or SimDTM adapters if debug module is enabled
+  new chipyard.harness.WithGPIOTiedOff ++                          // tie-off chiptop GPIOs, if GPIOs are present
+  new chipyard.harness.WithSimSPIFlashModel ++                     // add simulated SPI flash memory, if SPI is enabled
+  new chipyard.harness.WithSimAXIMMIO ++                           // add SimAXIMem for axi4 mmio port, if enabled
+  new chipyard.harness.WithTieOffInterrupts ++                     // tie-off interrupt ports, if present
+  new chipyard.harness.WithTieOffL2FBusAXI ++                      // tie-off external AXI4 master, if present
+  new chipyard.harness.WithCustomBootPinPlusArg ++                 // drive custom-boot pin with a plusarg, if custom-boot-pin is present
+  new chipyard.harness.WithClockAndResetFromHarness ++             // all Clock/Reset I/O in ChipTop should be driven by harnessClockInstantiator
+  new chipyard.harness.WithAbsoluteFreqHarnessClockInstantiator ++ // generate clocks in harness with unsynthesizable ClockSourceAtFreqMHz`;
+      generated_src += `\n`;
       
-      generated_src += `\n  new chipyard.config.WithNPMPs(0) ++`;
-      generated_src += `\n  new chipyard.config.WithL2TLBs(0) ++`;
-
+      generated_src += `\n  // ====== IO Binding ====== //`;
+      generated_src += `
+  // The IOBinders instantiate ChipTop IOs to match desired digital IOs
+  // IOCells are generated for "Chip-like" IOs, while simulation-only IOs are directly punched through
+  new chipyard.iobinders.WithAXI4MemPunchthrough ++
+  new chipyard.iobinders.WithAXI4MMIOPunchthrough ++
+  new chipyard.iobinders.WithTLMemPunchthrough ++
+  new chipyard.iobinders.WithL2FBusAXI4Punchthrough ++
+  new chipyard.iobinders.WithBlockDeviceIOPunchthrough ++
+  new chipyard.iobinders.WithNICIOPunchthrough ++
+  new chipyard.iobinders.WithSerialTLIOCells ++
+  new chipyard.iobinders.WithDebugIOCells ++
+  new chipyard.iobinders.WithUARTIOCells ++
+  new chipyard.iobinders.WithGPIOCells ++
+  new chipyard.iobinders.WithSPIIOCells ++
+  new chipyard.iobinders.WithTraceIOPunchthrough ++
+  new chipyard.iobinders.WithExtInterruptIOCells ++
+  new chipyard.iobinders.WithCustomBootPin ++`;
       generated_src += `\n`;
 
-
-
-      generated_src += `\n  new chipyard.config.WithJTAGDTMKey(idcodeVersion = 2, partNum = ${$("#gui_chipconfig_jtag_partnum").val()}, manufId = ${$("#gui_chipconfig_jtag_manufid").val()}, debugIdleCycles = 5) ++`
-
+      // ====== Memory Map ====== //
+      generated_src += `\n  // ====== Memory Map ====== //`;
       
-      // UART blocks
+      generated_src += `\n  // External memory section`;
+      // backing SerialTL memory
+      if ($("#gui_chipconfig_enable_serialtl").prop("checked")) {
+        generated_src += `\n  new testchipip.WithSerialTLClientIdBits(4) ++                     // support up to 1 << 4 simultaneous requests from serialTL port`;
+        generated_src += `\n  new testchipip.WithSerialTLWidth(32) ++                           // fatten the serialTL interface to improve testing performance`;
+        generated_src += `\n  new testchipip.WithDefaultSerialTL ++                             // use serialized tilelink port to external serialadapter/harnessRAM`;
+      }
+      else {
+        generated_src += `\n  new testchipip.WithNoSerialTL ++`;
+        generated_src += `\n  new freechips.rocketchip.subsystem.WithNoMemPort ++             // remove backing memory`;
+      }
+      // scratchpad memory
+      if ($("#gui_chipconfig_enable_scratchpad").prop("checked")) {
+        generated_src += `\n  new freechips.rocketchip.subsystem.WithScratchpadsOnly ++    // use rocket l1 DCache scratchpad as base phys mem`;
+      }
+      generated_src += `\n`;
+      
+      generated_src += `\n  // Peripheral section`;
+
+      // UART
       for (let i=$("#uart_list").find(".fields").length-1; i>=0; i-=1) {
         generated_src += `\n  new chipyard.config.WithUART(address = ${$("#gui_chipconfig_uart_"+i+"_address").val()}, baudrate = ${$("#gui_chipconfig_uart_"+i+"_baudrate").val()}) ++`;
       }
       generated_src += `\n`;
-
-      // GPIO blocks
+      // GPIO
       for (let i=$("#gpio_list").find(".fields").length-1; i>=0; i-=1) {
         let gpio_char = String.fromCharCode(97+i);
         generated_src += `\n  new chipyard.config.WithGPIO(address = ${$("#gui_chipconfig_gpio_"+gpio_char+"_address").val()}, width = ${$("#gui_chipconfig_gpio_"+gpio_char+"_width").val()}) ++`;
       }
-      
-      generated_src += `\n  new chipyard.config.WithBootROM ++                                // use default bootrom`;
-      generated_src += `\n`;
       generated_src += `\n`;
 
+      generated_src += `\n  // Core section`;
+      generated_src += `\n  new chipyard.config.WithBootROM ++                                // use default bootrom`;
+      generated_src += `\n`;
+      
+      // ====== Core ====== //
+      generated_src += `\n  // ====== Core ====== //`;
+      generated_src += `\n  // Debug settings`
+      generated_src += `\n  new chipyard.config.WithJTAGDTMKey(idcodeVersion = 2, partNum = ${$("#gui_chipconfig_jtag_partnum").val()}, manufId = ${$("#gui_chipconfig_jtag_manufid").val()}, debugIdleCycles = 5) ++`
+      generated_src += `\n  new freechips.rocketchip.subsystem.WithNBreakpoints(${$("#gui_chipconfig_n_breakpoints").val()}) ++`;
+      
+      generated_src += `\n  // Cache settings`
       generated_src += `
   new freechips.rocketchip.subsystem.WithL1ICacheSets(${$("#gui_chipconfig_l1_icache_sets").val()}) ++
   new freechips.rocketchip.subsystem.WithL1ICacheWays(${$("#gui_chipconfig_l1_icache_ways").val()}) ++
   new freechips.rocketchip.subsystem.WithL1DCacheSets(${$("#gui_chipconfig_l1_dcache_sets").val()}) ++
   new freechips.rocketchip.subsystem.WithL1DCacheWays(${$("#gui_chipconfig_l1_dcache_ways").val()}) ++`;
+      generated_src += `\n  new chipyard.config.WithL2TLBs(0) ++`;
 
 
-
+      generated_src += `\n  // Core settings`
       if ($("#gui_chipconfig_isa_extension_f").prop("checked")) {
         generated_src += `\n  new chipyard.config.WithDefaultFPU ++`;
       }
@@ -176,57 +313,33 @@
       }
 
       generated_src += `\n  new freechips.rocketchip.subsystem.WithNSmallCores(1) ++`;
-      
       generated_src += `\n`;
 
-      generated_src += `\n
-  // The HarnessBinders control generation of hardware in the TestHarness
-  new chipyard.harness.WithUARTAdapter ++                          // add UART adapter to display UART on stdout, if uart is present
-  new chipyard.harness.WithBlackBoxSimMem ++                       // add SimDRAM DRAM model for axi4 backing memory, if axi4 mem is enabled
-  new chipyard.harness.WithSimTSIOverSerialTL ++                   // add external serial-adapter and RAM
-  new chipyard.harness.WithSimDebug ++                             // add SimJTAG or SimDTM adapters if debug module is enabled
-  new chipyard.harness.WithGPIOTiedOff ++                          // tie-off chiptop GPIOs, if GPIOs are present
-  new chipyard.harness.WithSimSPIFlashModel ++                     // add simulated SPI flash memory, if SPI is enabled
-  new chipyard.harness.WithSimAXIMMIO ++                           // add SimAXIMem for axi4 mmio port, if enabled
-  new chipyard.harness.WithTieOffInterrupts ++                     // tie-off interrupt ports, if present
-  new chipyard.harness.WithTieOffL2FBusAXI ++                      // tie-off external AXI4 master, if present
-  new chipyard.harness.WithCustomBootPinPlusArg ++                 // drive custom-boot pin with a plusarg, if custom-boot-pin is present
-  new chipyard.harness.WithClockAndResetFromHarness ++             // all Clock/Reset I/O in ChipTop should be driven by harnessClockInstantiator
-  new chipyard.harness.WithAbsoluteFreqHarnessClockInstantiator ++ // generate clocks in harness with unsynthesizable ClockSourceAtFreqMHz
+      // ====== Memory Bus ====== //
+      generated_src += `\n  // ====== Memory Bus ====== //`;
+      generated_src += `\n  new chipyard.config.WithNPMPs(0) ++`;
+      generated_src += `\n  new chipyard.config.WithInheritBusFrequencyAssignments ++         // Unspecified clocks within a bus will receive the bus frequency if set`;
+      generated_src += `\n  new chipyard.config.WithPeripheryBusFrequencyAsDefault ++         // Unspecified frequencies with match the pbus frequency (which is always set)`;
+      generated_src += `\n  new chipyard.config.WithMemoryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++              // MBus frequency`;
+      generated_src += `\n  new chipyard.config.WithPeripheryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++           // PBus frequency`;
+      generated_src += `\n  new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++      // Default 2 memory channels`;
 
-  // The IOBinders instantiate ChipTop IOs to match desired digital IOs
-  // IOCells are generated for "Chip-like" IOs, while simulation-only IOs are directly punched through
-  new chipyard.iobinders.WithAXI4MemPunchthrough ++
-  new chipyard.iobinders.WithAXI4MMIOPunchthrough ++
-  new chipyard.iobinders.WithTLMemPunchthrough ++
-  new chipyard.iobinders.WithL2FBusAXI4Punchthrough ++
-  new chipyard.iobinders.WithBlockDeviceIOPunchthrough ++
-  new chipyard.iobinders.WithNICIOPunchthrough ++
-  new chipyard.iobinders.WithSerialTLIOCells ++
-  new chipyard.iobinders.WithDebugIOCells ++
-  new chipyard.iobinders.WithUARTIOCells ++
-  new chipyard.iobinders.WithGPIOCells ++
-  new chipyard.iobinders.WithSPIIOCells ++
-  new chipyard.iobinders.WithTraceIOPunchthrough ++
-  new chipyard.iobinders.WithExtInterruptIOCells ++
-  new chipyard.iobinders.WithCustomBootPin ++
+      generated_src += `\n`;
+      
+      generated_src += `\n`;
+      generated_src += `\n`;
 
+
+      generated_src += `\n  // ====== TODO: move these to correct sections ====== //`;
+      generated_src += `
   // By default, punch out IOs to the Harness
   new chipyard.clocking.WithPassthroughClockGenerator ++
 
   new testchipip.WithCustomBootPin ++                               // add a custom-boot-pin to support pin-driven boot address
   new testchipip.WithBootAddrReg ++                                 // add a boot-addr-reg for configurable boot address
-  new testchipip.WithSerialTLClientIdBits(4) ++                     // support up to 1 << 4 simultaneous requests from serialTL port
-  new testchipip.WithSerialTLWidth(32) ++                           // fatten the serialTL interface to improve testing performance
-  new testchipip.WithDefaultSerialTL ++                             // use serialized tilelink port to external serialadapter/harnessRAM
+  
   new chipyard.config.WithDebugModuleAbstractDataWords(8) ++        // increase debug module data capacity
-  new chipyard.config.WithL2TLBs(1024) ++                           // use L2 TLBs
   new chipyard.config.WithNoSubsystemDrivenClocks ++                // drive the subsystem diplomatic clocks from ChipTop instead of using implicit clocks
-  new chipyard.config.WithInheritBusFrequencyAssignments ++         // Unspecified clocks within a bus will receive the bus frequency if set
-  new chipyard.config.WithPeripheryBusFrequencyAsDefault ++         // Unspecified frequencies with match the pbus frequency (which is always set)
-  new chipyard.config.WithMemoryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++              // MBus frequency
-  new chipyard.config.WithPeripheryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++           // PBus frequency
-  new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++      // Default 2 memory channels
   new freechips.rocketchip.subsystem.WithClockGateModel ++          // add default EICG_wrapper clock gate model
   new freechips.rocketchip.subsystem.WithJtagDTM ++                 // set the debug module to expose a JTAG port
   new freechips.rocketchip.subsystem.WithNoMMIOPort ++              // no top-level MMIO master port (overrides default set in rocketchip)
@@ -236,6 +349,7 @@
   new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++ // leave the bus clocks undriven by sbus
   new freechips.rocketchip.subsystem.WithCoherentBusTopology ++     // hierarchical buses including sbus/mbus/pbus/fbus/cbus/l2
   new freechips.rocketchip.subsystem.WithDTS("ucb-bar, chipyard", Nil) ++ // custom device name for DTS
+
   new freechips.rocketchip.system.BaseConfig                        // "base" rocketchip system
 )`;
       generated_src += `\n`;
@@ -361,8 +475,20 @@
             </div>
             <div class="field">
               <div class="ui checkbox">
-                <input class="monitored" id="gui_chipconfig_bootrom_m" type="checkbox" checked="true" disabled="disabled">
+                <input class="monitored" id="gui_chipconfig_bootrom" type="checkbox" checked="true" disabled="disabled">
                 <label>BootROM</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_enable_scratchpad" type="checkbox">
+                <label>Scratchpad</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_enable_serialtl" type="checkbox">
+                <label>Backing SerialTL Memory</label>
               </div>
             </div>
             
@@ -425,6 +551,12 @@
                 <input class="monitored" id="gui_chipconfig_jtag_manufid" type="text" value="0x489">
               </div>
             </div>
+            
+            <div class="field">
+              <label># of Debug Breakpoints</label>
+              <input class="monitored" id="gui_chipconfig_n_breakpoints" type="number" value="2">
+            </div>
+            
             
           </form>
         </div>
