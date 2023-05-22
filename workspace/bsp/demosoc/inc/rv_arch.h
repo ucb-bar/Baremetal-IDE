@@ -1,0 +1,33 @@
+/**
+ * @file rv_arch.h
+ * @brief RISC-V Architecture Configuration
+ *
+ * This header file provides architecture-specific configuration macros for the RISC-V architecture.
+ * It defines macros and constants based on the target RISC-V architecture's word length (xlen),
+ * allowing easy adaptation of code to different RISC-V architectures.
+ *
+ * The macros provided include load and store instructions, register byte size, and other architecture-specific settings.
+ * These macros enable conditional compilation of code sections based on the target architecture,
+ * ensuring compatibility and efficient utilization of resources across different RISC-V architectures.
+ *
+ * @note This file should be included to configure architecture-specific settings and enable conditional compilation
+ *       based on the target RISC-V architecture.
+ *
+ * @author -T.K.-
+ * @date 2023-05-20
+ */
+
+#ifndef __RV_ARCH_H
+#define __RV_ARCH_H
+
+#if __riscv_xlen == 64
+  #define LOAD ld
+  #define STORE sd
+  #define REGBYTES 8
+#else
+  #define LOAD lw
+  #define STORE sw
+  #define REGBYTES 4
+#endif
+
+#endif /* __RV_ARCH_H */
