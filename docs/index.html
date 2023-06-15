@@ -92,15 +92,15 @@
       });
       $("#ui_menu_generate_baremetal_code").click(function() {
         var code = generateBaremetalCode();
-        downloadFile("demosocconfig.h", code);
+        downloadFile("examplechipconfig.h", code);
       });
 
       updateCode();
     });
 
     var generateBaremetalCode = function() {
-      var generated_src = `#ifndef __DEMOSOC_H
-#define __DEMOSOC_H
+      var generated_src = `#ifndef __EXAMPLECHIP_H
+#define __EXAMPLECHIP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -172,7 +172,7 @@ typedef struct {
 }
 #endif
 
-#endif /* __DEMOSOC_H */
+#endif /* __EXAMPLECHIP_H */
 `;
   
       return generated_src;
@@ -196,7 +196,7 @@ typedef struct {
 
 
     var updateCode = function() {
-      var generated_src = `class DemoSoCConfig extends Config(`
+      var generated_src = `class ExampleChipConfig extends Config(`
       generated_src += `
   // ==================================
   //   Set up TestHarness
@@ -429,7 +429,7 @@ typedef struct {
   <div class="spacer" style="height: 5em"></div>
   <div class="ui container">
     <div class="ui basic segment">
-      <h1 class="ui header">DemoSoCConfig</h1>
+      <h1 class="ui header">ExampleChipConfig</h1>
     </div>
     <div class="ui grid">
       <div class="three wide column">
