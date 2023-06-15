@@ -197,9 +197,12 @@ typedef struct {
 
     var updateCode = function() {
       var generated_src = `class DemoSoCConfig extends Config(`
-      generated_src += `\n  // ====== Simulation Harness ====== //`;
       generated_src += `
-  // The HarnessBinders control generation of hardware in the TestHarness
+  // ==================================
+  //   Set up TestHarness
+  // ==================================
+  // The HarnessBinders control generation of hardware in the TestHarness`;
+      generated_src += `
   new chipyard.harness.WithUARTAdapter ++                          // add UART adapter to display UART on stdout, if uart is present
   new chipyard.harness.WithBlackBoxSimMem ++                       // add SimDRAM DRAM model for axi4 backing memory, if axi4 mem is enabled
   new chipyard.harness.WithSimTSIOverSerialTL ++                   // add external serial-adapter and RAM
@@ -214,10 +217,13 @@ typedef struct {
   new chipyard.harness.WithAbsoluteFreqHarnessClockInstantiator ++ // generate clocks in harness with unsynthesizable ClockSourceAtFreqMHz`;
       generated_src += `\n`;
       
-      generated_src += `\n  // ====== IO Binding ====== //`;
       generated_src += `
+  // ==================================
+  //   Set up I/O harness
+  // ==================================
   // The IOBinders instantiate ChipTop IOs to match desired digital IOs
-  // IOCells are generated for "Chip-like" IOs, while simulation-only IOs are directly punched through
+  // IOCells are generated for "Chip-like" IOs, while simulation-only IOs are directly punched through`;
+      generated_src += `
   new chipyard.iobinders.WithAXI4MemPunchthrough ++
   new chipyard.iobinders.WithAXI4MMIOPunchthrough ++
   new chipyard.iobinders.WithTLMemPunchthrough ++
@@ -235,120 +241,159 @@ typedef struct {
       generated_src += `\n`;
 
       // ====== Memory Map ====== //
-      generated_src += `\n  // ====== Memory Map ====== //`;
+      generated_src += `
+  // ==================================
+  //   Set up Memory Devices
+  // ==================================`;
       
-      generated_src += `\n  // External memory section`;
+      generated_src += `
+  // External memory section`;
       // backing SerialTL memory
       if ($("#gui_chipconfig_enable_serialtl").prop("checked")) {
-        generated_src += `\n  new testchipip.WithSerialTLClientIdBits(4) ++                     // support up to 1 << 4 simultaneous requests from serialTL port`;
-        generated_src += `\n  new testchipip.WithSerialTLWidth(32) ++                           // fatten the serialTL interface to improve testing performance`;
-        generated_src += `\n  new testchipip.WithDefaultSerialTL ++                             // use serialized tilelink port to external serialadapter/harnessRAM`;
+        generated_src += `
+  new testchipip.WithSerialTLClientIdBits(4) ++                     // support up to 1 << 4 simultaneous requests from serialTL port`;
+        generated_src += `
+  new testchipip.WithSerialTLWidth(32) ++                           // fatten the serialTL interface to improve testing performance`;
+        generated_src += `
+  new testchipip.WithDefaultSerialTL ++                             // use serialized tilelink port to external serialadapter/harnessRAM`;
       }
       else {
-        generated_src += `\n  new testchipip.WithNoSerialTL ++`;
-        generated_src += `\n  new freechips.rocketchip.subsystem.WithNoMemPort ++             // remove backing memory`;
+        generated_src += `
+  new testchipip.WithNoSerialTL ++`;
+        generated_src += `
+  new freechips.rocketchip.subsystem.WithNoMemPort ++             // remove backing memory`;
       }
       // scratchpad memory
       if ($("#gui_chipconfig_enable_scratchpad").prop("checked")) {
-        generated_src += `\n  new freechips.rocketchip.subsystem.WithScratchpadsOnly ++    // use rocket l1 DCache scratchpad as base phys mem`;
+        generated_src += `
+  new freechips.rocketchip.subsystem.WithScratchpadsOnly ++    // use rocket l1 DCache scratchpad as base phys mem`;
       }
       generated_src += `\n`;
       
-      generated_src += `\n  // Peripheral section`;
+      generated_src += `
+  // Peripheral section`;
 
       // UART
       for (let i=$("#uart_list").find(".fields").length-1; i>=0; i-=1) {
-        generated_src += `\n  new chipyard.config.WithUART(address = ${$("#gui_chipconfig_uart_"+i+"_address").val()}, baudrate = ${$("#gui_chipconfig_uart_"+i+"_baudrate").val()}) ++`;
+        generated_src += `
+  new chipyard.config.WithUART(address = ${$("#gui_chipconfig_uart_"+i+"_address").val()}, baudrate = ${$("#gui_chipconfig_uart_"+i+"_baudrate").val()}) ++`;
       }
-      generated_src += `\n`;
+      if ($("#uart_list").find(".fields").length) {
+        generated_src += `\n`;
+      }
+
       // GPIO
       for (let i=$("#gpio_list").find(".fields").length-1; i>=0; i-=1) {
         let gpio_char = String.fromCharCode(97+i);
-        generated_src += `\n  new chipyard.config.WithGPIO(address = ${$("#gui_chipconfig_gpio_"+gpio_char+"_address").val()}, width = ${$("#gui_chipconfig_gpio_"+gpio_char+"_width").val()}) ++`;
+        generated_src += `
+  new chipyard.config.WithGPIO(address = ${$("#gui_chipconfig_gpio_"+gpio_char+"_address").val()}, width = ${$("#gui_chipconfig_gpio_"+gpio_char+"_width").val()}) ++`;
       }
+      if ($("#gpio_list").find(".fields").length) {
+        generated_src += `\n`;
+      }
+
+      generated_src += `
+  // Core section`;
+      generated_src += `
+  new chipyard.config.WithBootROM ++                                // use default bootrom
+  new testchipip.WithCustomBootPin ++                               // add a custom-boot-pin to support pin-driven boot address
+  new testchipip.WithBootAddrReg ++                                 // add a boot-addr-reg for configurable boot address                            // use default bootrom`;
+      generated_src += `\n`;
+      
+      // ====== Tile ====== //
+      generated_src += `
+  // ==================================
+  //   Set up tiles
+  // ==================================`;
+      generated_src += `
+  // Debug settings`
+      generated_src += `
+  new chipyard.config.WithJTAGDTMKey(idcodeVersion = 2, partNum = ${$("#gui_chipconfig_jtag_partnum").val()}, manufId = ${$("#gui_chipconfig_jtag_manufid").val()}, debugIdleCycles = 5) ++`
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithNBreakpoints(${$("#gui_chipconfig_n_breakpoints").val()}) ++`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithNBreakpoints(2) ++`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithJtagDTM ++                 // set the debug module to expose a JTAG port`;
       generated_src += `\n`;
 
-      generated_src += `\n  // Core section`;
-      generated_src += `\n  new chipyard.config.WithBootROM ++                                // use default bootrom`;
-      generated_src += `\n`;
-      
-      // ====== Core ====== //
-      generated_src += `\n  // ====== Core ====== //`;
-      generated_src += `\n  // Debug settings`
-      generated_src += `\n  new chipyard.config.WithJTAGDTMKey(idcodeVersion = 2, partNum = ${$("#gui_chipconfig_jtag_partnum").val()}, manufId = ${$("#gui_chipconfig_jtag_manufid").val()}, debugIdleCycles = 5) ++`
-      generated_src += `\n  new freechips.rocketchip.subsystem.WithNBreakpoints(${$("#gui_chipconfig_n_breakpoints").val()}) ++`;
-      
-      generated_src += `\n  // Cache settings`
+      generated_src += `
+  // Cache settings`
       generated_src += `
   new freechips.rocketchip.subsystem.WithL1ICacheSets(${$("#gui_chipconfig_l1_icache_sets").val()}) ++
   new freechips.rocketchip.subsystem.WithL1ICacheWays(${$("#gui_chipconfig_l1_icache_ways").val()}) ++
   new freechips.rocketchip.subsystem.WithL1DCacheSets(${$("#gui_chipconfig_l1_dcache_sets").val()}) ++
   new freechips.rocketchip.subsystem.WithL1DCacheWays(${$("#gui_chipconfig_l1_dcache_ways").val()}) ++`;
-      generated_src += `\n  new chipyard.config.WithL2TLBs(0) ++`;
+      generated_src += `
+  new chipyard.config.WithL2TLBs(0) ++`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++          // use Sifive L2 cache`;
+      generated_src += `\n`;
 
+      generated_src += `
+  // Memory settings`;
+      generated_src += `
+  new chipyard.config.WithNPMPs(0) ++
+  new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++      // Default 2 memory channels
+  new freechips.rocketchip.subsystem.WithNoMMIOPort ++              // no top-level MMIO master port (overrides default set in rocketchip)
+  new freechips.rocketchip.subsystem.WithNoSlavePort ++             // no top-level MMIO slave port (overrides default set in rocketchip)
+  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++     // hierarchical buses including sbus/mbus/pbus/fbus/cbus/l2`;
+      generated_src += `\n`;
 
-      generated_src += `\n  // Core settings`
+      generated_src += `
+  // Core settings`;
       if ($("#gui_chipconfig_isa_extension_f").prop("checked")) {
-        generated_src += `\n  new chipyard.config.WithDefaultFPU ++`;
+        generated_src += `
+  new chipyard.config.WithDefaultFPU ++`;
       }
-
       if ($("#gui_chipconfig_isa_extension_m").prop("checked")) {
-        generated_src += `\n  new chipyard.config.WithFastMulDiv ++`;
+        generated_src += `
+  new chipyard.config.WithFastMulDiv ++`;
       }
-
       if ($("#gui_chipconfig_isa_extension_b").prop("checked")) {
-        generated_src += `\n  new chipyard.config.WithBitManip ++`;
+        generated_src += `
+  new chipyard.config.WithBitManip ++`;
       }
-
       switch ($("#gui_chipconfig_base_isa").val()) {
         case "RV32I":
-          generated_src += `\n  new freechips.rocketchip.subsystem.WithRV32 ++`;
+          generated_src += `
+  new freechips.rocketchip.subsystem.WithRV32 ++`;
           break;
         case "RV32E":
-          generated_src += `\n  new freechips.rocketchip.subsystem.WithRV32E ++`;
+          generated_src += `
+  new freechips.rocketchip.subsystem.WithRV32E ++`;
           break;
         case "RV64I":
           break;
       }
-
-      generated_src += `\n  new freechips.rocketchip.subsystem.WithNSmallCores(1) ++`;
-      generated_src += `\n`;
-
-      // ====== Memory Bus ====== //
-      generated_src += `\n  // ====== Memory Bus ====== //`;
-      generated_src += `\n  new chipyard.config.WithNPMPs(0) ++`;
-      generated_src += `\n  new chipyard.config.WithInheritBusFrequencyAssignments ++         // Unspecified clocks within a bus will receive the bus frequency if set`;
-      generated_src += `\n  new chipyard.config.WithPeripheryBusFrequencyAsDefault ++         // Unspecified frequencies with match the pbus frequency (which is always set)`;
-      generated_src += `\n  new chipyard.config.WithMemoryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++              // MBus frequency`;
-      generated_src += `\n  new chipyard.config.WithPeripheryBusFrequency(${parseFloat($("#gui_chipconfig_memory_mbus_freq").val()).toFixed(2)}) ++           // PBus frequency`;
-      generated_src += `\n  new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++      // Default 2 memory channels`;
-
-      generated_src += `\n`;
-      
-      generated_src += `\n`;
-      generated_src += `\n`;
-
-
-      generated_src += `\n  // ====== TODO: move these to correct sections ====== //`;
       generated_src += `
-  // By default, punch out IOs to the Harness
-  new chipyard.clocking.WithPassthroughClockGenerator ++
-
-  new testchipip.WithCustomBootPin ++                               // add a custom-boot-pin to support pin-driven boot address
-  new testchipip.WithBootAddrReg ++                                 // add a boot-addr-reg for configurable boot address
-  
-  new chipyard.config.WithDebugModuleAbstractDataWords(8) ++        // increase debug module data capacity
-  new chipyard.config.WithNoSubsystemDrivenClocks ++                // drive the subsystem diplomatic clocks from ChipTop instead of using implicit clocks
-  new freechips.rocketchip.subsystem.WithClockGateModel ++          // add default EICG_wrapper clock gate model
-  new freechips.rocketchip.subsystem.WithJtagDTM ++                 // set the debug module to expose a JTAG port
-  new freechips.rocketchip.subsystem.WithNoMMIOPort ++              // no top-level MMIO master port (overrides default set in rocketchip)
-  new freechips.rocketchip.subsystem.WithNoSlavePort ++             // no top-level MMIO slave port (overrides default set in rocketchip)
-  new freechips.rocketchip.subsystem.WithInclusiveCache ++          // use Sifive L2 cache
   new freechips.rocketchip.subsystem.WithNExtTopInterrupts(0) ++    // no external interrupts
-  new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++ // leave the bus clocks undriven by sbus
-  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++     // hierarchical buses including sbus/mbus/pbus/fbus/cbus/l2
-  new freechips.rocketchip.subsystem.WithDTS("ucb-bar, chipyard", Nil) ++ // custom device name for DTS
+  new freechips.rocketchip.subsystem.WithNSmallCores(1) ++`;
+      generated_src += `\n`;
 
+      
+      generated_src += `
+  // ==================================
+  //   Set up reset and clocking
+  // ==================================`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++ // leave the bus clocks undriven by sbus
+  new freechips.rocketchip.subsystem.WithClockGateModel ++          // add default EICG_wrapper clock gate model
+  new chipyard.config.WithNoSubsystemDrivenClocks ++                // drive the subsystem diplomatic clocks from ChipTop instead of using implicit clocks
+  new chipyard.config.WithInheritBusFrequencyAssignments ++         // Unspecified clocks within a bus will receive the bus frequency if set
+  new chipyard.config.WithPeripheryBusFrequency(100.0) ++           // Default 500 MHz pbus
+  new chipyard.config.WithMemoryBusFrequency(100.0) ++              // Default 500 MHz mbus
+  new chipyard.clocking.WithPassthroughClockGenerator ++
+  new chipyard.clocking.WithClockGroupsCombinedByName(("uncore", Seq("sbus", "mbus", "pbus", "fbus", "cbus", "implicit"), Seq("tile"))) ++`;
+      generated_src += `\n`;
+
+
+      generated_src += `
+  // ==================================
+  //   Base Settings
+  // ==================================`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithDTS("ucb-bar, chipyard", Nil) ++ // custom device name for DTS
   new freechips.rocketchip.system.BaseConfig                        // "base" rocketchip system
 )`;
       generated_src += `\n`;
