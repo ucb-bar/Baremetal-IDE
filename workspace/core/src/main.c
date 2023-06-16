@@ -83,14 +83,14 @@ int main(int argc, char **argv) {
 
   // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
 
+  char str[128];
 
-
-  // printf("hello world!\n");
+  printf("hello world!\n");
   
-  // int i;
-  // for (i = 0; i < argc; i++) {
-  //   printf("argv[%d]: %p %s\n", i, (void *)(argv + i), argv[i]);
-  // }
+  int i;
+  for (i = 0; i < argc; i++) {
+    printf("argv[%d]: %p %s\n", i, (void *)(argv + i), argv[i]);
+  }
 
   uint8_t *ptr = malloc(10);
   // printf("malloc: %p\n", ptr);
@@ -107,6 +107,7 @@ int main(int argc, char **argv) {
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
+    return;
     sprintf(str, "hello world\n");
     HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 1000);
 
