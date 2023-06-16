@@ -8,14 +8,14 @@
  * 
  */
 
-#ifndef __DEMOSOC_HAL_CORE_H
-#define __DEMOSOC_HAL_CORE_H
+#ifndef __EXAMPLECHIP_HAL_CORE_H
+#define __EXAMPLECHIP_HAL_CORE_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "demosoc_hal.h"
+#include "examplechip_hal.h"
 
 void HAL_CORE_disableGlobalInterrupt();
 
@@ -32,4 +32,4 @@ void HAL_CORE_clearIRQ(IRQn_Type IRQn);
 }
 #endif
 
-#endif /* __DEMOSOC_HAL_CORE_H */
+#endif /* __EXAMPLECHIP_HAL_CORE_H */

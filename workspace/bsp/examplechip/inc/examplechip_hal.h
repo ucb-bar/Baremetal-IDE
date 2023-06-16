@@ -8,8 +8,8 @@
  * 
  */
 
-#ifndef __DEMOSOC_HAL_H
-#define __DEMOSOC_HAL_H
+#ifndef __EXAMPLECHIP_HAL_H
+#define __EXAMPLECHIP_HAL_H
 
 
 #ifdef __cplusplus
@@ -17,15 +17,15 @@ extern "C" {
 #endif
 
 #include "rv_common.h"
-#include "demosoc.h"
-#include "demosoc_hal_core.h"
-#include "demosoc_hal_clint.h"
-#include "demosoc_hal_gpio.h"
-#include "demosoc_hal_i2c.h"
-#include "demosoc_hal_plic.h"
-#include "demosoc_hal_rcc.h"
-#include "demosoc_hal_spi.h"
-#include "demosoc_hal_uart.h"
+#include "examplechip.h"
+#include "examplechip_hal_core.h"
+#include "examplechip_hal_clint.h"
+#include "examplechip_hal_gpio.h"
+#include "examplechip_hal_i2c.h"
+#include "examplechip_hal_plic.h"
+#include "examplechip_hal_rcc.h"
+#include "examplechip_hal_spi.h"
+#include "examplechip_hal_uart.h"
 
 #define HXTAL_FREQ    100000000                   // Hz
 #define SYS_CLK_FREQ  HXTAL_FREQ / 2                    // Hz
@@ -41,4 +41,4 @@ void HAL_delay(uint64_t time);
 }
 #endif
 
-#endif /* __DEMOSOC_HAL_H */
+#endif /* __EXAMPLECHIP_HAL_H */

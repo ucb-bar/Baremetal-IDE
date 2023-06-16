@@ -8,7 +8,7 @@
  * 
  */
 
-#include "demosoc_hal_i2c.h"
+#include "examplechip_hal_i2c.h"
 
 void HAL_I2C_init(I2C_TypeDef *I2Cx, I2C_InitTypeDef *I2C_init) {
   // need to disable I2C before make any change to prescaler

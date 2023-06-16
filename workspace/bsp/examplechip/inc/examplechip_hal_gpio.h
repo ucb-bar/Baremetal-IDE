@@ -8,14 +8,14 @@
  * 
  */
 
-#ifndef __DEMOSOC_HAL_GPIO_H
-#define __DEMOSOC_HAL_GPIO_H
+#ifndef __EXAMPLECHIP_HAL_GPIO_H
+#define __EXAMPLECHIP_HAL_GPIO_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "demosoc_hal.h"
+#include "examplechip_hal.h"
 
 typedef enum {
   GPIO_PIN_0 = 0b0001U,
@@ -57,4 +57,4 @@ void HAL_GPIO_writePin(GPIO_TypeDef *GPIOx, GPIO_PIN pin, uint8_t value);
 }
 #endif
 
-#endif /* __DEMOSOC_HAL_GPIO_H */
+#endif /* __EXAMPLECHIP_HAL_GPIO_H */

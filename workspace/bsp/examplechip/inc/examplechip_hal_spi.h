@@ -1,13 +1,13 @@
 
-#ifndef __DEMOSOC_HAL_SPI_H
-#define __DEMOSOC_HAL_SPI_H
+#ifndef __EXAMPLECHIP_HAL_SPI_H
+#define __EXAMPLECHIP_HAL_SPI_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "demosoc.h"
-#include "demosoc_hal.h"
+#include "examplechip.h"
+#include "examplechip_hal.h"
 
 #define SPI_CSMODE_AUTO                   0x00U
 #define SPI_CSMODE_HOLD                   0x02U
@@ -45,4 +45,4 @@ Status HAL_SPI_transmitReceive(SPI_TypeDef *SPIx, uint8_t *tx_data, uint8_t *rx_
 }
 #endif
 
-#endif /* __DEMOSOC_HAL_SPI_H */
+#endif /* __EXAMPLECHIP_HAL_SPI_H */

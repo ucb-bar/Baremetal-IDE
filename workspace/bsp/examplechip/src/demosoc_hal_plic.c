@@ -8,7 +8,7 @@
  * 
  */
 
-#include "demosoc_hal_plic.h"
+#include "examplechip_hal_plic.h"
 
 
 void HAL_PLIC_disable(uint32_t hart_id, uint32_t irq_id) {

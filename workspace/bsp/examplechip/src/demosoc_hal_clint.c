@@ -8,7 +8,7 @@
  * 
  */
 
-#include "demosoc_hal_clint.h"
+#include "examplechip_hal_clint.h"
 
 
 void HAL_CLINT_triggerSoftwareInterrupt(uint32_t hartid) {

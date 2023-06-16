@@ -1,5 +1,5 @@
 
-#include "demosoc_hal_spi.h"
+#include "examplechip_hal_spi.h"
 
 void HAL_SPI_init(SPI_TypeDef *SPIx, SPI_InitTypeDef *SPI_init) {
   SPIx->SCKDIV = SYS_CLK_FREQ / (2 * SPI_init->clock) - 1;

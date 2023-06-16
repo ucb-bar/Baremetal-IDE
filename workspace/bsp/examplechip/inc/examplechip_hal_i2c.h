@@ -8,14 +8,14 @@
  * 
  */
 
-#ifndef __DEMOSOC_HAL_I2C_H
-#define __DEMOSOC_HAL_I2C_H
+#ifndef __EXAMPLECHIP_HAL_I2C_H
+#define __EXAMPLECHIP_HAL_I2C_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "demosoc_hal.h"
+#include "examplechip_hal.h"
 
 typedef struct {
   uint16_t clock;
@@ -55,4 +55,4 @@ Status HAL_I2C_writeMemory(I2C_TypeDef *I2Cx, uint16_t device_addr, uint8_t mem_
 }
 #endif
 
-#endif /* __DEMOSOC_HAL_I2C_H */
+#endif /* __EXAMPLECHIP_HAL_I2C_H */

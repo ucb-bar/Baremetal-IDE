@@ -8,7 +8,7 @@
  * 
  */
 
-#include "demosoc_hal_gpio.h"
+#include "examplechip_hal_gpio.h"
 
 void HAL_GPIO_init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_init, GPIO_PIN pin) {
   if (GPIO_init->mode == GPIO_MODE_INPUT || GPIO_init->mode == GPIO_MODE_OUTPUT) {
