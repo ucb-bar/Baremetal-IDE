@@ -251,44 +251,45 @@ typedef struct {
 
 /* Memory Map Definition */
 #define DEBUG_CONTROLLER_BASE   0x00000000U
-#define PLL_BASE                0x00002000U
+#define BOOT_SELECT_BASE        0x00001000U
 #define ERROR_DEVICE_BASE       0x00003000U
-#define BOOT_SELECT_BASE        0x00004000U
 #define BOOTROM_BASE            0x00010000U
-#define LIBIF_ROM_BASE          0x00020000U
-#define LIBIF_RAW_BASE          0x00030000U
-#define RCC_BASE                0x00100000U
 #define CLINT_BASE              0x02000000U
-#define CACHE_CONTROLLER_BASE   0x02010000U
 #define SRAM_BASE               0x08000000U
 #define PLIC_BASE               0x0C000000U
-#define GPIO_BASE               0x10012000U
+#define RCC_BASE                0x10000000U
+#define GPIO_BASE               0x10010000U
 #define UART_BASE               0x10020000U
-#define QSPI_BASE               0x10020000U
-#define I2C_BASE                0x10024000U
+#define QSPI_BASE               0x10030000U
+#define I2C_BASE                0x10040000U
+#define PWM_BASE                0x10050000U
 #define QSPI_FLASH_BASE         0x20000000U
 #define DRAM_BASE               0x80000000U
 
 /* Peripheral Pointer Definition */
-#define GPIOA_BASE              (GPIO_BASE)
-#define UART0_BASE              (UART_BASE)
-#define QSPI0_BASE              (QSPI_BASE)
+#define GPIOA_BASE              (GPIO_BASE + 0x0000U)
+#define GPIOB_BASE              (GPIO_BASE + 0x1000U)
+#define GPIOC_BASE              (GPIO_BASE + 0x2000U)
+#define UART0_BASE              (UART_BASE + 0x0000U)
+#define UART1_BASE              (UART_BASE + 0x1000U)
+#define QSPI0_BASE              (QSPI_BASE + 0x0000U)
 #define SPI1_BASE               (QSPI_BASE + 0x1000U)
-#define I2C0_BASE               (I2C_BASE)
+#define I2C0_BASE               (I2C_BASE + 0x0000U)
 #define I2C1_BASE               (I2C_BASE + 0x1000U)
 
 
-#define DEBUG_CONTROLLER       ((DEBUG_CONTROLLER_TypeDef *)DEBUG_CONTROLLER_BASE)
-#define ERROR_DEVICE       ((ERROR_DEVICE_TypeDef *)ERROR_DEVICE_BASE)
-#define BOOT_SEL       ((BOOT_SEL_TypeDef *)BOOT_SEL_BASE)
-#define RCC                     ((RCC_TypeDef *)RCC_BASE)
-#define PLL                     ((PLL_TypeDef *)PLL_BASE)
+#define DEBUG_CONTROLLER        ((DEBUG_CONTROLLER_TypeDef *)DEBUG_CONTROLLER_BASE)
+#define ERROR_DEVICE            ((ERROR_DEVICE_TypeDef *)ERROR_DEVICE_BASE)
+#define BOOT_SEL                ((BOOT_SEL_TypeDef *)BOOT_SEL_BASE)
 #define CLINT                   ((CLINT_TypeDef *)CLINT_BASE)
-// #define CACHE_CONTROLLER        ((CACHE_TypeDef *)CACHE_CONTROLLER_BASE)
 #define PLIC                    ((PLIC_TypeDef *)PLIC_BASE)
+#define RCC                     ((RCC_TypeDef *)RCC_BASE)
 #define PLIC_EXTRA              ((PLIC_Extra_TypeDef *)(PLIC_BASE + 0x00200000U))
 #define GPIOA                   ((GPIO_TypeDef *)GPIOA_BASE)
+#define GPIOB                   ((GPIO_TypeDef *)GPIOB_BASE)
+#define GPIOC                   ((GPIO_TypeDef *)GPIOC_BASE)
 #define UART0                   ((UART_TypeDef *)UART0_BASE)
+#define UART1                   ((UART_TypeDef *)UART1_BASE)
 #define QSPI0                   ((QSPI_TypeDef *)QSPI0_BASE)
 #define SPI1                    ((SPI_TypeDef *)SPI1_BASE)
 #define I2C0                    ((I2C_TypeDef *)I2C0_BASE)

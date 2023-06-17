@@ -47,7 +47,7 @@ ENTRY(_start)
 MEMORY {
   LIBIFROM (rwx): ORIGIN = 0x00020000, LENGTH = 64K
   LIBIFRAM (rwx): ORIGIN = 0x00030000, LENGTH = 64K
-  SRAM (rwx):     ORIGIN = 0x08000000, LENGTH = 16K
+  SRAM (rwx):     ORIGIN = 0x08000000, LENGTH = 64K
   FLASH (rwx):    ORIGIN = 0x20000000, LENGTH = 128M
   DRAM (rwx):     ORIGIN = 0x80000000, LENGTH = 16384M
 }
@@ -102,7 +102,7 @@ SECTIONS {
     
     *(.gnu.linkonce.t.*)
     PROVIDE(__text_end = .);
-  }> FLASH
+  }> SRAM
   
 
   /* Section containing read-only data */
@@ -116,7 +116,7 @@ SECTIONS {
     *(.srodata.cst4)
     *(.srodata.cst2)
     *(.srodata .srodata.*)
-  }> FLASH
+  }> SRAM
 
   /* Section for initialized data */
   .data : ALIGN(8) {
@@ -143,14 +143,14 @@ SECTIONS {
     KEEP(*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
     KEEP(*(.fini_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
     PROVIDE_HIDDEN(__fini_array_end = .);
-  }> SRAM AT> FLASH
+  }> SRAM
 
   /* Section for initialized small data */
   .sdata : {
     PROVIDE(__global_pointer$ = . + 0x800);
     *(.sdata .sdata.*)
     *(.gnu.linkonce.s.*)
-  }> SRAM AT> FLASH
+  }> SRAM
 
   /* Section for initialized thread-local small data */
   .tdata : {
@@ -159,7 +159,7 @@ SECTIONS {
     *(.gnu.linkonce.td.*)
     PROVIDE_HIDDEN(__tdata_end = .);
     PROVIDE(__data_end = .);
-  }> SRAM AT> FLASH
+  }> SRAM
 
   PROVIDE(__tdata_size = SIZEOF(.tdata));
 
@@ -172,6 +172,7 @@ SECTIONS {
     *(.tcommon)
     PROVIDE_HIDDEN(__tbss_end = .);
   }> SRAM
+
   PROVIDE(__tbss_size = SIZEOF(.tbss));
 
   /* Section for zero-initialized uninitialized data */

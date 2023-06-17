@@ -75,15 +75,23 @@ int main(int argc, char **argv) {
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
 
-  // GPIO_InitTypeDef GPIO_init_config;
-  // GPIO_init_config.mode = GPIO_MODE_OUTPUT;
-  // GPIO_init_config.pull = GPIO_PULL_NONE;
-  // GPIO_init_config.drive_strength = GPIO_DS_STRONG;
-  // HAL_GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+  GPIO_InitTypeDef GPIO_init_config;
+  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
+  GPIO_init_config.pull = GPIO_PULL_NONE;
+  GPIO_init_config.drive_strength = GPIO_DS_STRONG;
+  HAL_GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
-  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
+  UART_InitTypeDef UART_init_config;
+  UART_init_config.baudrate = 115200;
+  UART_init_config.mode = UART_MODE_TX_RX;
+  UART_init_config.stopbits = UART_STOPBITS_2;
+  HAL_UART_init(UART0, &UART_init_config);
+
+  HAL_GPIO_writePin(GPIOA, GPIO_PIN_3 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15, 0);
 
   char str[128];
+
+
 
   // printf("hello world!\n");
   
@@ -96,35 +104,26 @@ int main(int argc, char **argv) {
 
   // HAL_delay(1);
 
-  sprintf(str, "hello world\n");
-  SET_BITS(UART0->TXCTRL, UART_TXCTRL_TXEN_MSK);
-  HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 1000);
-
   // printf("malloc: %p\n", ptr);
   // free(ptr);
 
-
-  HAL_delay(10);
-
-
-  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
-
-  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
-
-  // HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
-  
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
 
-		// HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
+		
+    HAL_GPIO_writePin(GPIOA, GPIO_PIN_3 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15, 0);
+    HAL_delay(100);
 
-		// HAL_GPIO_writePin(GPIOA, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
-    // HAL_delay(100);
+    HAL_GPIO_writePin(GPIOA, GPIO_PIN_3 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15, 1);
+    HAL_delay(100);
 
-    return 0;
+
+    sprintf(str, "hello world\r\n");
+    HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 1000);
+
 		/* USER CODE END WHILE */
 	}
 
