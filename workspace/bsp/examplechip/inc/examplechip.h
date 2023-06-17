@@ -263,7 +263,7 @@ typedef struct {
 #define SRAM_BASE               0x08000000U
 #define PLIC_BASE               0x0C000000U
 #define GPIO_BASE               0x10012000U
-#define UART_BASE               0x1001A000U
+#define UART_BASE               0x10020000U
 #define QSPI_BASE               0x10020000U
 #define I2C_BASE                0x10024000U
 #define QSPI_FLASH_BASE         0x20000000U

@@ -8,6 +8,6 @@
  * 
  */
 
-#include "demosoc_hal_rcc.h"
+#include "examplechip_hal_rcc.h"
 
 void HAL_RCC_InitSystemClock() {}

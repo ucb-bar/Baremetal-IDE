@@ -8,7 +8,7 @@
  * 
  */
 
-#include "demosoc_hal_uart.h"
+#include "examplechip_hal_uart.h"
 
 void HAL_UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
   CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXEN_MSK);

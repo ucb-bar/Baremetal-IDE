@@ -8,7 +8,7 @@
  * 
  */
 
-#include "demosoc_hal_core.h"
+#include "examplechip_hal_core.h"
 
 
 void HAL_CORE_disableGlobalInterrupt() {
