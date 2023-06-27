@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "main.h": "c"
+        "main.h": "c",
+        "syscall.h": "c",
+        "compiler.h": "c",
+        "stddef.h": "c",
+        "syscalls.h": "c",
+        "stdlib.h": "c"
     }
 }

@@ -49,9 +49,9 @@ ENTRY(_start)
 MEMORY {
   LIBIFROM (rwx): ORIGIN = 0x00020000, LENGTH = 64K
   LIBIFRAM (rwx): ORIGIN = 0x00030000, LENGTH = 64K
-  SRAM (rwx):     ORIGIN = 0x08000000, LENGTH = 16K
-  FLASH (rwx):    ORIGIN = 0x20000000, LENGTH = 128M
-  DRAM (rwx):     ORIGIN = 0x80000000, LENGTH = 16384M
+  SCRATCH  (rwx): ORIGIN = 0x08000000, LENGTH = 16K
+  FLASH    (rwx): ORIGIN = 0x20000000, LENGTH = 128M
+  DRAM     (rwx): ORIGIN = 0x80000000, LENGTH = 16384M
 }
 
 SECTIONS {
@@ -145,7 +145,7 @@ SECTIONS {
     KEEP(*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
     KEEP(*(.fini_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
     PROVIDE_HIDDEN(__fini_array_end = .);
-  }> SRAM AT> FLASH
+  }> SCRATCH AT> FLASH
   PROVIDE(__data_load_start = LOADADDR(.data));
 
   /* Section for initialized small data */
@@ -153,7 +153,7 @@ SECTIONS {
     PROVIDE(__global_pointer$ = . + 0x800);
     *(.sdata .sdata.*)
     *(.gnu.linkonce.s.*)
-  }> SRAM AT> FLASH
+  }> SCRATCH AT> FLASH
 
   /* Section for initialized thread-local small data */
   .tdata : {
@@ -162,7 +162,7 @@ SECTIONS {
     *(.gnu.linkonce.td.*)
     PROVIDE_HIDDEN(__tdata_end = .);
     PROVIDE(__data_end = .);
-  }> SRAM AT> FLASH
+  }> SCRATCH AT> FLASH
   PROVIDE(__tdata_size = SIZEOF(.tdata));
 
   /* Section for zero-initialized thread-local uninitialized data */
@@ -173,7 +173,7 @@ SECTIONS {
     *(.gnu.linkonce.tb.*)
     *(.tcommon)
     PROVIDE_HIDDEN(__tbss_end = .);
-  }> SRAM
+  }> SCRATCH
   PROVIDE(__tbss_size = SIZEOF(.tbss));
 
   /* Section for zero-initialized uninitialized data */
@@ -181,7 +181,7 @@ SECTIONS {
     PROVIDE_HIDDEN(__bss_start = .);
     *(.sbss .sbss.*)
     *(.gnu.linkonce.sb.*)
-  }> SRAM
+  }> SCRATCH
   
   /* Section for uninitialized data */
   .bss (NOLOAD) : ALIGN(8) {
@@ -189,7 +189,7 @@ SECTIONS {
     *(.gnu.linkonce.b.*)
     *(COMMON)
     PROVIDE_HIDDEN(__bss_end = .);
-  }> SRAM
+  }> SCRATCH
 
   . = ALIGN(8);
   PROVIDE(__end = .);
@@ -200,7 +200,7 @@ SECTIONS {
     . += __heap_size;
     . = ALIGN(4K);
     PROVIDE_HIDDEN(__heap_end = .);
-  }> SRAM
+  }> SCRATCH
   
   /* Reserve stack space */
   .stack (NOLOAD) : ALIGN(16) {
@@ -208,7 +208,7 @@ SECTIONS {
     . += __stack_size * 5; /* Hart 0 */
     PROVIDE(_sp = .);
     PROVIDE_HIDDEN(__stack_end = .);
-  }> SRAM
+  }> SCRATCH
 
   PROVIDE(__stack_shift = LOG2CEIL(__stack_size));
 

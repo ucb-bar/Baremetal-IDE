@@ -48,7 +48,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -90,22 +89,7 @@ int main(int argc, char **argv) {
   HAL_GPIO_writePin(GPIOA, GPIO_PIN_3 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15, 0);
 
   char str[128];
-
-
-
-  // printf("hello world!\n");
-  
-  // int i;
-  // for (i = 0; i < argc; i++) {
-  //   printf("argv[%d]: %p %s\n", i, (void *)(argv + i), argv[i]);
-  // }
-
-  // uint8_t *ptr = malloc(10);
-
-  // HAL_delay(1);
-
-  // printf("malloc: %p\n", ptr);
-  // free(ptr);
+  uint8_t counter = 0;
 
   /* USER CODE END 2 */
 
@@ -121,8 +105,14 @@ int main(int argc, char **argv) {
     HAL_delay(100);
 
 
-    sprintf(str, "hello world\r\n");
-    HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 1000);
+    uint8_t *ptr = malloc(10);
+
+    // printf("malloc: %p\n", ptr);
+    free(ptr);
+
+    
+    printf("hello world %d\r\n", counter);
+    counter += 1;
 
 		/* USER CODE END WHILE */
 	}

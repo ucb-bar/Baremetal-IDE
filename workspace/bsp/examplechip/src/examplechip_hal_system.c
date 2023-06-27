@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "rv_common.h"
-#include "syscall.h"
+// #include "syscall.h"
 
 __attribute__((weak)) void HAL_MachineSoftwareInterruptCallback(uint32_t hart_id) {
 //   { // debug message
