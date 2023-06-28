@@ -107,13 +107,13 @@ int main(int argc, char **argv) {
     HAL_delay(100);
 
 
-    // uint8_t *ptr = malloc(10);
+    uint8_t *ptr = malloc(10);
 
-    // printf("malloc: %p\n", ptr);
-    // free(ptr);
+    printf("malloc: %p\n", ptr);
+    free(ptr);
 
     char str[128];
-    sprintf(str, "hello world\r\n");
+    sprintf(str, "hello world %d\r\n", counter);
     HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 100);
     counter += 1;
     // HAL_CLINT_triggerSoftwareInterrupt(0);

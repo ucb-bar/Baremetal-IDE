@@ -146,6 +146,7 @@ SECTIONS {
     KEEP(*(.fini_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
     PROVIDE_HIDDEN(__fini_array_end = .);
   }> SCRATCH AT> FLASH
+  
   PROVIDE(__data_load_start = LOADADDR(.data));
 
   /* Section for initialized small data */
@@ -163,6 +164,7 @@ SECTIONS {
     PROVIDE_HIDDEN(__tdata_end = .);
     PROVIDE(__data_end = .);
   }> SCRATCH AT> FLASH
+
   PROVIDE(__tdata_size = SIZEOF(.tdata));
 
   /* Section for zero-initialized thread-local uninitialized data */
@@ -174,6 +176,7 @@ SECTIONS {
     *(.tcommon)
     PROVIDE_HIDDEN(__tbss_end = .);
   }> SCRATCH
+  
   PROVIDE(__tbss_size = SIZEOF(.tbss));
 
   /* Section for zero-initialized uninitialized data */

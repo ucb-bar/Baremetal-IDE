@@ -230,6 +230,25 @@ fpu_init_exit:
   la t0, __boot_hart
   bne s0, t0, boot_other
 
+data_init_entry:
+  la t0, __data_load_start
+  la t1, __data_start
+  la t2, __data_end
+
+  # see if:
+  # - data section is already at correct location?
+  # - data section is of size 0?
+  beq t0, t1, data_init_exit
+  bge t1, t2, data_init_exit
+
+data_init_loop:
+  LOAD   t3, 0(t0)
+  STORE t3, 0(t1)
+  addi t0, t0, REGBYTES
+  addi t1, t1, REGBYTES
+  blt  t1, t2, data_init_loop
+data_init_exit:
+
 bss_init_entry:
   /* Zero BSS segment */
   la t0, __bss_start
@@ -247,7 +266,6 @@ bss_init_exit:
   la a0, __libc_fini_array
   call atexit
   call __libc_init_array
-
 
 boot_manager:
   call system_init
