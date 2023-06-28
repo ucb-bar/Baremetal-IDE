@@ -265,8 +265,6 @@ bss_init_exit:
   call __libc_init_array
 
 boot_manager:
-  call system_init
-
   li a0, 1            /* argc = 1 */
   la a1, argv         /* argv = { "", NULL } */
   LOAD a2, environ    /* envp */
