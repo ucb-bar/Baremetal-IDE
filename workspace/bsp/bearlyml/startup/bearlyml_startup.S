@@ -207,16 +207,13 @@ fpu_init_exit:
 
   /* Initialize thread pointer */
   csrr s0, mhartid
-  lui t0, %hi(__stack_shift)
-  addi t0, t0, %lo(__stack_shift)
-  lui tp, %hi(__stack_start)
-  addi tp, tp, %lo(__stack_start)
+  la t0, __stack_shift
+  la tp, __stack_start
   sll t0, s0, t0
   add tp, tp, t0
 
   /* Initialize stack pointer */
-  lui t0, %hi(__stack_size)
-  addi t0, t0, %lo(__stack_size)
+  la t0, __stack_size
   add sp, tp, t0
 
   /* Initialize trap vector */
