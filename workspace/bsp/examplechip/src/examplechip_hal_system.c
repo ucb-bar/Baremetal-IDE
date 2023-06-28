@@ -3,141 +3,122 @@
 #include <string.h>
 
 #include "rv_common.h"
-// #include "syscall.h"
+#include "examplechip_hal.h"
 
-__attribute__((weak)) void HAL_MachineSoftwareInterruptCallback(uint32_t hart_id) {
-//   { // debug message
-//     char str[32];
-//     sprintf(str, "machine software irq\n");
-//     HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//   }
+/* ==== Exception Handlers ==== */
+__attribute__((weak)) void HAL_instructionAddressMisalignedExceptionHandler() {
+  while (1) {
+    printf("Exception: instruction address misaligned\n");
+  }
 }
 
-__attribute__((weak)) void HAL_GPIO_Callback() {}
+__attribute__((weak)) void HAL_instructionAccessFaultExceptionHandler() {
+  while (1) {
+    printf("Exception: instruction access fault\n");
+  }
+}
 
-void InstructionAddressMisalign_Exception_Handler() {
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "instruction address misalign exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-//   }
+__attribute__((weak)) void HAL_illegalInstructionExceptionHandler() {
+  while (1) {
+    printf("Exception: illegal instruction\n");
+  }
 }
-void InstructionAccessFault_Exception_Handler() {
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "instruction access fault exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-//   }
+
+__attribute__((weak)) void HAL_breakpointExceptionHandler() {
+  while (1) {
+    printf("Exception: breakpoint\n");
+  }
 }
-void IllegalInstruction_Exception_Handler() {
-  // while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "illegal instruction exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-//   }
+
+__attribute__((weak)) void HAL_loadAddressMisalignedExceptionHandler() {
+  while (1) {
+    printf("Exception: load address misaligned\n");
+  }
 }
-void Breakpoint_Exception_Handler() {
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "breakpoint exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-  // }
+
+__attribute__((weak)) void HAL_loadAccessFaultExceptionHandler() {
+  while (1) {
+    printf("Exception: load access fault\n");
+  }
 }
-void LoadAddressMisalign_Exception_handler() {
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "load address misaligned exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-//   }
+
+__attribute__((weak)) void HAL_storeAMOAddressMisalignedExceptionHandler() {
+  while (1) {
+    printf("Exception: store/AMO address misaligned\n");
+  }
 }
-void LoadAccessFault_Exception_handler() {
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "load access fault exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-//   }
+
+__attribute__((weak)) void HAL_storeAMOAccessFaultExceptionHandler() {
+  while (1) {
+    printf("Exception: store/AMO access fault\n");
+  }
 }
-void StoreAMOAddressMisalign_Exception_handler() {
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "store/AMO address misaligned exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-//   }
+
+__attribute__((weak)) void HAL_environmentCallUModeExceptionHandler() {
+  // TODO: implement mode transfer
+  while (1) {
+    printf("Exception: environment call from U-mode\n");
+  }
 }
-void StoreAMOAccessFault_Exception_handler() {
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "store/AMO access fault exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-  // }
-}
-void EnvironmentCallUMode_Exception_handler() {
+
+__attribute__((weak)) void HAL_environmentCallMModeExceptionHandler() {
 //   // TODO: implement mode transfer
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "environment call from U-mode exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-  // }
-}
-void EnvironmentCallMMode_Exception_handler() {
-//   // TODO: implement mode transfer
-//   while (1) {
-//     { // debug message
-//       char str[64];
-//       sprintf(str, "environment call from M-mode exception\n");
-//       HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//     }
-//   }
+  while (1) {
+    printf("Exception: environment call from M-mode\n");
+  }
 }
 
-void UserSoftware_IRQn_Handler() {}
-void SupervisorSoftware_IRQn_Handler() {}
-void HypervisorSoftware_IRQn_Handler() {}
-void MachineSoftware_IRQn_Handler() {
-  // HAL_MachineSoftwareInterruptCallback(0);
-  // CLINT->MSIP0 = 0;
-  // CLINT->MSIP1 = 0;
-  // CLINT->MSIP2 = 0;
-  // CLINT->MSIP3 = 0;
-  // CLINT->MSIP4 = 0;
+__attribute__((weak)) void HAL_instructionPageFaultExceptionHandler() {
+  while (1) {
+    printf("Exception: instruction page fault\n");
+  }
+}
+
+/* ==== Interrupt Callbacks ==== */
+__attribute__((weak)) void HAL_userSoftwareInterruptCallback() {
+  printf("user software irq\n");
+  // HAL_CORE_clearIRQ(UserSoftware_IRQn);
+}
+
+__attribute__((weak)) void HAL_supervisorSoftwareInterruptCallback() {
+  printf("supervisor software irq\n");
+  // HAL_CORE_clearIRQ(SupervisorSoftware_IRQn);
+}
+
+__attribute__((weak)) void HAL_hypervisorSoftwareInterruptCallback() {
+  printf("hypervisor software irq\n");
+  // HAL_CORE_clearIRQ(HypervisorSoftware_IRQn);
+}
+
+__attribute__((weak)) void HAL_machineSoftwareInterruptCallback() {
+  printf("machine software irq\n");
+  HAL_CLINT_clearSoftwareInterrupt(0);
   // HAL_CORE_clearIRQ(MachineSoftware_IRQn);
 }
 
-void UserTimer_IRQn_Handler() {}
-void SupervisorTimer_IRQn_Handler() {}
-void HypervisorTimer_IRQn_Handler() {}
-void MachineTimer_IRQn_Handler() {
-//   { // debug message
-//     char str[32];
-//     sprintf(str, "machine timer irq\n");
-//     HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//   }
-  // HAL_CLINT_setTimerInterrupt(0xFFFFFFFFFFFFFFFF);
-  // HAL_CORE_clearIRQ(MachineTimer_IRQn);
+__attribute__((weak)) void HAL_userTimerInterruptCallback() {
+  printf("user timer irq\n");
+  // HAL_CORE_clearIRQ(UserTimer_IRQn);
 }
 
-void UserExternal_IRQn_Handler() {}
-void SupervisorExternal_IRQn_Handler() {}
-void HypervisorExternal_IRQn_Handler() {}
-void MachineExternal_IRQn_Handler() {
+__attribute__((weak)) void HAL_supervisorTimerInterruptCallback() {
+  printf("supervisor timer irq\n");
+  // HAL_CORE_clearIRQ(SupervisorTimer_IRQn);
+}
+
+__attribute__((weak)) void HAL_hypervisorTimerInterruptCallback() {
+  printf("hypervisor timer irq\n");
+  // HAL_CORE_clearIRQ(HypervisorTimer_IRQn);
+}
+
+__attribute__((weak)) void HAL_machineTimerInterruptCallback() {
+  printf("machine timer irq\n");
+  HAL_CLINT_setTimerInterrupt(0xFFFFFFFFFFFFFFFF);
+  HAL_CLINT_clearSoftwareInterrupt(0);
+}
+
+__attribute__((weak)) void HAL_machineExternalInterruptCallback() {
+  printf("machine external irq\n");
   // uint32_t irq_source = HAL_PLIC_claimIRQ(0);
 
   // { // debug message
@@ -152,7 +133,6 @@ void MachineExternal_IRQn_Handler() {
 //       break;
 //   }
   // HAL_PLIC_completeIRQ(0, irq_source);
-  
   // HAL_CORE_clearIRQ(MachineExternal_IRQn);
 }
 
@@ -175,61 +155,52 @@ void __init_tls(void) {
   memset(__thread_self + (size_t)__tbss_offset, 0, (size_t)__tbss_size);
 }
 
-void trap_handler(uintptr_t m_epc, uintptr_t m_cause, uintptr_t m_tval, uintptr_t regs[32]) {
-
-  // /* Extract low-order bits of exception code as positive int */
-  // int code = cause & ((1UL << ((sizeof(int)<<3)-1)) - 1);
-  // /* Encode interrupt as negative value */
-  // code = ((intptr_t)cause < 0) ? -code : code;
-  // _exit(code);
-  // __builtin_unreachable();
-
+uintptr_t trap_handler(uintptr_t m_epc, uintptr_t m_cause, uintptr_t m_tval, uintptr_t regs[32]) {
   switch (m_cause) {
-    case 0x00000000:      // instruction address misaligned
-      InstructionAddressMisalign_Exception_Handler();
+    case 0x00000000UL:      // instruction address misaligned
+      HAL_instructionAddressMisalignedExceptionHandler();
       break;
-    case 0x00000001:      // instruction access fault
-      InstructionAccessFault_Exception_Handler();
+    case 0x00000001UL:      // instruction access fault
+      HAL_instructionAccessFaultExceptionHandler();
       break;
-    case 0x00000002:      // illegal instruction
-      IllegalInstruction_Exception_Handler();
+    case 0x00000002UL:      // illegal instruction
+      HAL_illegalInstructionExceptionHandler();
       break;
-    case 0x00000003:      // breakpoint
-      Breakpoint_Exception_Handler();
+    case 0x00000003UL:      // breakpoint
+      HAL_breakpointExceptionHandler();
       break;
-    case 0x00000004:      // load address misaligned
-      LoadAddressMisalign_Exception_handler();
+    case 0x00000004UL:      // load address misaligned
+      HAL_loadAddressMisalignedExceptionHandler();
       break;
-    case 0x00000005:      // load access fault
-      LoadAccessFault_Exception_handler();
+    case 0x00000005UL:      // load access fault
+      HAL_loadAccessFaultExceptionHandler();
       break;
-    case 0x00000006:      // store/AMO address misaligned
-      StoreAMOAddressMisalign_Exception_handler();
+    case 0x00000006UL:      // store/AMO address misaligned
+      HAL_storeAMOAddressMisalignedExceptionHandler();
       break;
-    case 0x00000007:      // store/AMO access fault
-      StoreAMOAccessFault_Exception_handler();
+    case 0x00000007UL:      // store/AMO access fault
+      HAL_storeAMOAccessFaultExceptionHandler();
       break;
-    case 0x00000008:      // environment call from U-mode
-      EnvironmentCallUMode_Exception_handler();
+    case 0x00000008UL:      // environment call from U-mode
+      HAL_environmentCallUModeExceptionHandler();
       break;
-    case 0x00000011:      // environment call from M-mode
-      EnvironmentCallMMode_Exception_handler();
+    case 0x0000000BUL:      // environment call from M-mode
+      HAL_environmentCallMModeExceptionHandler();
       break;
-    case 0x80000003:      // machine software interrupt
-      MachineSoftware_IRQn_Handler();
+    case 0x0000000CUL:      // instruction page fault
+      HAL_instructionPageFaultExceptionHandler();
       break;
-    case 0x80000007:      // machine timer interrupt
-      MachineTimer_IRQn_Handler();
+    case (1UL << (RISCV_XLEN-1)) | 0x00000003UL:      // machine software interrupt
+      HAL_machineSoftwareInterruptCallback();
       break;
-    case 0x8000000B:      // machine external interrupt
-      MachineExternal_IRQn_Handler();
+    case (1UL << (RISCV_XLEN-1)) | 0x00000007UL:      // machine timer interrupt
+      HAL_machineTimerInterruptCallback();
+      break;
+    case (1UL << (RISCV_XLEN-1)) | 0x0000000BUL:      // machine external interrupt
+      HAL_machineExternalInterruptCallback();
       break;
     default:
       break;
-      // { // debug message
-      //   char str[32];
-      //   sprintf(str, "mcause %lu\n", m_cause);
-      //   HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-      // }
   }
+  return m_epc;
 }

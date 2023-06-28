@@ -91,13 +91,16 @@ int main(int argc, char **argv) {
   char str[128];
   uint8_t counter = 0;
 
+
+  HAL_CORE_enableGlobalInterrupt();
+  HAL_CORE_enableIRQ(MachineSoftware_IRQn);
+  HAL_CORE_enableIRQ(MachineTimer_IRQn);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
-
-		
     HAL_GPIO_writePin(GPIOA, GPIO_PIN_3 | GPIO_PIN_7 | GPIO_PIN_11 | GPIO_PIN_15, 0);
     HAL_delay(100);
 
@@ -113,6 +116,7 @@ int main(int argc, char **argv) {
     
     printf("hello world %d\r\n", counter);
     counter += 1;
+    HAL_CLINT_triggerSoftwareInterrupt(0);
 
 		/* USER CODE END WHILE */
 	}

@@ -11,6 +11,10 @@
 #include "examplechip_hal_clint.h"
 
 
+void HAL_CLINT_clearSoftwareInterrupt(uint32_t hartid) {
+  CLEAR_BITS(CLINT->MSIP0, 1U << (hartid));
+}
+
 void HAL_CLINT_triggerSoftwareInterrupt(uint32_t hartid) {
   SET_BITS(CLINT->MSIP0, 1U << (hartid));
 }
@@ -32,3 +36,6 @@ void HAL_CLINT_setTimerInterrupt(uint64_t time) {
   *((uint32_t *)(&CLINT->MTIMECMP0)) = (uint32_t)time;
   *((uint32_t *)(&CLINT->MTIMECMP0) + 1) = (uint32_t)(time >> 32);
 }
+
+
+

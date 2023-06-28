@@ -16,6 +16,7 @@
 extern "C" {
 #endif
 
+#include "rv_arch.h"
 #include "rv_common.h"
 #include "examplechip.h"
 #include "examplechip_hal_core.h"

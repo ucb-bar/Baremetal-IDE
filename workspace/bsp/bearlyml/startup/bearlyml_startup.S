@@ -209,7 +209,8 @@ fpu_init_exit:
   csrr s0, mhartid
   lui t0, %hi(__stack_shift)
   addi t0, t0, %lo(__stack_shift)
-  la tp, __stack_start
+  lui tp, %hi(__stack_start)
+  addi tp, tp, %lo(__stack_start)
   sll t0, s0, t0
   add tp, tp, t0
 
