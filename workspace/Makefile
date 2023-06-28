@@ -6,7 +6,7 @@
 
 TARGET ?= firmware
 
-CHIP ?= examplechip
+CHIP ?= bearlyml
 
 #################################
 # RISCV Toolchain

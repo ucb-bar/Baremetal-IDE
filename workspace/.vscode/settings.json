@@ -7,6 +7,9 @@
         "syscalls.h": "c",
         "stdlib.h": "c",
         "examplechip_hal.h": "c",
-        "examplechip_hal_clint.h": "c"
+        "examplechip_hal_clint.h": "c",
+        "bearlyml_hal.h": "c",
+        "rv_common.h": "c",
+        "rv_arch.h": "c"
     }
 }
