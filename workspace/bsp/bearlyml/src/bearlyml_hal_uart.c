@@ -14,48 +14,20 @@ void HAL_UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
   CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXEN_MSK);
   CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_TXEN_MSK);
 
-  if (READ_BITS(UART_init->mode, 0b01)) {
+  if (READ_BITS((uint32_t)UART_init->mode, 0b01)) {
     SET_BITS(UARTx->RXCTRL, UART_RXCTRL_RXEN_MSK);
   }
   
-  if (READ_BITS(UART_init->mode, 0b10)) {
+  if (READ_BITS((uint32_t)UART_init->mode, 0b10)) {
     SET_BITS(UARTx->TXCTRL, UART_TXCTRL_TXEN_MSK);
   }
 
   CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_NSTOP_MSK);
-  CLEAR_BITS(UARTx->TXCTRL, UART_init->stopbits);
+  CLEAR_BITS(UARTx->TXCTRL, (uint32_t)UART_init->stopbits);
   
   // baudrate setting
   // f_baud = f_sys / (div + 1)
   UARTx->DIV = (SYS_CLK_FREQ / UART_init->baudrate) - 1;
-}
-
-uint8_t HAL_UART_getRXFIFODepth(UART_TypeDef *UARTx) {
-  return READ_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK) >> UART_RXCTRL_RXCNT_POS;
-}
-
-uint8_t HAL_UART_getTXFIFODepth(UART_TypeDef *UARTx) {
-  return READ_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK) >> UART_TXCTRL_TXCNT_POS;
-}
-
-void HAL_UART_disableRXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
-  CLEAR_BITS(UARTx->IE, UART_IE_RXWM_MSK);
-}
-
-void HAL_UART_enableRXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
-  CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK);
-  SET_BITS(UARTx->RXCTRL, fifo_level << UART_RXCTRL_RXCNT_POS);
-  SET_BITS(UARTx->IE, UART_IE_RXWM_MSK);
-}
-
-void HAL_UART_disableTXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
-  CLEAR_BITS(UARTx->IE, UART_IE_TXWM_MSK);
-}
-
-void HAL_UART_enableTXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
-  CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK);
-  SET_BITS(UARTx->TXCTRL, fifo_level << UART_TXCTRL_TXCNT_POS);
-  SET_BITS(UARTx->IE, UART_IE_TXWM_MSK);
 }
 
 Status HAL_UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout) {

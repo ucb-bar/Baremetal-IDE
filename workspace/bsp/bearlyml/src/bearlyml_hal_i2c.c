@@ -22,18 +22,6 @@ void HAL_I2C_init(I2C_TypeDef *I2Cx, I2C_InitTypeDef *I2C_init) {
   HAL_I2C_enable(I2Cx);
 }
 
-void HAL_I2C_disable(I2C_TypeDef *I2Cx) {
-  CLEAR_BITS(I2Cx->CTRL, I2C_CTRL_EN_MSK);
-}
-
-void HAL_I2C_enable(I2C_TypeDef *I2Cx) {
-  SET_BITS(I2Cx->CTRL, I2C_CTRL_EN_MSK);
-}
-
-State HAL_I2C_getFlag(I2C_TypeDef *I2Cx, I2C_Flag flag) {
-  return READ_BITS(I2Cx->STAT_CMD, flag) ? SET : RESET;
-}
-
 Status HAL_I2C_waitForFlag(I2C_TypeDef *I2Cx, I2C_Flag flag, State state, uint32_t timestart, uint32_t timeout) {
   while (HAL_I2C_getFlag(I2Cx, flag) != state) {
     if (timeout == 0UL) {
@@ -59,7 +47,6 @@ Status HAL_I2C_waitForTransaction(I2C_TypeDef *I2Cx, uint32_t timestart, uint32_
     I2Cx->STAT_CMD = I2C_STAT_CMD_BUSY_STO_MSK;
     return ERROR;
   }
-  return OK;
 }
 
 Status HAL_I2C_masterReceive(I2C_TypeDef *I2Cx, uint16_t device_addr, uint8_t *buffer, uint16_t size, uint64_t timeout) {
