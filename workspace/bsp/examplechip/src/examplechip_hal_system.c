@@ -92,7 +92,8 @@ __attribute__((weak)) void HAL_hypervisorSoftwareInterruptCallback() {
 
 __attribute__((weak)) void HAL_machineSoftwareInterruptCallback() {
   printf("machine software irq\n");
-  HAL_CLINT_clearSoftwareInterrupt(0);
+  uint32_t hartid = HAL_CORE_getHartId();
+  HAL_CLINT_clearSoftwareInterrupt(hartid);
   // HAL_CORE_clearIRQ(MachineSoftware_IRQn);
 }
 
@@ -113,8 +114,8 @@ __attribute__((weak)) void HAL_hypervisorTimerInterruptCallback() {
 
 __attribute__((weak)) void HAL_machineTimerInterruptCallback() {
   printf("machine timer irq\n");
-  HAL_CLINT_setTimerInterrupt(0xFFFFFFFFFFFFFFFF);
-  HAL_CLINT_clearSoftwareInterrupt(0);
+  uint32_t hartid = HAL_CORE_getHartId();
+  HAL_CLINT_setTimerInterruptTarget(hartid, 0xFFFFFFFFFFFFFFFF);
 }
 
 __attribute__((weak)) void HAL_machineExternalInterruptCallback() {

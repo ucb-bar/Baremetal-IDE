@@ -130,7 +130,7 @@ void MachineTimer_IRQn_Handler() {
 //     sprintf(str, "machine timer irq\n");
 //     HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
 //   }
-  // HAL_CLINT_setTimerInterrupt(0xFFFFFFFFFFFFFFFF);
+  // HAL_CLINT_setTimerInterruptTarget(0xFFFFFFFFFFFFFFFF);
   // HAL_CORE_clearIRQ(MachineTimer_IRQn);
 }
 

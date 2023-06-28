@@ -91,7 +91,6 @@ int main(int argc, char **argv) {
   char str[128];
   uint8_t counter = 0;
 
-
   HAL_CORE_enableGlobalInterrupt();
   HAL_CORE_enableIRQ(MachineSoftware_IRQn);
   HAL_CORE_enableIRQ(MachineTimer_IRQn);

@@ -19,33 +19,53 @@ extern "C" {
 
 #define UART_FIFO_DEPTH                 8
 
-#define UART_MODE_RX                    0x01U
-#define UART_MODE_TX                    0x02U
-#define UART_MODE_TX_RX                 0x03U
+typedef enum {
+  UART_MODE_RX          = 0x01,
+  UART_MODE_TX          = 0x02,
+  UART_MODE_TX_RX       = 0x03,
+} UART_Mode;
 
-#define UART_STOPBITS_1                 0
-#define UART_STOPBITS_2                 UART_TXCTRL_NSTOP_MSK
+typedef enum {
+  UART_STOPBITS_1       = 0,
+  UART_STOPBITS_2       = UART_TXCTRL_NSTOP_MSK,
+} UART_StopBits;
 
 typedef struct {
   uint32_t baudrate;  // the default baudrate divisor is 0xAD, 173
-  uint32_t mode;
-  uint32_t stopbits;
+  UART_Mode mode;
+  UART_StopBits stopbits;
 } UART_InitTypeDef;
 
 
+static inline uint8_t HAL_UART_getRXFIFODepth(UART_TypeDef *UARTx) {
+  return READ_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK) >> UART_RXCTRL_RXCNT_POS;
+}
+
+static inline uint8_t HAL_UART_getTXFIFODepth(UART_TypeDef *UARTx) {
+  return READ_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK) >> UART_TXCTRL_TXCNT_POS;
+}
+
+static inline void HAL_UART_disableRXInterrupt(UART_TypeDef *UARTx) {
+  CLEAR_BITS(UARTx->IE, UART_IE_RXWM_MSK);
+}
+
+static inline void HAL_UART_enableRXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
+  CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK);
+  SET_BITS(UARTx->RXCTRL, fifo_level << UART_RXCTRL_RXCNT_POS);
+  SET_BITS(UARTx->IE, UART_IE_RXWM_MSK);
+}
+
+static inline void HAL_UART_disableTXInterrupt(UART_TypeDef *UARTx) {
+  CLEAR_BITS(UARTx->IE, UART_IE_TXWM_MSK);
+}
+
+static inline void HAL_UART_enableTXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
+  CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK);
+  SET_BITS(UARTx->TXCTRL, fifo_level << UART_TXCTRL_TXCNT_POS);
+  SET_BITS(UARTx->IE, UART_IE_TXWM_MSK);
+}
+
 void HAL_UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init);
-
-uint8_t HAL_UART_getRXFIFODepth(UART_TypeDef *UARTx);
-
-uint8_t HAL_UART_getTXFIFODepth(UART_TypeDef *UARTx);
-
-void HAL_UART_disableRXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level);
-
-void HAL_UART_enableRXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level);
-
-void HAL_UART_disableTXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level);
-
-void HAL_UART_enableTXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level);
 
 Status HAL_UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout);
 

@@ -26,8 +26,44 @@ typedef enum {
   MachineExternal_IRQn      = 11,
 } IRQn_Type;
 
+// Interrupt map (2 harts 45 interrupts):
+//   [1, 1] => uart_0
+//   [2, 2] => uart_1
+//   [3, 3] => uart_2
+//   [4, 27] => gpio_0
+//   [28, 43] => gpio_1
+//   [44, 45] => gpio_2
+
 typedef enum {
-  UART0_IRQn                ,
+  UART0_IRQn,
+  UART1_IRQn,
+  UART2_IRQn,
+  GPIOA_PIN0_IRQn,
+  GPIOA_PIN1_IRQn,
+  GPIOA_PIN2_IRQn,
+  GPIOA_PIN3_IRQn,
+  GPIOA_PIN4_IRQn,
+  GPIOA_PIN5_IRQn,
+  GPIOA_PIN6_IRQn,
+  GPIOA_PIN7_IRQn,
+  GPIOA_PIN8_IRQn,
+  GPIOA_PIN9_IRQn,
+  GPIOA_PIN10_IRQn,
+  GPIOA_PIN11_IRQn,
+  GPIOA_PIN12_IRQn,
+  GPIOA_PIN13_IRQn,
+  GPIOA_PIN14_IRQn,
+  GPIOA_PIN15_IRQn,
+  GPIOA_PIN16_IRQn,
+  GPIOA_PIN17_IRQn,
+  GPIOA_PIN18_IRQn,
+  GPIOA_PIN19_IRQn,
+  GPIOA_PIN20_IRQn,
+  GPIOA_PIN21_IRQn,
+  GPIOA_PIN22_IRQn,
+  GPIOA_PIN23_IRQn,
+  GPIOB_PIN0_IRQn,
+  GPIOB_PIN1_IRQn,
 } PLIC_IRQn_Type;
 
 /* Core CSR Bit Field Definition */

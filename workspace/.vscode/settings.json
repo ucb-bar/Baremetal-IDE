@@ -5,6 +5,8 @@
         "compiler.h": "c",
         "stddef.h": "c",
         "syscalls.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "examplechip_hal.h": "c",
+        "examplechip_hal_clint.h": "c"
     }
 }
