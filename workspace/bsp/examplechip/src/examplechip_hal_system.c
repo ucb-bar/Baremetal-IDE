@@ -137,14 +137,6 @@ __attribute__((weak)) void HAL_machineExternalInterruptCallback() {
   // HAL_CORE_clearIRQ(MachineExternal_IRQn);
 }
 
-void system_init(uint32_t hartid) {
-
-  // TODO: these should really go into main(), but putting here temporarily for ease of testing
-  // HAL_init();
-  
-  return;
-}
-
 void __init_tls(void) {
   register char *__thread_self __asm__ ("tp");
   extern char __tdata_start[];

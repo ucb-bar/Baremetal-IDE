@@ -207,16 +207,13 @@ fpu_init_exit:
 
   /* Initialize thread pointer */
   csrr s0, mhartid
-  lui t0, %hi(__stack_shift)
-  addi t0, t0, %lo(__stack_shift)
-  lui tp, %hi(__stack_start)
-  addi tp, tp, %lo(__stack_start)
+  la t0, __stack_shift
+  la tp, __stack_start
   sll t0, s0, t0
   add tp, tp, t0
 
   /* Initialize stack pointer */
-  lui t0, %hi(__stack_size)
-  addi t0, t0, %lo(__stack_size)
+  la t0, __stack_size
   add sp, tp, t0
 
   /* Initialize trap vector */
@@ -268,8 +265,6 @@ bss_init_exit:
   call __libc_init_array
 
 boot_manager:
-  call system_init
-
   li a0, 1            /* argc = 1 */
   la a1, argv         /* argv = { "", NULL } */
   LOAD a2, environ    /* envp */

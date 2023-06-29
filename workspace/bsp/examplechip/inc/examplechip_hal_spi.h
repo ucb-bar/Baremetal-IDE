@@ -6,7 +6,6 @@
 extern "C" {
 #endif
 
-#include "examplechip.h"
 #include "examplechip_hal.h"
 
 #define SPI_CSMODE_AUTO                   0x00U
