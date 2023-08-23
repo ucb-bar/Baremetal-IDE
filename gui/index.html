@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SoC Designer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/show-hint.min.css">  
+  <link rel="stylesheet" href="vscode-dark.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/show-hint.min.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/clike/clike.min.js"></script>
+  
+  <style>
+    .CodeMirror {
+      border: 1px solid #eee;
+      height: auto;
+    }
+  </style>
+  <script>
+    var code_textarea;
+
+
+    var registerMonitoredInputs = function() {
+      $(".monitored").change(updateCode);
+    }
+
+    $(document).ready(function() {
+      code_textarea = CodeMirror.fromTextArea($("#ui_generated_src")[0], {
+        mode: "text/x-scala",
+        // theme: "vscode-dark",
+        lineNumbers: true,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        viewportMargin: Infinity
+      });
+
+      $("select.ui.dropdown").dropdown();
+      $(".navbar.ui.dropdown").dropdown({
+        "action": "select"
+      });
+    ;
+      $(".tab-select.menu .item").tab();
+
+      registerMonitoredInputs();
+
+      $("#ui_add_gpio_btn").click(function() {
+        let n_gpio_blocks = $("#gpio_list").find(".fields").length;
+        $("#gpio_list").html($("#gpio_list").html() + `
+<div class="two fields">
+  <div class="field">
+    <label>GPIO${String.fromCharCode(65+n_gpio_blocks)} Address</label>
+    <input class="monitored" id="gui_chipconfig_gpio_${String.fromCharCode(97+n_gpio_blocks)}_address" type="text" value="0x1001${n_gpio_blocks}000">
+  </div>
+  <div class="field">
+    <label>GPIO${String.fromCharCode(65+n_gpio_blocks)} Width</label>
+    <input class="monitored" id="gui_chipconfig_gpio_${String.fromCharCode(97+n_gpio_blocks)}_width" type="text" value="32">
+  </div>
+</div>`);
+
+        registerMonitoredInputs();
+        updateCode();
+      });
+
+      $("#ui_add_uart_btn").click(function() {
+        let n_uart_blocks = $("#uart_list").find(".fields").length;
+        $("#uart_list").html($("#uart_list").html() + `
+<div class="two fields">
+  <div class="field">
+    <label>UART${n_uart_blocks} Address</label>
+    <input class="monitored" id="gui_chipconfig_uart_${n_uart_blocks}_address" type="text" value="0x1002${n_uart_blocks}000">
+  </div>
+  <div class="field">
+    <label>UART${n_uart_blocks} Baudrate</label>
+    <input class="monitored" id="gui_chipconfig_uart_${n_uart_blocks}_baudrate" type="text" value="115200">
+  </div>
+</div>`);
+        
+        registerMonitoredInputs();
+        updateCode();
+      });
+
+      $("#ui_menu_generate_rtl_code").click(function() {
+        downloadFile("ChipConfig.scala", code_textarea.getValue());
+      });
+      $("#ui_menu_generate_baremetal_code").click(function() {
+        var code = generateBaremetalCode();
+        downloadFile("examplechipconfig.h", code);
+      });
+
+      updateCode();
+    });
+
+    var generateBaremetalCode = function() {
+      var generated_src = `#ifndef __EXAMPLECHIP_H
+#define __EXAMPLECHIP_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "rv_common.h"
+`;
+
+      generated_src += `      
+typedef struct {
+  __IO uint32_t TXDATA;                         /** Transmit data register */
+  __I  uint32_t RXDATA;                         /** Receive data register */
+  __IO uint32_t TXCTRL;                         /** Transmit control register */
+  __IO uint32_t RXCTRL;                         /** Receive control register */
+  __IO uint32_t IE;                             /** UART interrupt enable */
+  __I  uint32_t IP;                             /** UART interrupt pending */
+  __IO uint32_t DIV;                            /** Baud rate divisor */
+} UART_TypeDef;
+`;
+
+      generated_src += `
+typedef struct {
+  __I  uint32_t INPUT_VAL;                      /** pin value */
+  __IO uint32_t INPUT_EN;                       /** pin input enable */
+  __IO uint32_t OUTPUT_EN;                      /** Pin output enable */
+  __IO uint32_t OUTPUT_VAL;                     /** Output value */
+  __IO uint32_t PUE;                            /** Internal pull-up enable */
+  __IO uint32_t DS;                             /** Pin drive strength */
+  __IO uint32_t RISE_IE;                        /** Rise interrupt enable */
+  __IO uint32_t RISE_IP;                        /** Rise interrupt pending */
+  __IO uint32_t FALL_IE;                        /** Fall interrupt enable */
+  __IO uint32_t FALL_IP;                        /** Fall interrupt pending */
+  __IO uint32_t HIGH_IE;                        /** High interrupt pending */
+  __IO uint32_t HIGH_IP;                        /** High interrupt pending */
+  __IO uint32_t LOW_IE;                         /** Low interrupt pending */
+  __IO uint32_t LOW_IP;                         /** Low interrupt pending */
+  __IO uint32_t OUT_XOR;                        /** Output XOR (invert) */
+} GPIO_TypeDef;
+`;
+
+      generated_src += `\n#define RCC_BASE                0x10011000U`;
+      generated_src += `\n#define GPIO_BASE               0x10011000U`;
+      generated_src += `\n#define UART_BASE               0x10012000U`;
+      generated_src += `\n`;
+
+      for (let i=0; i<$("#gpio_list").find(".fields").length; i+=1) {
+        let gpio_char = String.fromCharCode(65+i);
+        generated_src += `\n#define GPIO${gpio_char}_BASE              (GPIO_BASE + 0x${i}000)`;
+      }
+
+      for (let i=0; i<$("#uart_list").find(".fields").length; i+=1) {
+        generated_src += `\n#define UART${i}_BASE              (UART_BASE + 0x${i}000)`;
+      }
+      generated_src += `\n`;
+
+      
+      for (let i=0; i<$("#gpio_list").find(".fields").length; i+=1) {
+        let gpio_char = String.fromCharCode(65+i);
+        generated_src += `\n#define GPIO${gpio_char}                   ((GPIO_TypeDef *)GPIO${gpio_char}_BASE)`;
+      }
+
+      for (let i=0; i<$("#uart_list").find(".fields").length; i+=1) {
+        generated_src += `\n#define UART${i}                   ((UART_TypeDef *)UART${i}_BASE)`;
+      }
+      generated_src += `\n`;
+      
+      generated_src += `
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __EXAMPLECHIP_H */
+`;
+  
+      return generated_src;
+    }
+
+    var downloadFile = function(filename, content) {
+      //create a file and put the content, name and type
+      var file = new File(["\ufeff"+content], filename, {type: "text/plain:charset=UTF-8"});
+
+      //create a ObjectURL in order to download the created file
+      url = window.URL.createObjectURL(file);
+
+      //create a hidden link and set the href and click it
+      var a = document.createElement("a");
+      a.style = "display: none";
+      a.href = url;
+      a.download = file.name;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
+
+
+    var updateCode = function() {
+      var generated_src = `class ExampleChipConfig extends Config(`
+      generated_src += `
+  // ==================================
+  //   Set up TestHarness
+  // ==================================
+  // The HarnessBinders control generation of hardware in the TestHarness`;
+      generated_src += `
+  new chipyard.harness.WithUARTAdapter ++                          // add UART adapter to display UART on stdout, if uart is present
+  new chipyard.harness.WithBlackBoxSimMem ++                       // add SimDRAM DRAM model for axi4 backing memory, if axi4 mem is enabled
+  new chipyard.harness.WithSimTSIOverSerialTL ++                   // add external serial-adapter and RAM
+  new chipyard.harness.WithSimDebug ++                             // add SimJTAG or SimDTM adapters if debug module is enabled
+  new chipyard.harness.WithGPIOTiedOff ++                          // tie-off chiptop GPIOs, if GPIOs are present
+  new chipyard.harness.WithSimSPIFlashModel ++                     // add simulated SPI flash memory, if SPI is enabled
+  new chipyard.harness.WithSimAXIMMIO ++                           // add SimAXIMem for axi4 mmio port, if enabled
+  new chipyard.harness.WithTieOffInterrupts ++                     // tie-off interrupt ports, if present
+  new chipyard.harness.WithTieOffL2FBusAXI ++                      // tie-off external AXI4 master, if present
+  new chipyard.harness.WithCustomBootPinPlusArg ++                 // drive custom-boot pin with a plusarg, if custom-boot-pin is present
+  new chipyard.harness.WithClockAndResetFromHarness ++             // all Clock/Reset I/O in ChipTop should be driven by harnessClockInstantiator
+  new chipyard.harness.WithAbsoluteFreqHarnessClockInstantiator ++ // generate clocks in harness with unsynthesizable ClockSourceAtFreqMHz`;
+      generated_src += `\n`;
+      
+      generated_src += `
+  // ==================================
+  //   Set up I/O harness
+  // ==================================
+  // The IOBinders instantiate ChipTop IOs to match desired digital IOs
+  // IOCells are generated for "Chip-like" IOs, while simulation-only IOs are directly punched through`;
+      generated_src += `
+  new chipyard.iobinders.WithAXI4MemPunchthrough ++
+  new chipyard.iobinders.WithAXI4MMIOPunchthrough ++
+  new chipyard.iobinders.WithTLMemPunchthrough ++
+  new chipyard.iobinders.WithL2FBusAXI4Punchthrough ++
+  new chipyard.iobinders.WithBlockDeviceIOPunchthrough ++
+  new chipyard.iobinders.WithNICIOPunchthrough ++
+  new chipyard.iobinders.WithSerialTLIOCells ++
+  new chipyard.iobinders.WithDebugIOCells ++
+  new chipyard.iobinders.WithUARTIOCells ++
+  new chipyard.iobinders.WithGPIOCells ++
+  new chipyard.iobinders.WithSPIIOCells ++
+  new chipyard.iobinders.WithTraceIOPunchthrough ++
+  new chipyard.iobinders.WithExtInterruptIOCells ++
+  new chipyard.iobinders.WithCustomBootPin ++`;
+      generated_src += `\n`;
+
+      // ====== Memory Map ====== //
+      generated_src += `
+  // ==================================
+  //   Set up Memory Devices
+  // ==================================`;
+      
+      generated_src += `
+  // External memory section`;
+      // backing SerialTL memory
+      if ($("#gui_chipconfig_enable_serialtl").prop("checked")) {
+        generated_src += `
+  new testchipip.WithSerialTLClientIdBits(4) ++                     // support up to 1 << 4 simultaneous requests from serialTL port`;
+        generated_src += `
+  new testchipip.WithSerialTLWidth(32) ++                           // fatten the serialTL interface to improve testing performance`;
+        generated_src += `
+  new testchipip.WithDefaultSerialTL ++                             // use serialized tilelink port to external serialadapter/harnessRAM`;
+      }
+      else {
+        generated_src += `
+  new testchipip.WithNoSerialTL ++`;
+        generated_src += `
+  new freechips.rocketchip.subsystem.WithNoMemPort ++             // remove backing memory`;
+      }
+      // scratchpad memory
+      if ($("#gui_chipconfig_enable_scratchpad").prop("checked")) {
+        generated_src += `
+  new freechips.rocketchip.subsystem.WithScratchpadsOnly ++    // use rocket l1 DCache scratchpad as base phys mem`;
+      }
+      generated_src += `\n`;
+      
+      generated_src += `
+  // Peripheral section`;
+
+      // UART
+      for (let i=$("#uart_list").find(".fields").length-1; i>=0; i-=1) {
+        generated_src += `
+  new chipyard.config.WithUART(address = ${$("#gui_chipconfig_uart_"+i+"_address").val()}, baudrate = ${$("#gui_chipconfig_uart_"+i+"_baudrate").val()}) ++`;
+      }
+      if ($("#uart_list").find(".fields").length) {
+        generated_src += `\n`;
+      }
+
+      // GPIO
+      for (let i=$("#gpio_list").find(".fields").length-1; i>=0; i-=1) {
+        let gpio_char = String.fromCharCode(97+i);
+        generated_src += `
+  new chipyard.config.WithGPIO(address = ${$("#gui_chipconfig_gpio_"+gpio_char+"_address").val()}, width = ${$("#gui_chipconfig_gpio_"+gpio_char+"_width").val()}) ++`;
+      }
+      if ($("#gpio_list").find(".fields").length) {
+        generated_src += `\n`;
+      }
+
+      generated_src += `
+  // Core section`;
+      generated_src += `
+  new chipyard.config.WithBootROM ++                                // use default bootrom
+  new testchipip.WithCustomBootPin ++                               // add a custom-boot-pin to support pin-driven boot address
+  new testchipip.WithBootAddrReg ++                                 // add a boot-addr-reg for configurable boot address                            // use default bootrom`;
+      generated_src += `\n`;
+      
+      // ====== Tile ====== //
+      generated_src += `
+  // ==================================
+  //   Set up tiles
+  // ==================================`;
+      generated_src += `
+  // Debug settings`
+      generated_src += `
+  new chipyard.config.WithJTAGDTMKey(idcodeVersion = 2, partNum = ${$("#gui_chipconfig_jtag_partnum").val()}, manufId = ${$("#gui_chipconfig_jtag_manufid").val()}, debugIdleCycles = 5) ++`
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithNBreakpoints(${$("#gui_chipconfig_n_breakpoints").val()}) ++`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithJtagDTM ++                 // set the debug module to expose a JTAG port`;
+      generated_src += `\n`;
+
+      generated_src += `
+  // Cache settings`
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithL1ICacheSets(${$("#gui_chipconfig_l1_icache_sets").val()}) ++
+  new freechips.rocketchip.subsystem.WithL1ICacheWays(${$("#gui_chipconfig_l1_icache_ways").val()}) ++
+  new freechips.rocketchip.subsystem.WithL1DCacheSets(${$("#gui_chipconfig_l1_dcache_sets").val()}) ++
+  new freechips.rocketchip.subsystem.WithL1DCacheWays(${$("#gui_chipconfig_l1_dcache_ways").val()}) ++`;
+      generated_src += `
+  new chipyard.config.WithL2TLBs(0) ++`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithInclusiveCache ++          // use Sifive L2 cache`;
+      generated_src += `\n`;
+
+      generated_src += `
+  // Memory settings`;
+      generated_src += `
+  new chipyard.config.WithNPMPs(0) ++
+  new freechips.rocketchip.subsystem.WithNMemoryChannels(2) ++      // Default 2 memory channels
+  new freechips.rocketchip.subsystem.WithNoMMIOPort ++              // no top-level MMIO master port (overrides default set in rocketchip)
+  new freechips.rocketchip.subsystem.WithNoSlavePort ++             // no top-level MMIO slave port (overrides default set in rocketchip)
+  new freechips.rocketchip.subsystem.WithCoherentBusTopology ++     // hierarchical buses including sbus/mbus/pbus/fbus/cbus/l2`;
+      generated_src += `\n`;
+
+      generated_src += `
+  // Core settings`;
+      if ($("#gui_chipconfig_isa_extension_f").prop("checked")) {
+        generated_src += `
+  new chipyard.config.WithDefaultFPU ++`;
+      }
+      if ($("#gui_chipconfig_isa_extension_m").prop("checked")) {
+        generated_src += `
+  new chipyard.config.WithFastMulDiv ++`;
+      }
+      if ($("#gui_chipconfig_isa_extension_b").prop("checked")) {
+        generated_src += `
+  new chipyard.config.WithBitManip ++`;
+      }
+      switch ($("#gui_chipconfig_base_isa").val()) {
+        case "RV32I":
+          generated_src += `
+  new freechips.rocketchip.subsystem.WithRV32 ++`;
+          break;
+        case "RV32E":
+          generated_src += `
+  new freechips.rocketchip.subsystem.WithRV32E ++`;
+          break;
+        case "RV64I":
+          break;
+      }
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithNExtTopInterrupts(0) ++    // no external interrupts
+  new freechips.rocketchip.subsystem.WithNSmallCores(1) ++`;
+      generated_src += `\n`;
+
+      
+      generated_src += `
+  // ==================================
+  //   Set up reset and clocking
+  // ==================================`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithDontDriveBusClocksFromSBus ++ // leave the bus clocks undriven by sbus
+  new freechips.rocketchip.subsystem.WithClockGateModel ++          // add default EICG_wrapper clock gate model
+  new chipyard.config.WithNoSubsystemDrivenClocks ++                // drive the subsystem diplomatic clocks from ChipTop instead of using implicit clocks
+  new chipyard.config.WithInheritBusFrequencyAssignments ++         // Unspecified clocks within a bus will receive the bus frequency if set
+  new chipyard.config.WithPeripheryBusFrequency(100.0) ++           // Default 500 MHz pbus
+  new chipyard.config.WithMemoryBusFrequency(100.0) ++              // Default 500 MHz mbus
+  new chipyard.clocking.WithPassthroughClockGenerator ++
+  new chipyard.clocking.WithClockGroupsCombinedByName(("uncore", Seq("sbus", "mbus", "pbus", "fbus", "cbus", "implicit"), Seq("tile"))) ++`;
+      generated_src += `\n`;
+
+
+      generated_src += `
+  // ==================================
+  //   Base Settings
+  // ==================================`;
+      generated_src += `
+  new freechips.rocketchip.subsystem.WithDTS("ucb-bar, chipyard", Nil) ++ // custom device name for DTS
+  new freechips.rocketchip.system.BaseConfig                        // "base" rocketchip system
+)`;
+      generated_src += `\n`;
+
+      // $("#ui_generated_src").val(generated_src);
+      code_textarea.setValue(generated_src);
+    }
+  </script>
+</head>
+<body>
+  <div class="ui large top fixed menu">
+    <div class="ui container">
+      <a class="header item" href="#">
+        SoC Designer
+      </a>
+      <div class="ui navbar dropdown link item">
+        Project
+        <div class="menu">
+          <a class="item" href="https://ucb-bar.github.io/Baremetal-IDE">SoC Config</a>
+          <a class="item" href="https://ucb-bar.github.io/Baremetal-IDE/clock_tree">Clock Config</a>
+        </div>
+      </div>
+      <div class="ui navbar dropdown link item">
+        Generate
+        <div class="menu">
+          <div id="ui_menu_generate_rtl_code" class="item">Generate RTL</div>
+          <div id="ui_menu_generate_baremetal_code" class="item">Generate Baremetal Code</div>
+        </div>
+      </div>
+      <div class="item">Help</div>
+    </div>
+  </div>
+  <div class="spacer" style="height: 5em"></div>
+  <div class="ui container">
+    <div class="ui basic segment">
+      <h1 class="ui header">ExampleChipConfig</h1>
+    </div>
+    <div class="ui grid">
+      <div class="three wide column">
+        <div class="ui fluid secondary vertical pointing tab-select menu ">
+          <a class="active item" data-tab="tab-core">Core</a>
+          <a class="item" data-tab="tab-memory">Memory</a>
+          <a class="item" data-tab="tab-peripheral">Peripheral</a>
+          <a class="item" data-tab="tab-debug">Debug</a>
+        </div>
+      </div>
+  
+      <div class="five wide column">
+        <div class="ui tab active" data-tab="tab-core">
+          <form class="ui form">
+            <h4 class="ui dividing header">Base ISA</h4>
+            <div class="field">
+              <select id="gui_chipconfig_base_isa" class="ui dropdown monitored">
+                <option value="RV64I">RV64I</option>
+                <option value="RV32I">RV32I</option>
+                <option value="RV32E">RV32E</option>
+              </select>
+            </div>
+            <h4 class="ui dividing header">ISA Extensions</h4>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_isa_extension_m" type="checkbox">
+                <label>Multiply (M)</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_isa_extension_a" type="checkbox" checked="true" disabled="disabled">
+                <label>Atomic (A)</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_isa_extension_f" type="checkbox">
+                <label>Floating Point (F)</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_isa_extension_c" type="checkbox" checked="true" disabled="disabled">
+                <label>Compressed (C)</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_isa_extension_b" type="checkbox">
+                <label>BitManip (B)</label>
+              </div>
+            </div>
+            
+            <h4 class="ui dividing header">L1 ICache</h4>
+            <div class="two fields">
+              <div class="field">
+                <label># Sets</label>
+                <input class="monitored" id="gui_chipconfig_l1_icache_sets" type="number" value="64">
+              </div>
+              <div class="field">
+                <label># Ways</label>
+                <input class="monitored" id="gui_chipconfig_l1_icache_ways" type="number" value="2">
+              </div>
+            </div>
+            
+            <h4 class="ui dividing header">L1 DCache</h4>
+            <div class="two fields">
+              <div class="field">
+                <label># Sets</label>
+                <input class="monitored" id="gui_chipconfig_l1_dcache_sets" type="number" value="64">
+              </div>
+              <div class="field">
+                <label># Ways</label>
+                <input class="monitored" id="gui_chipconfig_l1_dcache_ways" type="number" value="2">
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="ui tab" data-tab="tab-memory">
+          <form class="ui form">
+            <h4 class="ui dividing header">Memory Bus</h4>
+            <div class="field">
+              <label>MBus Frequency (MHz)</label>
+              <input class="monitored" id="gui_chipconfig_memory_mbus_freq" type="number" value="100.00">
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_bootrom" type="checkbox" checked="true" disabled="disabled">
+                <label>BootROM</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_enable_scratchpad" type="checkbox">
+                <label>Scratchpad</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox">
+                <input class="monitored" id="gui_chipconfig_enable_serialtl" type="checkbox">
+                <label>Backing SerialTL Memory</label>
+              </div>
+            </div>
+            
+            <h4 class="ui dividing header">Periphery Bus</h4>
+            <div class="field">
+              <label>PBus Frequency (MHz)</label>
+              <input class="monitored" id="gui_chipconfig_memory_pbus_freq" type="number" value="100.00">
+            </div>
+          </form>
+
+        </div>
+        <div class="ui tab" data-tab="tab-peripheral">
+          <form class="ui form">
+            <h4 class="ui dividing header">GPIO</h4>
+            <div id="gpio_list"></div>
+            <div class="field">
+              <div id="ui_add_gpio_btn" class="ui button">+ Add GPIO</div>
+            </div>
+            
+            <h4 class="ui dividing header">UART</h4>
+            <div id="uart_list">
+              <div class="two fields">
+                <div class="field">
+                  <label>UART0 Address</label>
+                  <input class="monitored" id="gui_chipconfig_uart_0_address" type="text" value="0x10020000">
+                </div>
+                <div class="field">
+                  <label>UART0 Baudrate</label>
+                  <input class="monitored" id="gui_chipconfig_uart_0_baudrate" type="text" value="115200">
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div id="ui_add_uart_btn" class="ui button">+ Add UART</div>
+            </div>
+
+            <h4 class="ui dividing header">SPI</h4>
+            <div id="spi_list"></div>
+            <div class="field">
+              <div id="ui_add_spi_btn" class="ui button">+ Add SPI</div>
+            </div>
+            
+            <h4 class="ui dividing header">I2C</h4>
+            <div id="i2c_list"></div>
+            <div class="field">
+              <div id="ui_add_i2c_btn" class="ui button">+ Add I2C</div>
+            </div>
+          </form>
+        </div>
+        <div class="ui tab" data-tab="tab-debug">
+          <form class="ui form">
+            <h4 class="ui dividing header">JTAG</h4>
+            <div class="two fields">
+              <div class="field">
+                <label>Part Number</label>
+                <input class="monitored" id="gui_chipconfig_jtag_partnum" type="text" value="0x000">
+              </div>
+              <div class="field">
+                <label>Manufacture ID</label>
+                <input class="monitored" id="gui_chipconfig_jtag_manufid" type="text" value="0x489">
+              </div>
+            </div>
+            
+            <div class="field">
+              <label># of Debug Breakpoints</label>
+              <input class="monitored" id="gui_chipconfig_n_breakpoints" type="number" value="2">
+            </div>
+            
+            
+          </form>
+        </div>
+      </div>
+      <div class="eight wide column">
+        <div class="ui form">
+          <div class="field">
+            <label>Text</label>
+            <div style="max-height: 80vh; overflow: auto">
+              <textarea id="ui_generated_src"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
