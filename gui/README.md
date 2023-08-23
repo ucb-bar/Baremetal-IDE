@@ -1,2 +1,0 @@
-# Chipyard GUI
-
