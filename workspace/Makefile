@@ -6,7 +6,7 @@
 
 TARGET ?= firmware
 
-CHIP ?= bearlyml
+CHIP ?= examplechip
 
 #################################
 # RISCV Toolchain
@@ -40,7 +40,10 @@ BUILD_DIR = build/
 # Source Files
 #################################
 
-LIBRARIES = htif
+
+ifeq ($(USE_HTIF), 1)
+LIBRARIES += htif
+endif
 
 # USR sources
 INCLUDES   = -I$(INC_DIR)
@@ -167,6 +170,23 @@ $(C_OBJECTS): $(BUILD_DIR)%.o: %.c
 
 
 #################################
+# OpenOCD Upload Commands
+#################################
+
+UPLOAD_COMMANDS_SRAM  = -c "init"
+UPLOAD_COMMANDS_SRAM += -c "load_image $(TARGET_ELF) 0x0"
+UPLOAD_COMMANDS_SRAM += -c "reset"
+# UPLOAD_COMMANDS_SRAM += -c "sleep 100"
+# UPLOAD_COMMANDS_SRAM += -c "reg pc 0x08000000"
+UPLOAD_COMMANDS_SRAM += -c "exit"
+
+UPLOAD_COMMANDS_FLASH  = -c "exit"
+UPLOAD_COMMANDS_FLASH += -c "program $(TARGET_BIN) 0x20000000"
+UPLOAD_COMMANDS_FLASH += -c "reset"
+UPLOAD_COMMANDS_FLASH += -c "exit"
+
+
+#################################
 # Recipes
 #################################
 
@@ -189,7 +209,9 @@ dump:
 # openocd currently only supports 32 bit target, thus we need to use binary loader
 .PHONY: upload
 upload: $(TARGET_BIN)
-	@openocd -f ./debug/$(CHIP).cfg -c "program $(TARGET_BIN) 0x20000000 reset exit"
+	@openocd -f ./debug/$(CHIP).cfg $(UPLOAD_COMMANDS_SRAM)
+# @openocd -f ./debug/$(CHIP).cfg -c "init" -c "load_image ./build/firmware.elf 0x0" -c "reset" -c "sleep 100" -c "reg pc 0x08000000" -c "exit"
+# @openocd -f ./debug/$(CHIP).cfg -c "program $(TARGET_BIN) 0x20000000 reset exit"
 
 .PHONY: debug
 debug: $(TARGET_BIN)	

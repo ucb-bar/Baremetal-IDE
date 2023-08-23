@@ -31,13 +31,19 @@ typedef enum {
 #define I2C_DATA_WRITE        0b0U
 #define I2C_DATA_READ         0b1U
 
+static inline void HAL_I2C_disable(I2C_TypeDef *I2Cx) {
+  CLEAR_BITS(I2Cx->CTRL, I2C_CTRL_EN_MSK);
+}
+
+static inline void HAL_I2C_enable(I2C_TypeDef *I2Cx) {
+  SET_BITS(I2Cx->CTRL, I2C_CTRL_EN_MSK);
+}
+
+static inline State HAL_I2C_getFlag(I2C_TypeDef *I2Cx, I2C_Flag flag) {
+  return READ_BITS(I2Cx->STAT_CMD, flag) ? SET : RESET;
+}
+
 void HAL_I2C_init(I2C_TypeDef *I2Cx, I2C_InitTypeDef *I2C_init);
-
-void HAL_I2C_disable(I2C_TypeDef *I2Cx);
-
-void HAL_I2C_enable(I2C_TypeDef *I2Cx);
-
-State HAL_I2C_getFlag(I2C_TypeDef *I2Cx, I2C_Flag flag);
 
 Status HAL_I2C_waitForFlag(I2C_TypeDef *I2Cx, I2C_Flag flag, State state, uint32_t timestart, uint32_t timeout);
 

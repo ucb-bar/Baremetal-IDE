@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "rv_common.h"
-#include "bearlyml_hal.h"
+#include "examplechip_hal.h"
 
 /* ==== Exception Handlers ==== */
 __attribute__((weak)) void HAL_instructionAddressMisalignedExceptionHandler() {

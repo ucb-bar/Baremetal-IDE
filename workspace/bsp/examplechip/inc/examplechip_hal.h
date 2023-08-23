@@ -16,6 +16,7 @@
 extern "C" {
 #endif
 
+#include "rv_arch.h"
 #include "rv_common.h"
 #include "examplechip.h"
 #include "examplechip_hal_core.h"
@@ -27,9 +28,9 @@ extern "C" {
 #include "examplechip_hal_spi.h"
 #include "examplechip_hal_uart.h"
 
-#define HXTAL_FREQ    100000000                   // Hz
-#define SYS_CLK_FREQ  HXTAL_FREQ / 2                    // Hz
-#define MTIME_FREQ    (SYS_CLK_FREQ / 200000)    // tick per milliseconds
+#define HXTAL_FREQ    32000000                          // Hz
+#define SYS_CLK_FREQ  HXTAL_FREQ                        // Hz
+#define MTIME_FREQ    (SYS_CLK_FREQ / 200000)           // tick per milliseconds
 
 void HAL_init();
 

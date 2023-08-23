@@ -17,7 +17,7 @@ make bin
 Terminal 1
 
 ```bash
-openocd.exe -f .\demosoc.cfg
+openocd.exe -f ./examplechip.cfg
 ```
 
 Terminal 2

@@ -16,7 +16,8 @@
 extern "C" {
 #endif
 
-#include "encoding.h"
+#include "rv_arch.h"
+#include "rv_common.h"
 #include "bearlyml.h"
 #include "bearlyml_hal_core.h"
 #include "bearlyml_hal_clint.h"
@@ -27,7 +28,8 @@ extern "C" {
 #include "bearlyml_hal_uart.h"
 
 
-#define HXTAL_FREQ    100000000                   // Hz
+#define HXTAL_FREQ     20000000                   // Hz
+// #define HXTAL_FREQ    100000000                   // Hz
 #define SYS_CLK_FREQ  HXTAL_FREQ / 2              // Hz
 #define MTIME_FREQ    (SYS_CLK_FREQ / 100000)     // tick per milliseconds
 
