@@ -102,6 +102,30 @@ int main(int argc, char **argv) {
 
   char str[128];
   uint8_t counter = 0;
+
+
+  UART0->IE = UART_IE_RXWM_MSK;
+  // CLEAR_BITS(UART0->TXCTRL, UART_TXCTRL_TXCNT_MSK);
+  // SET_BITS(UART0->TXCTRL, 1 << UART_TXCTRL_TXCNT_POS);
+
+  CLEAR_BITS(UART0->RXCTRL, UART_RXCTRL_RXCNT_MSK);
+  SET_BITS(UART0->RXCTRL, 0 << UART_RXCTRL_RXCNT_POS);
+
+  HAL_CORE_enableGlobalInterrupt();
+  HAL_CORE_enableInterrupt(MachineExternalInterrupt);
+
+  // plic mapping
+  /*
+  Interrupt map (2 harts 45 interrupts):
+Successfully wrote to the file.
+  [1, 1] => uart_0
+  [2, 2] => uart_1
+  [3, 3] => uart_2
+  [4, 27] => gpio_0
+  [28, 43] => gpio_1
+  [44, 45] => gpio_2
+  */
+  HAL_PLIC_enable(0, 1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -123,6 +147,10 @@ int main(int argc, char **argv) {
     char str[128];
     sprintf(str, "hello world %d\r\n", counter);
     HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 100);
+
+
+    printf("rxwmip %d\n", UART0->IP);
+    
     counter += 1;
 		/* USER CODE END WHILE */
 	}
