@@ -114,7 +114,6 @@ int main(int argc, char **argv) {
     HAL_delay(100);
 
 
-
     uint8_t *ptr = malloc(10);
 
     printf("malloc: %p\n", ptr);
@@ -126,6 +125,7 @@ int main(int argc, char **argv) {
     counter += 1;
 		/* USER CODE END WHILE */
 	}
+
 	/* USER CODE BEGIN 3 */
 
 	/* USER CODE END 3 */
