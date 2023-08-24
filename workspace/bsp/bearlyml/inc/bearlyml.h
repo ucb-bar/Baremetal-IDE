@@ -12,19 +12,19 @@ extern "C" {
 
 /* IRQ Definition */
 typedef enum {
-  UserSoftware_IRQn         = 0,
-  SupervisorSoftware_IRQn   = 1,
-  HypervisorSoftware_IRQn   = 2,
-  MachineSoftware_IRQn      = 3,
-  UserTimer_IRQn            = 4,
-  SupervisorTimer_IRQn      = 5,
-  HypervisorTimer_IRQn      = 6,
-  MachineTimer_IRQn         = 7,
-  UserExternal_IRQn         = 8,
-  SupervisorExternal_IRQn   = 9,
-  HypervisorExternal_IRQn   = 10,
-  MachineExternal_IRQn      = 11,
-} IRQn_Type;
+  UserSoftwareInterrupt         = 0,
+  SupervisorSoftwareInterrupt   = 1,
+  HypervisorSoftwareInterrupt   = 2,
+  MachineSoftwareInterrupt      = 3,
+  UserTimerInterrupt            = 4,
+  SupervisorTimerInterrupt      = 5,
+  HypervisorTimerInterrupt      = 6,
+  MachineTimerInterrupt         = 7,
+  UserExternalInterrupt         = 8,
+  SupervisorExternalInterrupt   = 9,
+  HypervisorExternalInterrupt   = 10,
+  MachineExternalInterrupt      = 11,
+} InterruptType;
 
 typedef enum {
   UART0_IRQn                ,
