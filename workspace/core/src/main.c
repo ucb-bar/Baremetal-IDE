@@ -85,24 +85,39 @@ int main(int argc, char **argv) {
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	while (1) {
+	for (size_t i=0; i<2; i+=1) {
+    
+  printf("mie: %x\n", READ_CSR("mie"));
+
+  HAL_CORE_enableGlobalInterrupt();
+  HAL_CORE_enableInterrupt(MachineSoftwareInterrupt);
+  HAL_CORE_enableInterrupt(MachineTimerInterrupt);
+
+  printf("mie: %x\n", READ_CSR("mie"));
+
+  HAL_CLINT_triggerSoftwareInterrupt(0);
+  HAL_CLINT_setTimerInterruptTarget(0, HAL_CLINT_getTime() + 10);
+
+  HAL_delay(1);
+
     uint64_t marchid = READ_CSR("marchid");
     const char* march = get_march(marchid);
     printf("Hello world from core 0, a %s\n", march);
+
 
     uint8_t *ptr = malloc(10);
     printf("malloc: %p\n", ptr);
     free(ptr);
 
-    return 0;
+
 		/* USER CODE END WHILE */
 	}
 
+    return 0;
 	/* USER CODE BEGIN 3 */
 
 	/* USER CODE END 3 */
