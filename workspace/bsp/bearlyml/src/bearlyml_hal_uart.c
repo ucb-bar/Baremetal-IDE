@@ -33,8 +33,9 @@ void HAL_UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
 Status HAL_UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout) {
   uint32_t rx_data_status;
   while (size > 0) {
-    rx_data_status = READ_BITS(UARTx->RXDATA, UART_RXDATA_EMPTY_MSK);
+    rx_data_status = UARTx->RXDATA;
     while (READ_BITS(rx_data_status, UART_RXDATA_EMPTY_MSK)) {
+      rx_data_status = UARTx->RXDATA;
       // return TIMEOUT;
     }
     *data = READ_BITS(rx_data_status, UART_RXDATA_DATA_MSK);
