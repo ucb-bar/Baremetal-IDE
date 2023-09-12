@@ -31,11 +31,11 @@ static inline void HAL_CORE_enableGlobalInterrupt() {
   SET_CSR_BITS("mstatus", 1U << 3U);
 }
 
-static inline void HAL_CORE_disableIRQ(IRQn_Type IRQn) {
+static inline void HAL_CORE_disableInterrupt(InterruptType IRQn) {
   CLEAR_CSR_BITS("mie", 1U << (uint32_t)IRQn);
 }
 
-static inline void HAL_CORE_enableIRQ(IRQn_Type IRQn) {
+static inline void HAL_CORE_enableInterrupt(InterruptType IRQn) {
   SET_CSR_BITS("mie", 1U << (uint32_t)IRQn);
 }
 

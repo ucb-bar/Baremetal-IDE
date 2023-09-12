@@ -12,19 +12,19 @@ extern "C" {
 
 /* IRQ Definition */
 typedef enum {
-  UserSoftware_IRQn         = 0,
-  SupervisorSoftware_IRQn   = 1,
-  HypervisorSoftware_IRQn   = 2,
-  MachineSoftware_IRQn      = 3,
-  UserTimer_IRQn            = 4,
-  SupervisorTimer_IRQn      = 5,
-  HypervisorTimer_IRQn      = 6,
-  MachineTimer_IRQn         = 7,
-  UserExternal_IRQn         = 8,
-  SupervisorExternal_IRQn   = 9,
-  HypervisorExternal_IRQn   = 10,
-  MachineExternal_IRQn      = 11,
-} IRQn_Type;
+  UserSoftwareInterrupt         = 0,
+  SupervisorSoftwareInterrupt   = 1,
+  HypervisorSoftwareInterrupt   = 2,
+  MachineSoftwareInterrupt      = 3,
+  UserTimerInterrupt            = 4,
+  SupervisorTimerInterrupt      = 5,
+  HypervisorTimerInterrupt      = 6,
+  MachineTimerInterrupt         = 7,
+  UserExternalInterrupt         = 8,
+  SupervisorExternalInterrupt   = 9,
+  HypervisorExternalInterrupt   = 10,
+  MachineExternalInterrupt      = 11,
+} InterruptType;
 
 typedef enum {
   UART0_IRQn                ,
@@ -250,9 +250,9 @@ typedef struct {
 
 
 /* Memory Map Definition */
-#define DEBUG_CONTROLLER_BASE   0x00000000
-#define ERROR_DEVICE_BASE   0x00003000
-#define BOOTSEL_BASE   0x00003000
+#define DEBUG_CONTROLLER_BASE   0x00000000U
+#define ERROR_DEVICE_BASE       0x00003000U
+#define BOOTSEL_BASE            0x00004000U
 #define BOOT_SELECT_BASE        0x00004000U
 #define BOOTROM_BASE            0x00010000U
 #define LIBIF_ROM_BASE          0x00020000U

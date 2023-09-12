@@ -6,7 +6,6 @@
 extern "C" {
 #endif
 
-#include "bearlyml.h"
 #include "bearlyml_hal.h"
 
 #define SPI_CSMODE_AUTO                   0x00U
