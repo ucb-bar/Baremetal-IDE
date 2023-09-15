@@ -12,14 +12,14 @@
           "request": "launch",
           "servertype": "openocd",
           "serverpath": "openocd",
-          "toolchainPrefix": "riscv64-unknown-elf",
+          "toolchainPrefix": "/home/tk/Desktop/chipyard-fpga/.conda-env/riscv-tools/bin/riscv64-unknown-elf",
           "configFiles": [
-              "${workspaceRoot}/debug/bearlyml.cfg"
+              "${workspaceRoot}/debug/examplechip.cfg"
           ],
           "searchDir": [],
           "runToEntryPoint": "main",
           "showDevDebugOutput": "none"
-          "svdFile": "${workspaceRoot}/debug/bearlyml.svd",
+          "svdFile": "${workspaceRoot}/debug/examplechip.svd",
           "numberOfProcessors": 5,
           "currentProcessor": 1
       }

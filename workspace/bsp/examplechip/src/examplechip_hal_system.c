@@ -118,23 +118,20 @@ __attribute__((weak)) void HAL_machineTimerInterruptCallback() {
   HAL_CLINT_setTimerInterruptTarget(hartid, 0xFFFFFFFFFFFFFFFF);
 }
 
+__attribute__((weak)) void HAL_UART0_Callback() {
+  volatile tmp = UART0->RXDATA;
+}
+
 __attribute__((weak)) void HAL_machineExternalInterruptCallback() {
   printf("machine external irq\n");
-  // uint32_t irq_source = HAL_PLIC_claimIRQ(0);
+  uint32_t irq_source = HAL_PLIC_claimIRQ(0);
 
-  // { // debug message
-//     char str[32];
-//     sprintf(str, "machine external irq: %lu\n", irq_source);
-//     HAL_UART_transmit(UART0, (uint8_t *)str, strlen(str), 0);
-//   }
-//   switch (irq_source) {
-//     case 2:                 // GPIO interrupt
-//       HAL_GPIO_Callback();
-//       GPIOA->HIGH_IE = 0b0;
-//       break;
-//   }
-  // HAL_PLIC_completeIRQ(0, irq_source);
-  // HAL_CORE_clearIRQ(MachineExternal_IRQn);
+  switch (irq_source) {
+    case UART0_IRQn:                 // UART interrupt
+      HAL_UART0_Callback();
+      break;
+  }
+  HAL_PLIC_completeIRQ(0, irq_source);
 }
 
 void __init_tls(void) {

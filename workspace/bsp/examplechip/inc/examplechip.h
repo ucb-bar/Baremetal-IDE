@@ -35,6 +35,7 @@ typedef enum {
 //   [44, 45] => gpio_2
 
 typedef enum {
+  NO_IRQn,
   UART0_IRQn,
   UART1_IRQn,
   UART2_IRQn,
