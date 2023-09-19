@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
   /* USER CODE BEGIN 1 */
   uint8_t counter = 0;
   
-	/* USER CODE END 1 */
+  /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
   
@@ -94,15 +94,15 @@ int main(int argc, char **argv) {
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	while (1) {
+  while (1) {
     uint64_t mhartid = READ_CSR("mhartid");
     printf("Hello world from hart %d: %d\n", mhartid, counter);
     counter += 1;
-		/* USER CODE END WHILE */
-	}
-	/* USER CODE BEGIN 3 */
+    /* USER CODE END WHILE */
+  }
+  /* USER CODE BEGIN 3 */
 
-	/* USER CODE END 3 */
+  /* USER CODE END 3 */
 }
 
 /*
