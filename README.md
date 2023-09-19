@@ -1,5 +1,18 @@
 # Chipyard Baremetal IDE
 
+## Setup
+
+Follow the tutorial [here](https://ucb-ee290c.github.io/tutorials/software/setting-up-riscv-environment) to set up RISC-V development environment.
+
+## Initial Repository Setup
+
+After cloning the repo, we need to initialize the submodules by executing
+
+```bash
+git submodule init
+git submodule update
+```
+
 #### Compile for simulation
 
 ```bash
