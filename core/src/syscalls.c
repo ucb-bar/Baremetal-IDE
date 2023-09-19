@@ -23,6 +23,7 @@ void *_sbrk(ptrdiff_t incr) {
   curbrk = newbrk;
   return oldbrk;
 }
+
 int _fstat(int file, struct stat *st) {
   errno = EBADF;
   return -1;
