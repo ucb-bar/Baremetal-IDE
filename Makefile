@@ -214,6 +214,6 @@ upload: $(TARGET_BIN)
 # @openocd -f ./debug/$(CHIP).cfg -c "program $(TARGET_BIN) 0x20000000 reset exit"
 
 .PHONY: debug
-debug: $(TARGET_BIN)	
+debug: $(TARGET_BIN)
 	@openocd -f ./debug/$(CHIP).cfg & $(DG) --eval-command="target extended-remote localhost:3333"
 
