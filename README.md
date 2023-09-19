@@ -6,7 +6,7 @@ Follow the tutorial [here](https://ucb-ee290c.github.io/tutorials/software/setti
 
 ## Initial Repository Setup
 
-After cloning the repo, we need to initialize the submodules by executing
+After cloning the repo, we need to initialize the submodules by executing the following commands.
 
 ```bash
 git submodule init
