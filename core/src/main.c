@@ -48,24 +48,6 @@
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-const char* get_march(size_t marchid) {
-  switch (marchid) {
-  case 1:
-    return "rocket";
-  case 2:
-    return "sonicboom";
-  case 5:
-    return "spike";
-  default:
-    return "unknown";
-  }
-}
-
-// user-defined UART interrupt handler
-void HAL_UART0_Callback() {
-  volatile a = UART0->RXDATA;
-  printf("UART irq: %c\n", a);
-}
 
 /* USER CODE END 0 */
 
@@ -75,6 +57,7 @@ void HAL_UART0_Callback() {
   */
 int main(int argc, char **argv) {
   /* USER CODE BEGIN 1 */
+  uint8_t counter = 0;
   
 	/* USER CODE END 1 */
 
@@ -107,48 +90,13 @@ int main(int argc, char **argv) {
   UART_init_config.stopbits = UART_STOPBITS_2;
   HAL_UART_init(UART0, &UART_init_config);
 
-  // set initial GPIO pin value
-  HAL_GPIO_writePin(GPIOA, GPIO_PIN_2, 0);
-
-  char str[128];
-  uint8_t counter = 0;
-
-  // enable UART reception interrupt
-  UART0->IE = UART_IE_RXWM_MSK;
-  // CLEAR_BITS(UART0->TXCTRL, UART_TXCTRL_TXCNT_MSK);
-  // SET_BITS(UART0->TXCTRL, 1 << UART_TXCTRL_TXCNT_POS);
-
-  // set UART RX interrupt count to 0, this means that UART will raise interrupt when it receives any single character
-  CLEAR_BITS(UART0->RXCTRL, UART_RXCTRL_RXCNT_MSK);
-  SET_BITS(UART0->RXCTRL, 0 << UART_RXCTRL_RXCNT_POS);
-
-  // enable core interrupt
-  HAL_CORE_enableGlobalInterrupt();
-  HAL_CORE_enableInterrupt(MachineExternalInterrupt);
-
-  // set priority level
-  // Note: priority level CANNOT be 0. this will effectively disable the interrupt
-  HAL_PLIC_enable(0, UART0_IRQn);
-  HAL_PLIC_setPriority(UART0_IRQn, 1);
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
-
-    printf("%d\tmie: %x   mip: %x   \n", counter, READ_CSR("mie"), READ_CSR("mip"));
-    printf("\tPLIC en %x, pendings %x\n", PLIC->enables[0], PLIC->pendings[0]);
-    printf("\tUARTie %x, UARTip %x\n", UART0->IE, UART0->IP);
-
-    HAL_GPIO_writePin(GPIOA, GPIO_PIN_2, 1);
-    HAL_delay(100);
-
-    HAL_GPIO_writePin(GPIOA, GPIO_PIN_2, 0);
-    HAL_delay(100);
-
-    
-    
+    uint64_t mhartid = READ_CSR("mhartid");
+    printf("Hello world from hart %d: %d\n", mhartid, counter);
     counter += 1;
 		/* USER CODE END WHILE */
 	}
