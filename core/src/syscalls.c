@@ -1,7 +1,7 @@
 #include "syscalls.h"
 
 ssize_t _write(int fd, const void *ptr, size_t len) {
-  HAL_UART_transmit(UART0, (uint8_t *)ptr, len, 100);
+  HAL_UART_transmit(UART0, (const uint8_t *)ptr, len, 100);
   return 0;
 }
 
