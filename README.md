@@ -2,7 +2,7 @@
 
 ## Setup
 
-Follow the tutorial [here](https://ucb-ee290c.github.io/tutorials/software/setting-up-riscv-environment) to set up RISC-V development environment.
+Follow the tutorial [here](https://notes.tk233.xyz/chipyard-soc-fpga/setting-up-riscv-toolchain) to set up RISC-V development environment.
 
 ## Initial Repository Setup
 
