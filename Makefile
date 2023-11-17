@@ -116,7 +116,7 @@ ARCHFLAGS = -march=$(ARCH) -mabi=$(ABI) -mcmodel=$(CODEMODEL) -fno-pie
 # compiler Flags
 CFLAGS  = -g -std=gnu11 -O0
 CFLAGS += -fno-common -fno-builtin-printf
-CFLAGS += -Wall -Wextra -Warray-bounds -Wno-unused-parameter
+CFLAGS += -Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual
 # CFLAGS += -Wl,--start-group -lc_nano -lgloss_htif -Wl,--end-group -lgcc
 CFLAGS += $(SPECFLAGS)
 CFLAGS += $(ARCHFLAGS)
