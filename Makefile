@@ -57,14 +57,14 @@ INCLUDES  += -I$(BSP_DIR)common/inc
 # A_SOURCES += $(BSP_DIR)$(CHIP)/startup/bootrom.S
 A_SOURCES += $(BSP_DIR)$(CHIP)/startup/startup.S
 
-C_SOURCES += $(BSP_DIR)common/src/hal_clint.c
-C_SOURCES += $(BSP_DIR)common/src/hal_core.c
-C_SOURCES += $(BSP_DIR)common/src/hal_gpio.c
-C_SOURCES += $(BSP_DIR)common/src/hal_i2c.c
-C_SOURCES += $(BSP_DIR)common/src/hal_plic.c
-C_SOURCES += $(BSP_DIR)common/src/hal_spi.c
-C_SOURCES += $(BSP_DIR)common/src/hal_uart.c
-C_SOURCES += $(BSP_DIR)$(CHIP)/src/hal_rcc.c
+# C_SOURCES += $(BSP_DIR)common/src/hal_clint.c
+# C_SOURCES += $(BSP_DIR)common/src/hal_core.c
+# C_SOURCES += $(BSP_DIR)common/src/hal_gpio.c
+# C_SOURCES += $(BSP_DIR)common/src/hal_i2c.c
+# C_SOURCES += $(BSP_DIR)common/src/hal_plic.c
+# C_SOURCES += $(BSP_DIR)common/src/hal_spi.c
+# C_SOURCES += $(BSP_DIR)common/src/hal_uart.c
+# C_SOURCES += $(BSP_DIR)$(CHIP)/src/hal_rcc.c
 
 # LIB sources
 INCLUDES  += $(foreach LIBRARY_NAME,$(LIBRARIES),-I$(LIB_DIR)$(LIBRARY_NAME)/inc)
@@ -97,8 +97,8 @@ TARGET_VERILOG = $(BUILD_DIR)$(TARGET).out
 #################################
 
 # MCU Settings
-ARCH = rv64imafdc
-ABI = lp64d
+ARCH = rv64imadc
+ABI = lp64
 CODEMODEL = medany
 
 ifeq ($(USE_HTIF), 1)
@@ -125,7 +125,7 @@ CFLAGS += $(INCLUDES)
 # linker Flags
 LFLAGS  = -static
 LFLAGS += -nostartfiles
-# LFLAGS += -nostdlib
+LFLAGS += -nostdlib
 # LFLAGS += -u _printf_float
 ifdef STACK_SIZE
 LFLAGS += -Xlinker --defsym=__stack_size=$(STACK_SIZE)
