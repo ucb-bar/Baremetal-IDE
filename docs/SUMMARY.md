@@ -9,6 +9,7 @@
 * [Using Peripheral Devices](using-peripheral-devices/README.md)
   * [Testchipip IPs](using-peripheral-devices/testchipip-ips/README.md)
     * [Core-Local Interruptor (CLINT)](using-peripheral-devices/testchipip-ips/core-local-interruptor-clint.md)
+    * [Joint Test Action Group (JTAG)](using-peripheral-devices/testchipip-ips/joint-test-action-group-jtag.md)
   * [SiFive IPs](using-peripheral-devices/sifive-ips/README.md)
     * [General Purpose I/Os (GPIO)](using-peripheral-devices/sifive-ips/general-purpose-i-os-gpio.md)
     * [Universal Asynchronous Receiver/Transmitter (UART)](using-peripheral-devices/sifive-ips/universal-asynchronous-receiver-transmitter-uart.md)
