@@ -20,3 +20,13 @@
   * [Sensor Library](extensions/sensor-library.md)
   * [Support for RTOS Environment](extensions/support-for-rtos-environment.md)
   * [Support for Arduino Environment](extensions/support-for-arduino-environment.md)
+
+## Chip Bringup
+
+* [Bootup Methods](chip-bringup/bootup-methods.md)
+* [JTAG](chip-bringup/jtag.md)
+* [Serial TileLink](chip-bringup/serial-tilelink.md)
+* [Example Test Procedure for Chip Testing](chip-bringup/example-test-procedure-for-chip-testing.md)
+* [Common Part Selection](chip-bringup/common-part-selection.md)
+* [Common Issues in Chip Bringup](chip-bringup/common-issues-in-chip-bringup.md)
+* [Conventions](chip-bringup/conventions.md)

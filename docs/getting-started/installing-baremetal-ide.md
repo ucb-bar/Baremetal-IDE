@@ -38,5 +38,5 @@ git submodule update
 
 In Microsoft Visual Studio Code, search and install the extension "Cortex-Debug".
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 

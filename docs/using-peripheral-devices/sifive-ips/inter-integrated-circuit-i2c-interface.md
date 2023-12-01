@@ -20,7 +20,7 @@ The I2C (inter-integrated circuit) bus interface handles communications to the s
 
 ## I2C functional description
 
-<figure><img src="../../.gitbook/assets/image (2).png" alt=""><figcaption><p>I2C block diagram</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (2) (1).png" alt=""><figcaption><p>I2C block diagram</p></figcaption></figure>
 
 ### I2C signals
 
