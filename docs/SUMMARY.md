@@ -33,5 +33,5 @@
 
 ## PCB
 
-* [PCB Component Naming Convention](pcb/pcb-component-naming-convention.md)
+* [PCB Footprint Naming Convention](pcb/pcb-footprint-naming-convention.md)
 * [Importing Altium Library](pcb/importing-altium-library.md)

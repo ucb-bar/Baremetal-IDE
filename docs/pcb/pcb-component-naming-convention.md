@@ -1,2 +1,0 @@
-# PCB Component Naming Convention
-
