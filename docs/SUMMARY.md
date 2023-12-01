@@ -30,3 +30,8 @@
 * [Common Part Selection](chip-bringup/common-part-selection.md)
 * [Common Issues in Chip Bringup](chip-bringup/common-issues-in-chip-bringup.md)
 * [Conventions](chip-bringup/conventions.md)
+
+## PCB
+
+* [PCB Component Naming Convention](pcb/pcb-component-naming-convention.md)
+* [Importing Altium Library](pcb/importing-altium-library.md)
