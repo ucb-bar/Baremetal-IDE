@@ -24,6 +24,18 @@
   * [Support for RTOS Environment](baremetal-ide/extensions/support-for-rtos-environment.md)
   * [Support for Arduino Environment](baremetal-ide/extensions/support-for-arduino-environment.md)
 
+## Chipyard
+
+* [Setting up Chipyard](chipyard/setting-up-chipyard/README.md)
+  * [Setting up Chipyard on WSL](chipyard/setting-up-chipyard/setting-up-chipyard-on-wsl.md)
+  * [Setting up Chipyard on Ubuntu](chipyard/setting-up-chipyard/setting-up-chipyard-on-ubuntu.md)
+  * [Setting up Chipyard on BWRC Machines](chipyard/setting-up-chipyard/setting-up-chipyard-on-bwrc-machines.md)
+* [Setting up RISC-V Toolchain](chipyard/setting-up-risc-v-toolchain/README.md)
+  * [Setting up RISC-V Toolchain on Windows 10](chipyard/setting-up-risc-v-toolchain/setting-up-risc-v-toolchain-on-windows-10.md)
+  * [Setting up RISC-V Toolchain on Ubuntu](chipyard/setting-up-risc-v-toolchain/setting-up-risc-v-toolchain-on-ubuntu.md)
+  * [Setting up RV32 Toolchain on BWRC](chipyard/setting-up-risc-v-toolchain/setting-up-rv32-toolchain-on-bwrc.md)
+* [Page](chipyard/page.md)
+
 ## Chip Bringup
 
 * [Bootup Methods](chip-bringup/bootup-methods.md)

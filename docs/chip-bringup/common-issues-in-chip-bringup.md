@@ -87,9 +87,27 @@ check if system clock is supplied
 
 ## JTAG Scan chain all ones
 
-check connection to the DUT
+Device is not connected to the debugger. Check connection to the DUT device.
 
+<pre class="language-bash"><code class="lang-bash">(base) tk@TK-Avenue-Ubuntu:~/Desktop/HAL/jtag$ openocd -f osciarty.cfg 
+Open On-Chip Debugger 0.11.0-rc1+dev (SiFive OpenOCD 0.10.0-2020.12.1)
+Licensed under GNU GPL v2
+For bug reports:
+        https://github.com/sifive/freedom-tools/issues
+Info : clock speed 2000 kHz
+Error: JTAG scan chain interrogation failed: all ones
+Error: Check JTAG interface, timings, target power, etc.
+Error: Trying to use configured scan chain anyway...
+Error: riscv.cpu: IR capture error; <a data-footnote-ref href="#user-content-fn-1">saw 0x1f not 0x01</a>
+Warn : Bypassing JTAG setup events due to errors
+Error: Unsupported DTM version: 15
+Warn : target riscv.cpu examination failed
+Info : starting gdb server for riscv.cpu on 3333
+Info : Listening on port 3333 for gdb connections
+Error: Target not examined yet
 
+Error: Unsupported DTM version: 15
+</code></pre>
 
 
 
@@ -130,3 +148,6 @@ VCU118
 
 DO NOT PRESS \`PROGRAM\` BUTTON!!! This will erase the image on FPGA
 
+
+
+[^1]: all ones here
