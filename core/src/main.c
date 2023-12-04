@@ -95,9 +95,11 @@ int main(int argc, char **argv) {
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    uint64_t mhartid = READ_CSR("mhartid");
+    size_t mhartid = READ_CSR("mhartid");
     printf("Hello world from hart %d: %d\n", mhartid, counter);
+
     counter += 1;
+    HAL_delay(100);
     /* USER CODE END WHILE */
   }
   /* USER CODE BEGIN 3 */
