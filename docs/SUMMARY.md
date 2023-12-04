@@ -23,6 +23,7 @@
   * [Sensor Library](baremetal-ide/extensions/sensor-library.md)
   * [Support for RTOS Environment](baremetal-ide/extensions/support-for-rtos-environment.md)
   * [Support for Arduino Environment](baremetal-ide/extensions/support-for-arduino-environment.md)
+* [Pinmaps](baremetal-ide/pinmaps.md)
 
 ## Chipyard
 
