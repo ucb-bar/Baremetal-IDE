@@ -31,7 +31,7 @@ As you can see, this is a very simple protocol with little hardware overhead. Bu
 
 An example SerialTL frame
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 
 

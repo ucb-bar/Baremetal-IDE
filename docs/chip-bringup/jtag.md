@@ -10,7 +10,7 @@
 
 JTAG will reset after TMS == 1 for 5 or more cycles
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 From these [two](https://www.fpga4fun.com/JTAG3.html) [sources](https://www2.lauterbach.com/pdf/training\_jtag.pdf), it seems that JTAG will only sample TDO AFTER entering shift IR/DR mode
 
@@ -32,11 +32,11 @@ Thus, for us, we need to initialize on TCK == LOW, set TDI and TMS before rising
 
 
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>a JTAG bit</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption><p>a JTAG bit</p></figcaption></figure>
 
 
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption><p>JTAG communication frames</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption><p>JTAG communication frames</p></figcaption></figure>
 
 
 

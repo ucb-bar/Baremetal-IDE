@@ -49,8 +49,9 @@
   * [Common JTAG Issues](chip-bringup/common-issues-in-chip-bringup.md)
   * [Common Programming Issues](chip-bringup/troubleshooting/common-programming-issues.md)
   * [Misc FPGA Notes](chip-bringup/troubleshooting/misc-fpga-notes.md)
-* [vcu118 FPGA Bringup](chip-bringup/vcu118-fpga-bringup.md)
+* [Prototyping Design on vcu118 FPGA](chip-bringup/prototyping-design-on-vcu118-fpga.md)
 * [FireMarshal](chip-bringup/firemarshal.md)
+* [Creating SD Card for Linux Bootup](chip-bringup/creating-sd-card-for-linux-bootup.md)
 
 ## PCB
 

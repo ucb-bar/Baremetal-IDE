@@ -95,7 +95,7 @@ Address offset: `0x08`
 
 Reset value: `0x0000_0000`
 
-<figure><img src="../../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 <table data-full-width="true"><thead><tr><th width="98">Bits</th><th width="159">Name</th><th>Description</th></tr></thead><tbody><tr><td>18:16</td><td>TXCNT</td><td><p>Transmit FIFO watermark trigger.</p><p></p><p>These bits are read-and-write. These bits specify the threshold at which the TX FIFO watermark interrupt triggers.</p></td></tr><tr><td>1</td><td>NSTOP</td><td><p>Stop bit configuration.</p><p></p><p>This bit is read-and-write.</p><p>0: one stop bit</p><p>1: two stop bits</p></td></tr><tr><td>0</td><td>TXEN</td><td><p>Transmission enable control.</p><p></p><p>This bit is read-and-write.</p><p>0: TX disabled</p><p>1: TX enabled</p></td></tr></tbody></table>
 
@@ -107,7 +107,7 @@ Address offset: `0x0C`
 
 Reset value: `0x0000_0000`
 
-<figure><img src="../../../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 <table data-full-width="true"><thead><tr><th width="98">Bits</th><th width="159">Name</th><th>Description</th></tr></thead><tbody><tr><td>18:16</td><td>RXCNT</td><td><p>Receive FIFO watermark trigger.</p><p></p><p>These bits are read-and-write. These bits specify the threshold at which the RX FIFO watermark interrupt triggers.</p></td></tr><tr><td>0</td><td>RXEN</td><td><p>Reception enable control.</p><p></p><p>This bit is read-and-write.</p><p>0: RX disabled</p><p>1: RX enabled</p></td></tr></tbody></table>
 
