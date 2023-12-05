@@ -1,4 +1,6 @@
-# JTAG
+# JTAG Testing Procedure
+
+## What is JTAG
 
 
 
@@ -91,8 +93,13 @@ If there’s only one device on chain, we should be getting 1 immediately next c
 We should receive BYPASS after 1 cycle
 
 \
-\
 
+
+## Common Errors during JTAG Debugging
+
+{% content-ref url="common-issues-in-chip-bringup.md" %}
+[common-issues-in-chip-bringup.md](common-issues-in-chip-bringup.md)
+{% endcontent-ref %}
 
 
 
