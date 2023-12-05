@@ -40,6 +40,7 @@
 ## Chip Bringup
 
 * [Bootup Methods](chip-bringup/bootup-methods.md)
+* [FireMarshal](chip-bringup/firemarshal.md)
 * [JTAG](chip-bringup/jtag.md)
 * [Serial TileLink](chip-bringup/serial-tilelink.md)
 * [Example Test Procedure for Chip Testing](chip-bringup/example-test-procedure-for-chip-testing.md)
