@@ -1,4 +1,4 @@
-# Serial TileLink
+# Serial TileLink Testing Procedure
 
 ## TileLink and Serial TileLink <a href="#1-tilelink-and-serial-tilelink" id="1-tilelink-and-serial-tilelink"></a>
 

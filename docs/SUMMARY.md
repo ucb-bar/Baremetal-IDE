@@ -40,10 +40,10 @@
 ## Chip Bringup
 
 * [Bootup Methods](chip-bringup/bootup-methods.md)
+* [Example Initial Test Procedure for Chip Testing](chip-bringup/example-initial-test-procedure-for-chip-testing.md)
 * [JTAG Testing Procedure](chip-bringup/jtag.md)
-* [Serial TileLink Testing Procedure](chip-bringup/serial-tilelink-testing-procedure.md)
+* [Serial TileLink Testing Procedure](chip-bringup/serial-tilelink.md)
 * [Sanity Check UART Program](chip-bringup/sanity-check-uart-program.md)
-* [Example Test Procedure for Chip Testing](chip-bringup/example-test-procedure-for-chip-testing.md)
 * [Common Part Selection](chip-bringup/common-part-selection.md)
 * [Troubleshooting](chip-bringup/troubleshooting/README.md)
   * [Common JTAG Issues](chip-bringup/common-issues-in-chip-bringup.md)
