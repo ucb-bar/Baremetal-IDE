@@ -46,6 +46,7 @@
 * [Common Part Selection](chip-bringup/common-part-selection.md)
 * [Common Issues in Chip Bringup](chip-bringup/common-issues-in-chip-bringup.md)
 * [Conventions](chip-bringup/conventions.md)
+* [vcu118 FPGA Bringup](chip-bringup/vcu118-fpga-bringup.md)
 
 ## PCB
 
