@@ -43,6 +43,7 @@
 * [FireMarshal](chip-bringup/firemarshal.md)
 * [JTAG](chip-bringup/jtag.md)
 * [Serial TileLink](chip-bringup/serial-tilelink.md)
+* [Sanity Check UART Program](chip-bringup/sanity-check-uart-program.md)
 * [Example Test Procedure for Chip Testing](chip-bringup/example-test-procedure-for-chip-testing.md)
 * [Common Part Selection](chip-bringup/common-part-selection.md)
 * [Common Issues in Chip Bringup](chip-bringup/common-issues-in-chip-bringup.md)
