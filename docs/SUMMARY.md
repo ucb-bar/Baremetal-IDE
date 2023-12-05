@@ -46,7 +46,10 @@
 * [Sanity Check UART Program](chip-bringup/sanity-check-uart-program.md)
 * [Example Test Procedure for Chip Testing](chip-bringup/example-test-procedure-for-chip-testing.md)
 * [Common Part Selection](chip-bringup/common-part-selection.md)
-* [Common Issues in Chip Bringup](chip-bringup/common-issues-in-chip-bringup.md)
+* [Troubleshooting](chip-bringup/troubleshooting/README.md)
+  * [Common JTAG Issues](chip-bringup/troubleshooting/common-jtag-issues.md)
+  * [Common Programming Issues](chip-bringup/troubleshooting/common-programming-issues.md)
+  * [Misc FPGA Notes](chip-bringup/troubleshooting/misc-fpga-notes.md)
 * [Conventions](chip-bringup/conventions.md)
 * [vcu118 FPGA Bringup](chip-bringup/vcu118-fpga-bringup.md)
 
