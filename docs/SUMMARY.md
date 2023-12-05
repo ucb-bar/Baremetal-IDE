@@ -40,9 +40,8 @@
 ## Chip Bringup
 
 * [Bootup Methods](chip-bringup/bootup-methods.md)
-* [FireMarshal](chip-bringup/firemarshal.md)
-* [JTAG Testing Procedure](chip-bringup/jtag-testing-procedure.md)
-* [Serial TileLink](chip-bringup/serial-tilelink.md)
+* [JTAG Testing Procedure](chip-bringup/jtag.md)
+* [Serial TileLink Testing Procedure](chip-bringup/serial-tilelink-testing-procedure.md)
 * [Sanity Check UART Program](chip-bringup/sanity-check-uart-program.md)
 * [Example Test Procedure for Chip Testing](chip-bringup/example-test-procedure-for-chip-testing.md)
 * [Common Part Selection](chip-bringup/common-part-selection.md)
@@ -50,8 +49,8 @@
   * [Common JTAG Issues](chip-bringup/common-issues-in-chip-bringup.md)
   * [Common Programming Issues](chip-bringup/troubleshooting/common-programming-issues.md)
   * [Misc FPGA Notes](chip-bringup/troubleshooting/misc-fpga-notes.md)
-* [Conventions](chip-bringup/conventions.md)
 * [vcu118 FPGA Bringup](chip-bringup/vcu118-fpga-bringup.md)
+* [FireMarshal](chip-bringup/firemarshal.md)
 
 ## PCB
 
