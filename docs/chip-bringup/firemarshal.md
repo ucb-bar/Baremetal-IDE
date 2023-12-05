@@ -10,6 +10,14 @@ First, set up Chipyard following this tutorial:
 
 
 
+```bash
+sudo chmod +r /boot/vmlinuz-*
+```
+
+[https://askubuntu.com/questions/1046828/how-to-run-libguestfs-tools-tools-such-as-virt-make-fs-without-sudo](https://askubuntu.com/questions/1046828/how-to-run-libguestfs-tools-tools-such-as-virt-make-fs-without-sudo)
+
+
+
 
 
 
