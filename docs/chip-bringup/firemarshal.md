@@ -91,7 +91,7 @@ board-dir: "boards/prototype/"
 
 here the `-d` indicates `--nodisk` or initramfs
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -103,7 +103,7 @@ here the `-d` indicates `--nodisk` or initramfs
 ./marshal -v -d install -t prototype br-base.json
 ```
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -123,7 +123,7 @@ Use the following command to copy Linux image into SD card. Replace `sdx` with t
 sudo dd if=$chipyard/software/firemarshal/images/prototype/br-base/br-base-bin-nodisk-flat of=/dev/sdx1
 ```
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 
 
@@ -148,7 +148,7 @@ BR2_PACKAGE_E2FSPROGS=y
 
 Build the system again, and now the Linux should not ask for password when logging into root.
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 
 

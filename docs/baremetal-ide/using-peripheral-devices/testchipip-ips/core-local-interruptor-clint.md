@@ -61,7 +61,7 @@ Address offset: `0x00 + 0x04 * n`
 
 Reset value: `0x0000_0000`
 
-<figure><img src="../../../.gitbook/assets/image (4) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (14).png" alt=""><figcaption></figcaption></figure>
 
 <table data-full-width="true"><thead><tr><th width="98">Bits</th><th width="159">Name</th><th>Description</th></tr></thead><tbody><tr><td>0</td><td>MSIP</td><td><p>Machine-mode software interrupt pending for hart0.</p><p></p><p>This bit is controlled by software.</p><p>0: No software interrupt pending</p><p>1: Software interrupt pending</p></td></tr></tbody></table>
 
@@ -73,7 +73,7 @@ Address offset: `0x4000 + 0x04 * n`
 
 Reset value: `<previous value>`
 
-<figure><img src="../../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (15).png" alt=""><figcaption></figcaption></figure>
 
 <table data-full-width="true"><thead><tr><th width="102">Bits</th><th width="166">Name</th><th>Description</th></tr></thead><tbody><tr><td>63:0</td><td>MTIMECMP</td><td>Machine-mode time compare target.<br><br>These bits are controlled by software. Hardware will generate a machine-mode timer interrupt to hart0 when MTIME0 is greater than or equal to MTIMECMP0.</td></tr></tbody></table>
 
@@ -85,7 +85,7 @@ Address offset: `0xBFF8`
 
 Reset value: `0x0000_0000`
 
-<figure><img src="../../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
 
 <table data-full-width="true"><thead><tr><th width="102">Bits</th><th width="166">Name</th><th>Description</th></tr></thead><tbody><tr><td>63:0</td><td>MTIME</td><td><p>Machine-mode time.</p><p></p><p>These bits are controlled by software and hardware.</p></td></tr></tbody></table>
 
