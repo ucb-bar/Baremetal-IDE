@@ -8,8 +8,8 @@ First, set up Chipyard following this tutorial. When running the `./build-setup.
 $chipyard/build-setup.sh riscv-tools -s 6 -s 7 
 ```
 
-{% content-ref url="../chipyard/setting-up-chipyard/setting-up-chipyard-on-ubuntu.md" %}
-[setting-up-chipyard-on-ubuntu.md](../chipyard/setting-up-chipyard/setting-up-chipyard-on-ubuntu.md)
+{% content-ref url="broken-reference" %}
+[Broken link](broken-reference)
 {% endcontent-ref %}
 
 

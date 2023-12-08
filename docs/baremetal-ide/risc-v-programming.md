@@ -38,6 +38,6 @@ OpenOCD, which stands for Open On-Chip Debugger, is a free, open-source software
 
 In this tutorial, we will set up the RISC-V environment by installing necessary toolchains and other softwares.
 
-{% content-ref url="http://127.0.0.1:5000/o/QxuKWlObc6aI0kOw9xus/s/VJt4O1JTDNktDRwjb6Q8/" %}
-[Berkeley Humanoid Manual](http://127.0.0.1:5000/o/QxuKWlObc6aI0kOw9xus/s/VJt4O1JTDNktDRwjb6Q8/)
+{% content-ref url="https://app.gitbook.com/o/QxuKWlObc6aI0kOw9xus/s/VJt4O1JTDNktDRwjb6Q8/" %}
+[Berkeley Humanoid Manual](https://app.gitbook.com/o/QxuKWlObc6aI0kOw9xus/s/VJt4O1JTDNktDRwjb6Q8/)
 {% endcontent-ref %}
