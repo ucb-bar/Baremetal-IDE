@@ -1,7 +1,7 @@
 # Chipyard Baremetal-IDE Documentation
 
 
-
+this is a dumb update to test the preview
 haha
 
 
