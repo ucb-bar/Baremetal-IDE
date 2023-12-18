@@ -7,4 +7,4 @@ Baremetal-IDE features peripheral configuration, code generation, code compilati
 
 ## Documentation and Getting Started
 
-Please refer to the [documentation](https://ucb-bar.gitbook.io/ucb-bar/v/chipyard-tutorials/baremetal-ide/getting-started-with-baremetal-ide) website.
+Please refer to the [documentation](https://ucb-bar.gitbook.io/chipyard/baremetal-ide/getting-started-with-baremetal-ide) website.
