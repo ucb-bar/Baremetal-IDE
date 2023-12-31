@@ -1,2 +1,0 @@
-# Support for Arduino Environment
-

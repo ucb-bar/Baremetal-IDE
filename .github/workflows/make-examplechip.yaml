@@ -14,13 +14,13 @@ jobs:
       run:
         shell: bash -l {0}
         
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v4
       with:
-        submodules: 'true'
-    - run: echo $PATH
+        submodules: recursive
     - name: Set up toolchain
       run: echo "/scratch/tk/chipyard/.conda-env/riscv-tools/bin/" >> $GITHUB_PATH
-    - run: echo $PATH
-    - run: make
+    - name: Make
+      run: make
