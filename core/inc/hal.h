@@ -22,10 +22,10 @@ extern "C" {
 /**
  * System Clock Configuration
  */
-#define HXTAL_FREQ     20000000                   // Hz
-// #define HXTAL_FREQ    100000000                   // Hz
-#define SYS_CLK_FREQ  HXTAL_FREQ / 2              // Hz
-#define MTIME_FREQ    (SYS_CLK_FREQ / 100000)     // tick per milliseconds
+#define HXTAL_FREQ          50000000                        /** crystal or external clock frequency in Hz */
+#define SYS_CLK_FREQ        HXTAL_FREQ                      /** system clock frequency in Hz */
+#define MTIME_TIMEBASE      50000                           /** tick per milliseconds */
+#define MTIME_FREQ          (SYS_CLK_FREQ / MTIME_TIMEBASE)
 
 #ifdef __cplusplus
 }
