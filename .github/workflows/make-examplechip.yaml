@@ -21,6 +21,10 @@ jobs:
       with:
         submodules: recursive
     - name: Set up toolchain
-      run: echo "/scratch/tk/chipyard/.conda-env/riscv-tools/bin/" >> $GITHUB_PATH
+      run: |
+        wget https://github.com/ucb-bar/RISC-V-GNU-Toolchain-Prebuilt/releases/download/v2023.12.30/riscv64-unknown-toolchain.tar.xz
+        tar -xf riscv64-unknown-toolchain.tar.xz
     - name: Make
-      run: make
+      run: |
+        export PATH="$GITHUB_WORKSPACE/riscv64-unknown-toolchain/bin/:$PATH"
+        make
