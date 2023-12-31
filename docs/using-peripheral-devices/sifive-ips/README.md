@@ -1,2 +1,0 @@
-# SiFive IPs
-
