@@ -76,13 +76,6 @@ int main(int argc, char **argv) {
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
 
-  // set up GPIO registers
-  GPIO_InitTypeDef GPIO_init_config;
-  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
-  GPIO_init_config.pull = GPIO_PULL_NONE;
-  GPIO_init_config.drive_strength = GPIO_DS_STRONG;
-  HAL_GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
-
   // set up UART registers
   UART_InitTypeDef UART_init_config;
   UART_init_config.baudrate = 115200;
@@ -96,8 +89,12 @@ int main(int argc, char **argv) {
   /* USER CODE BEGIN WHILE */
   while (1) {
     uint64_t mhartid = READ_CSR("mhartid");
+
     printf("Hello world from hart %d: %d\n", mhartid, counter);
+    
     counter += 1;
+
+    HAL_delay(100);
     /* USER CODE END WHILE */
   }
   /* USER CODE BEGIN 3 */
