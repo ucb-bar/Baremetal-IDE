@@ -1,4 +1,0 @@
-# Programming Blinky
-
-nihao world
-
