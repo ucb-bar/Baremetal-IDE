@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 
-#include "examplechip.h"
+#include "bearlyml23.h"
 
 /**
  * This section controls which peripheral device is included in the application program.
@@ -22,9 +22,8 @@ extern "C" {
 /**
  * System Clock Configuration
  */
-#define HXTAL_FREQ     20000000                   // Hz
-// #define HXTAL_FREQ    100000000                   // Hz
-#define SYS_CLK_FREQ  HXTAL_FREQ / 2              // Hz
+#define HXTAL_FREQ     100000000                  // Hz
+#define SYS_CLK_FREQ  HXTAL_FREQ              // Hz
 #define MTIME_FREQ    (SYS_CLK_FREQ / 100000)     // tick per milliseconds
 
 #ifdef __cplusplus
