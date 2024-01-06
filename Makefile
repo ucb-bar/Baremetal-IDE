@@ -97,14 +97,14 @@ TARGET_VERILOG = $(BUILD_DIR)$(TARGET).out
 #################################
 
 # MCU Settings
-ARCH = rv64imafdc
-ABI = lp64d
-CODEMODEL = medany
+ARCH ?= rv64imafdc
+ABI ?= lp64d
+CODEMODEL ?= medany
 
 ifeq ($(USE_HTIF), 1)
-LD_SCRIPT = $(BSP_DIR)$(CHIP)/$(CHIP)_htif.ld
+LD_SCRIPT ?= $(BSP_DIR)$(CHIP)/$(CHIP)_htif.ld
 else
-LD_SCRIPT = $(BSP_DIR)$(CHIP)/$(CHIP).ld
+LD_SCRIPT ?= $(BSP_DIR)$(CHIP)/$(CHIP).ld
 endif
 
 # -mcmodel=medany -Wl,--start-group -lc_nano -lgloss_htif -Wl,--end-group -lgcc -static -nostartfiles -dT htif.ld
