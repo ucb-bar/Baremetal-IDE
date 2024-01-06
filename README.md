@@ -1,3 +1,5 @@
+![](docs/logo_b.png)
+
 # Chipyard Baremetal-IDE
 
 ![CI-status](https://img.shields.io/github/actions/workflow/status/ucb-bar/Baremetal-IDE/make-examplechip.yaml?branch=main&style=flat-square&label=CI&logo=githubactions&logoColor=fff) ![API-Docs-status](https://img.shields.io/github/actions/workflow/status/ucb-bar/Baremetal-IDE/build-docs.yaml?branch=main&style=flat-square&label=Docs&logo=googledocs&logoColor=fff)
