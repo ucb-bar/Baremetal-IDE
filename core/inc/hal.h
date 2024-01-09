@@ -23,7 +23,7 @@ extern "C" {
  * System Clock Configuration
  */
 #define HXTAL_FREQ     100000000                  // Hz
-#define SYS_CLK_FREQ  HXTAL_FREQ              // Hz
+#define SYS_CLK_FREQ  HXTAL_FREQ            // Hz
 #define MTIME_FREQ    (SYS_CLK_FREQ / 100000)     // tick per milliseconds
 
 #ifdef __cplusplus
