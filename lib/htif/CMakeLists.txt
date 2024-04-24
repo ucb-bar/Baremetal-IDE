@@ -1,0 +1,47 @@
+set(INCLUDE 
+  ${CMAKE_CURRENT_SOURCE_DIR}/inc/
+)
+set(SOURCES 
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/access.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/chdir.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/chmod.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/chown.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/close.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/execve.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/exit.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/faccessat.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/fork.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/fstat.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/fstatat.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/ftime.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/getcwd.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/getpid.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/gettimeofday.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/htif.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/isatty.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/kill.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/link.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/lseek.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/lstat.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/nanosleep.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/open.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/openat.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/printbuf.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/printf.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/puts.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/read.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/sbrk.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/snprintf.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/sprintf.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/stat.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/sysconf.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/times.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/unlink.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/utime.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/vxprintf.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/wait.c
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/write.c
+)
+
+add_library(htif STATIC ${SOURCES})
+target_include_directories(htif PUBLIC ${INCLUDE})
