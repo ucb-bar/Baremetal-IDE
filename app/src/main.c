@@ -77,26 +77,26 @@ int main(int argc, char **argv) {
   /* USER CODE BEGIN 2 */
 
   // set up UART registers
-  UART_InitTypeDef UART_init_config;
-  UART_init_config.baudrate = 115200;
-  UART_init_config.mode = UART_MODE_TX_RX;
-  UART_init_config.stopbits = UART_STOPBITS_2;
-  HAL_UART_init(UART0, &UART_init_config);
+  // UART_InitTypeDef UART_init_config;
+  // UART_init_config.baudrate = 115200;
+  // UART_init_config.mode = UART_MODE_TX_RX;
+  // UART_init_config.stopbits = UART_STOPBITS_2;
+  // HAL_UART_init(UART0, &UART_init_config);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1) {
-    uint64_t mhartid = READ_CSR("mhartid");
+  // while (1) {
+  uint64_t mhartid = READ_CSR("mhartid");
 
-    printf("Hello world from hart %d: %d\n", mhartid, counter);
-    
-    counter += 1;
+  printf("Hello world from hart %d: %d\n", mhartid, counter);
+  
+  counter += 1;
 
-    HAL_delay(100);
-    /* USER CODE END WHILE */
-  }
+  // HAL_delay(100);
+  /* USER CODE END WHILE */
+  // }
   /* USER CODE BEGIN 3 */
 
   /* USER CODE END 3 */
