@@ -1,5 +1,5 @@
-#ifndef __LL_I2C_H
-#define __LL_I2C_H
+#ifndef __I2C_H
+#define __I2C_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,4 +43,4 @@ typedef struct {
 }
 #endif
 
-#endif /* __LL_I2C_H */
+#endif /* __I2C_H */

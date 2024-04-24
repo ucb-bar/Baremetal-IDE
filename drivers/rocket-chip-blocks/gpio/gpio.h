@@ -1,5 +1,5 @@
-#ifndef __LL_GPIO_H
-#define __LL_GPIO_H
+#ifndef __GPIO_H
+#define __GPIO_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,4 +34,4 @@ typedef struct {
 }
 #endif
 
-#endif /* __LL_GPIO_H */
+#endif /* __GPIO_H */

@@ -16,7 +16,7 @@ extern "C" {
 #endif
 
 #include "rv_common.h"
-#include "ll_i2c.h"
+#include "i2c.h"
 
 typedef enum {
   I2C_FLAG_IF = I2C_STAT_CMD_IF_MSK,

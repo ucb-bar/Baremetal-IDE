@@ -1,5 +1,5 @@
-#ifndef __LL_UART_H
-#define __LL_UART_H
+#ifndef __UART_H
+#define __UART_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,4 +54,4 @@ typedef struct {
 }
 #endif
 
-#endif /* __LL_UART_H */
+#endif /* __UART_H */

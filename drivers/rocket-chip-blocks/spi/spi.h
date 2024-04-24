@@ -1,5 +1,5 @@
-#ifndef __LL_SPI_H
-#define __LL_SPI_H
+#ifndef __SPI_H
+#define __SPI_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -82,4 +82,4 @@ typedef struct {
 }
 #endif
 
-#endif /* __LL_SPI_H */ 
+#endif /* __SPI_H */ 

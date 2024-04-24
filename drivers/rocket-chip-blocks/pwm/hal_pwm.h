@@ -7,7 +7,7 @@ extern "C" {
 #endif
 
 #include "rv_common.h"
-#include "ll_pwm.h"
+#include "pwm.h"
 
 
 // struct pwm_config {

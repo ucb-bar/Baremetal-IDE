@@ -16,7 +16,7 @@ extern "C" {
 #endif
 
 #include "rv_common.h"
-#include "ll_uart.h"
+#include "uart.h"
 
 typedef enum {
   UART_MODE_RX          = 0x01,

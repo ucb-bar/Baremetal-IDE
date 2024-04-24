@@ -7,7 +7,7 @@ extern "C" {
 #endif
 
 #include "rv_common.h"
-#include "ll_spi.h"
+#include "spi.h"
 
 typedef enum {
   SPI_MODE0,

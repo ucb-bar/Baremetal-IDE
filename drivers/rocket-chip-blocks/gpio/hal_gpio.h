@@ -16,7 +16,7 @@ extern "C" {
 #endif
 
 #include "rv_common.h"
-#include "ll_gpio.h"
+#include "gpio.h"
 
 
 typedef enum {
