@@ -28,7 +28,20 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
-#include "hal.h"
+
+#include "fe310.h"
+
+/**
+ * This section controls which peripheral device is included in the application program.
+ * To save the memory space, the unused peripheral device can be commented out.
+ */
+#include "hal_core.h"
+#include "hal_clint.h"
+#include "hal_gpio.h"
+#include "hal_i2c.h"
+#include "hal_plic.h"
+#include "hal_uart.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
