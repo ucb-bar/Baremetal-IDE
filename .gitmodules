@@ -1,3 +1,0 @@
-[submodule "bsp"]
-	path = bsp
-	url = https://github.com/ucb-bar/Baremetal-IDE-bsp.git
