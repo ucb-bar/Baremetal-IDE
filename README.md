@@ -19,7 +19,7 @@ Please refer to the [Tutorial Website](https://ucb-bar.gitbook.io/chipyard/barem
 ### Compiling for Spike
 
 ```bash
-make CHIP=spike ARCH=rv64imafdc ABI=lp64d SPEC=lib/libgloss-htif/util/htif_nano.specs
+make CHIP=spike
 ```
 
 ### Compiling for FE310
@@ -27,3 +27,10 @@ make CHIP=spike ARCH=rv64imafdc ABI=lp64d SPEC=lib/libgloss-htif/util/htif_nano.
 ```bash
 make CHIP=fe310
 ```
+
+### Compiling example programs
+
+```bash
+make APP_DIR=./examples/blinky/
+```
+
