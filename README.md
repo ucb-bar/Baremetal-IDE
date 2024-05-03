@@ -12,3 +12,18 @@ Baremetal-IDE features peripheral configuration, code generation, code compilati
 ## Documentation and Getting Started
 
 Please refer to the [Tutorial Website](https://ucb-bar.gitbook.io/chipyard/baremetal-ide/getting-started-with-baremetal-ide) for getting started with Baremetal-IDE, and refer to the [API Docs](https://ucb-bar.github.io/Baremetal-IDE/index.html) for more detailed information on the APIs.
+
+
+## Simple examples
+
+### Compiling for Spike
+
+```bash
+make CHIP=spike ARCH=rv64imafdc ABI=lp64d SPEC=lib/libgloss-htif/util/htif_nano.specs
+```
+
+### Compiling for FE310
+
+```bash
+make CHIP=fe310
+```
