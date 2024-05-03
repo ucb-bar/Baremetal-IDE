@@ -17,14 +17,14 @@
 
 TARGET ?= firmware
 
-CHIP ?= fe310
+CHIP ?= examplechip
 
 # MCU Settings
 ARCH ?= rv32imac
 ABI ?= ilp32
 CODEMODEL ?= medany
 
-
+# Spec Settings
 SPEC = nano.specs
 # SPEC = lib/libgloss-htif/util/htif_nano.specs
 
@@ -47,14 +47,13 @@ SIZE = $(PREFIX)size
 # Working directories
 #################################
 
-DRIVER_DIR = driver/
-BSP_DIR = bsp/
-LIB_DIR = lib/
 APP_DIR = app/
+BSP_DIR = bsp/
+DRIVER_DIR = driver/
+LIB_DIR = lib/
 
 SRC_DIR = $(APP_DIR)src/
 INC_DIR = $(APP_DIR)inc/
-
 BIN_DIR = dist/
 BUILD_DIR = build/
 
@@ -63,46 +62,25 @@ BUILD_DIR = build/
 # Source Files
 #################################
 
-
-# APP sources
+### APP sources ###
 INCLUDES   = -I$(INC_DIR)
-INCLUDES  += -I$(INC_DIR)hal/
 A_SOURCES  = $(wildcard $(SRC_DIR)*.S) $(wildcard $(SRC_DIR)*/*.S)
 C_SOURCES  = $(wildcard $(SRC_DIR)*.c) $(wildcard $(SRC_DIR)*/*.c)
 
-# BSP sources
+### BSP sources ###
 INCLUDES  += -I$(BSP_DIR)$(CHIP)
-# INCLUDES  += -I$(BSP_DIR)common/inc/
 # A_SOURCES += $(BSP_DIR)$(CHIP)/boot/bootrom.S
 A_SOURCES += $(BSP_DIR)$(CHIP)/boot/startup.S
 
-# DRIVER sources
-INCLUDES  += -I$(DRIVER_DIR)rv/
-C_SOURCES += $(DRIVER_DIR)rv/hal_core.c
+-include $(BSP_DIR)$(CHIP)/Makefile
 
+# ### DRIVER sources ###
 
-INCLUDES  += -I$(DRIVER_DIR)rocket-chip/clint/
-INCLUDES  += -I$(DRIVER_DIR)rocket-chip/plic/
-C_SOURCES += $(DRIVER_DIR)rocket-chip/clint/hal_clint.c
-C_SOURCES += $(DRIVER_DIR)rocket-chip/plic/hal_plic.c
-
-INCLUDES  += -I$(DRIVER_DIR)rocket-chip-blocks/gpio/
-INCLUDES  += -I$(DRIVER_DIR)rocket-chip-blocks/uart/
-C_SOURCES += $(DRIVER_DIR)rocket-chip-blocks/gpio/hal_gpio.c
-C_SOURCES += $(DRIVER_DIR)rocket-chip-blocks/uart/hal_uart.c
-
-# LIB sources
+# ### LIB sources ###
 # INCLUDES  += $(foreach LIBRARY_NAME,$(LIBRARIES),-I$(LIB_DIR)$(LIBRARY_NAME)/inc)
 # A_SOURCES += $(foreach LIBRARY_NAME,$(LIBRARIES),$(wildcard $(LIB_DIR)$(LIBRARY_NAME)/src/*.S))
 # C_SOURCES += $(foreach LIBRARY_NAME,$(LIBRARIES),$(wildcard $(LIB_DIR)$(LIBRARY_NAME)/src/*.c))
 
-INCLUDES  += -I$(LIB_DIR)libgloss-htif/include
-C_SOURCES += $(LIB_DIR)libgloss-htif/sys/sbrk.c
-# C_SOURCES += $(LIB_DIR)standalone/write.c
-
-C_SOURCES += $(LIB_DIR)libgloss-htif/sys/write.c
-C_SOURCES += $(LIB_DIR)libgloss-htif/misc/htif.c
-A_SOURCES += $(LIB_DIR)libgloss-htif/misc/crtmain.S
 
 #################################
 # Object List
