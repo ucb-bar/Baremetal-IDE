@@ -14,48 +14,55 @@
 #################################
 
 # these variables can be overwritten by the command line
-
-TARGET ?= firmware
-
-CHIP ?= spike
-
-# MCU Settings
-ARCH ?= rv64imafdc
-ABI ?= lp64d
-CODEMODEL ?= medany
-
-# Spec Settings
-# SPEC = nano.specs
-SPEC = lib/libgloss-htif/util/htif_nano.specs
+TARGET 		?= app
+CHIP 		?= spike
 
 
 #################################
 # RISCV Toolchain
 #################################
 
-PREFIX = riscv64-unknown-elf-
+PREFIX 	:= riscv64-unknown-elf-
 
-CC = $(PREFIX)gcc
-CXX = $(PREFIX)g++
-CP = $(PREFIX)objcopy
-OD = $(PREFIX)objdump
-DG = $(PREFIX)gdb
-SIZE = $(PREFIX)size
+CC 		:= $(PREFIX)gcc
+CXX 	:= $(PREFIX)g++
+CP 		:= $(PREFIX)objcopy
+OD 		:= $(PREFIX)objdump
+DG 		:= $(PREFIX)gdb
+SIZE 	:= $(PREFIX)size
 
 
 #################################
 # Working directories
 #################################
 
-APP_DIR = app/
-BSP_DIR = bsp/
-DRIVER_DIR = driver/
-LIB_DIR = lib/
+ROOT_DIR	?= ./
 
-SRC_DIR = $(APP_DIR)src/
-INC_DIR = $(APP_DIR)inc/
-BIN_DIR = dist/
-BUILD_DIR = build/
+APP_DIR 	?= $(ROOT_DIR)$(TARGET)/
+BSP_DIR  	:= $(ROOT_DIR)bsp/
+DRIVER_DIR 	:= $(ROOT_DIR)driver/
+LIB_DIR 	:= $(ROOT_DIR)lib/
+
+BUILD_DIR 	:= $(ROOT_DIR)build/
+BIN_DIR 	:= $(ROOT_DIR)dist/
+
+
+#################################
+# Chip Files
+#################################
+
+-include $(BSP_DIR)$(CHIP)/Makefile
+
+# MCU Settings
+ARCH 		?= rv64imafdc
+ABI 		?= lp64d
+CODEMODEL 	?= medany
+
+# Spec Settings
+SPEC 		?= nano.specs
+
+# Linker Script
+LD_SCRIPT 	?= $(BSP_DIR)$(CHIP)/$(CHIP).ld
 
 
 #################################
@@ -63,16 +70,17 @@ BUILD_DIR = build/
 #################################
 
 ### APP sources ###
-INCLUDES   = -I$(INC_DIR)
-A_SOURCES  = $(wildcard $(SRC_DIR)*.S) $(wildcard $(SRC_DIR)*/*.S)
-C_SOURCES  = $(wildcard $(SRC_DIR)*.c) $(wildcard $(SRC_DIR)*/*.c)
+APP_INC_DIR := $(APP_DIR)inc/
+APP_SRC_DIR := $(APP_DIR)src/
+
+INCLUDES  += -I$(APP_INC_DIR)
+A_SOURCES += $(wildcard $(APP_SRC_DIR)*.S) $(wildcard $(APP_SRC_DIR)*/*.S)
+C_SOURCES += $(wildcard $(APP_SRC_DIR)*.c) $(wildcard $(APP_SRC_DIR)*/*.c)
 
 ### BSP sources ###
 INCLUDES  += -I$(BSP_DIR)$(CHIP)
 # A_SOURCES += $(BSP_DIR)$(CHIP)/boot/bootrom.S
 # A_SOURCES += $(BSP_DIR)$(CHIP)/boot/startup.S
-
-# -include $(BSP_DIR)$(CHIP)/Makefile
 
 # ### DRIVER sources ###
 
@@ -81,6 +89,9 @@ INCLUDES  += -I$(BSP_DIR)$(CHIP)
 # INCLUDES  += $(foreach LIBRARY_NAME,$(LIBRARIES),-I$(LIB_DIR)$(LIBRARY_NAME)/inc)
 # A_SOURCES += $(foreach LIBRARY_NAME,$(LIBRARIES),$(wildcard $(LIB_DIR)$(LIBRARY_NAME)/src/*.S))
 # C_SOURCES += $(foreach LIBRARY_NAME,$(LIBRARIES),$(wildcard $(LIB_DIR)$(LIBRARY_NAME)/src/*.c))
+
+# include project-specific dependencies
+-include $(TARGET)/Makefile
 
 
 #################################
@@ -97,32 +108,26 @@ OBJECTS = $(A_OBJECTS) $(C_OBJECTS)
 # Flags
 #################################
 
-LD_SCRIPT ?= lib/libgloss-htif/util/htif.ld
-# LD_SCRIPT ?= $(BSP_DIR)$(CHIP)/$(CHIP).ld
-
 ifneq ($(CHIP),)
-DEVICE_FLAGS := -DCHIP=$(CHIP)
+CHIP_FLAGS += -DCHIP=$(CHIP)
 endif
 
-# -mcmodel=medany -Wl,--start-group -lc_nano -lgloss_htif -Wl,--end-group -lgcc -static -nostartfiles -dT htif.ld
-SPEC_FLAGS = --specs="$(SPEC)"
+SPEC_FLAGS := --specs="$(SPEC)"
 
-ARCH_FLAGS = -march=$(ARCH) -mabi=$(ABI) -mcmodel=$(CODEMODEL) -fno-pie
+ARCH_FLAGS := -march=$(ARCH) -mabi=$(ABI) -mcmodel=$(CODEMODEL) -fno-pie
 
 # compiler Flags
-CFLAGS  = -g -std=gnu11 -O0
+CFLAGS := -g -std=gnu11 -O0
 CFLAGS += -fno-common -fno-builtin-printf
 CFLAGS += -Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual
-# CFLAGS += -Wl,--start-group -lc_nano -lgloss_htif -Wl,--end-group -lgcc
 CFLAGS += $(SPEC_FLAGS)
-CFLAGS += $(DEVICE_FLAGS)
+CFLAGS += $(CHIP_FLAGS)
 CFLAGS += $(ARCH_FLAGS)
 CFLAGS += $(INCLUDES)
 
 # linker Flags
-LFLAGS  = -static
-# LFLAGS += -nostartfiles
-# LFLAGS += -nostdlib
+LFLAGS := -static
+LFLAGS += -nostartfiles
 LFLAGS += -u _printf_float
 ifdef STACK_SIZE
 LFLAGS += -Xlinker --defsym=__stack_size=$(STACK_SIZE)
@@ -134,21 +139,23 @@ LFLAGS += -T $(LD_SCRIPT)
 # Target Output Files
 #################################
 
-TARGET_ELF 		= $(BUILD_DIR)$(TARGET).elf
-TARGET_BIN 		= $(BUILD_DIR)$(TARGET).bin
-TARGET_HEX 		= $(BUILD_DIR)$(TARGET).hex
-TARGET_VERILOG 	= $(BUILD_DIR)$(TARGET).out
-TARGET_LST      = $(BUILD_DIR)$(TARGET).lst
+TARGET_NAME ?= $(shell basename $(TARGET))
+
+TARGET_ELF 		:= $(BUILD_DIR)$(TARGET_NAME).elf
+TARGET_BIN 		:= $(BUILD_DIR)$(TARGET_NAME).bin
+TARGET_HEX 		:= $(BUILD_DIR)$(TARGET_NAME).hex
+TARGET_VERILOG 	:= $(BUILD_DIR)$(TARGET_NAME).out
+TARGET_LST      := $(BUILD_DIR)$(TARGET_NAME).lst
 
 
 #################################
 # Internals
 #################################
 
-IDE_VERSION = 0.1.0
+IDE_VERSION 	:= 0.1.0
 
 # read all supported chips from the bsp directory
-SUPPORTED_CHIPS = $(sort $(shell ls -d $(BSP_DIR)*/ | xargs -n 1 basename | sed 's/\///g' | grep -v "scripts"))
+SUPPORTED_CHIPS := $(sort $(shell ls -d $(BSP_DIR)*/ | xargs -n 1 basename | sed 's/\///g' | grep -v "scripts"))
 
 
 #################################
@@ -172,18 +179,18 @@ $(TARGET_VERILOG): $(TARGET_ELF)
 
 $(TARGET_ELF): $(OBJECTS)
 	@echo "[LD] linking $@"
-	@$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 	$(SIZE) $(TARGET_ELF)
 
 $(A_OBJECTS): $(BUILD_DIR)%.o: %.S
 	@echo "[CC] compiling $@"
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(C_OBJECTS): $(BUILD_DIR)%.o: %.c
 	@echo "[CC] compiling $@"
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 
 #################################
@@ -245,7 +252,7 @@ help:
 	@echo "Makefile for Baremetal-IDE"
 	@echo ""
 	@echo "Usage:"
-	@echo "    make [TARGET=<target_name>] [CHIP=<chipname>]"
+	@echo "    make [TARGET=<path_to_project>] [CHIP=<chipname>]"
 	@echo ""
 	@echo "To clean the project, run:"
 	@echo "    make clean"
@@ -253,3 +260,7 @@ help:
 	@echo "Valid CHIP values are: $(SUPPORTED_CHIPS)"
 	@echo ""
 
+test:
+	@echo $(shell basename $(TARGET))
+	@echo $(C_SOURCES)
+	@echo $(APP_SRC_DIR)
