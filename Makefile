@@ -17,16 +17,16 @@
 
 TARGET ?= firmware
 
-CHIP ?= examplechip
+CHIP ?= spike
 
 # MCU Settings
-ARCH ?= rv32imac
-ABI ?= ilp32
+ARCH ?= rv64imafdc
+ABI ?= lp64d
 CODEMODEL ?= medany
 
 # Spec Settings
-SPEC = nano.specs
-# SPEC = lib/libgloss-htif/util/htif_nano.specs
+# SPEC = nano.specs
+SPEC = lib/libgloss-htif/util/htif_nano.specs
 
 
 #################################
@@ -70,11 +70,12 @@ C_SOURCES  = $(wildcard $(SRC_DIR)*.c) $(wildcard $(SRC_DIR)*/*.c)
 ### BSP sources ###
 INCLUDES  += -I$(BSP_DIR)$(CHIP)
 # A_SOURCES += $(BSP_DIR)$(CHIP)/boot/bootrom.S
-A_SOURCES += $(BSP_DIR)$(CHIP)/boot/startup.S
+# A_SOURCES += $(BSP_DIR)$(CHIP)/boot/startup.S
 
--include $(BSP_DIR)$(CHIP)/Makefile
+# -include $(BSP_DIR)$(CHIP)/Makefile
 
 # ### DRIVER sources ###
+
 
 # ### LIB sources ###
 # INCLUDES  += $(foreach LIBRARY_NAME,$(LIBRARIES),-I$(LIB_DIR)$(LIBRARY_NAME)/inc)
@@ -96,11 +97,11 @@ OBJECTS = $(A_OBJECTS) $(C_OBJECTS)
 # Flags
 #################################
 
-# LD_SCRIPT ?= $(BSP_DIR)$(CHIP)/$(CHIP)_htif.ld
-LD_SCRIPT ?= $(BSP_DIR)$(CHIP)/$(CHIP).ld
+LD_SCRIPT ?= lib/libgloss-htif/util/htif.ld
+# LD_SCRIPT ?= $(BSP_DIR)$(CHIP)/$(CHIP).ld
 
 ifneq ($(CHIP),)
-DEVICE_FLAGS  := -DCHIP=$(CHIP)
+DEVICE_FLAGS := -DCHIP=$(CHIP)
 endif
 
 # -mcmodel=medany -Wl,--start-group -lc_nano -lgloss_htif -Wl,--end-group -lgcc -static -nostartfiles -dT htif.ld
@@ -120,7 +121,7 @@ CFLAGS += $(INCLUDES)
 
 # linker Flags
 LFLAGS  = -static
-LFLAGS += -nostartfiles
+# LFLAGS += -nostartfiles
 # LFLAGS += -nostdlib
 LFLAGS += -u _printf_float
 ifdef STACK_SIZE
