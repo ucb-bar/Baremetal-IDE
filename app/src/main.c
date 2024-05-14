@@ -85,13 +85,12 @@ void APP_main() {
 
   GPIO_writePin(GPIOA, GPIO_PIN_5, counter % 2);
   
-  // counter += 1;
+  counter += 1;
 
   // free(ptr);
 
-
-  // HAL_delay(100);
-  return 0;
+  usleep(200000);
+  // sleep(1);
 }
 /* USER CODE END PUC */
 

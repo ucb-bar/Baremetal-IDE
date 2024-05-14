@@ -1,20 +1,33 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <time.h>
 
-#include "gpio.h"
+#include "fe310.h"
 
-#define GPIOA                   ((GPIO_TypeDef *)0x10012000U)
+void APP_init();
+void APP_main();
+
+uint8_t counter = 0;
+
+
+void APP_init() {
+  GPIO_InitTypeDef GPIO_init_config;
+  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
+  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_5);
+}
+
+void APP_main() {
+  GPIO_writePin(GPIOA, GPIO_PIN_5, counter % 2);
+  counter += 1;
+
+  usleep(200000);
+  // sleep(1);
+}
 
 int main(void) {
-  // printf("Hello world from core 0\n");
-
-  
-  CLEAR_BITS(GPIOA->IOF_EN, (uint32_t)GPIO_PIN_5);
-  
-  CLEAR_BITS(GPIOA->INPUT_EN, (uint32_t)GPIO_PIN_5);
-  SET_BITS(GPIOA->OUTPUT_EN, (uint32_t)GPIO_PIN_5);
-
-  SET_BITS(GPIOA->OUTPUT_VAL, (uint32_t)GPIO_PIN_5);
-
+  APP_init();
+  while (1) {
+    APP_main();
+  }
   return 0;
 }
