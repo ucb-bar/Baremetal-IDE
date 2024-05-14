@@ -62,16 +62,6 @@ SECTIONS {
   __heap_size = DEFINED(__heap_size) ? __heap_size : 2K;
   PROVIDE(__heap_size = __heap_size);
   
-  /*
-  .bootrom (NOLOAD) : {
-    *(.bootrom.start)
-    . = ORIGIN(BOOTROM) + 0x40;
-    *(.bootrom.hang)
-    . = ORIGIN(BOOTROM) + 0x80;
-    *(.bootrom.hang80)
-  }> BOOTROM
-  */
-
   /* Section containing the program */
   .text : ALIGN(4) {
     PROVIDE(__text_start = .);
