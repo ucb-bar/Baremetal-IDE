@@ -28,21 +28,38 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <time.h>
 
-#include "fe310.h"
+#ifdef CHIP
+  // automatically include the correct chip header file
+  // see https://stackoverflow.com/questions/58517780/how-to-include-makefile-variable-in-include-preprocessor-directive
+  #define FORMATSTR(s) STR2(s)
+  #define STR2(s) #s
+
+  #include FORMATSTR(CHIP.h)
+#else
+  #include "examplechip.h"
+#endif
 
 /**
  * This section controls which peripheral device is included in the application program.
  * To save the memory space, the unused peripheral device can be commented out.
  */
-#include "hal_core.h"
-#include "hal_clint.h"
-#include "hal_gpio.h"
-#include "hal_i2c.h"
-#include "hal_plic.h"
-#include "hal_uart.h"
+// #include "hal_core.h"
+// #include "hal_clint.h"
+// #include "hal_gpio.h"
+// #include "hal_i2c.h"
+// #include "hal_plic.h"
+// #include "hal_uart.h"
 
 /* USER CODE END Includes */
+
+/* Private defines -----------------------------------------------------------*/
+/* USER CODE BEGIN Private defines */
+
+/* USER CODE END Private defines */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
@@ -61,13 +78,9 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */
-
+void APP_init();
+void APP_main();
 /* USER CODE END EFP */
-
-/* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }
