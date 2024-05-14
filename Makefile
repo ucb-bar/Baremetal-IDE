@@ -59,7 +59,8 @@ ABI 		?= lp64d
 CODEMODEL 	?= medany
 
 # Spec Settings
-SPEC 		?= nano.specs
+# SPEC 		?= nano.specs
+SPEC 		?= nosys.specs
 
 # Linker Script
 LD_SCRIPT 	?= $(BSP_DIR)$(CHIP)/$(CHIP).ld

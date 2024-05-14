@@ -42,21 +42,11 @@ typedef struct {
 
 
 int main(void) {
+  _write(0, "Hello, rld!\n", 14);
 
-  char *ptr = "Hello, World!\n";
-  size_t len = 14;
-  int fd = 0;
+  printf("Hello, world! %d\n", 0);
 
-  SYSCALL3(SYS_write, fd, (uintptr_t)ptr, len);
-
-  
-
-    uint64_t cmd = HTIF_TOHOST(0, 0, (0 << 1) | 0x1);
-    for (;;) {
-        fromhost = 0;
-        tohost = cmd;
-    }
-  // _exit(0);
+  printf("Helloooooooo, world!\n");
 
   return 0;
 }
