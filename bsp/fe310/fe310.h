@@ -7,12 +7,12 @@ extern "C" {
 #endif
 
 #include "rv_arch.h"
-#include "rv_common.h"
-#include "gpio.h"
+#include "rv.h"
+// #include "gpio.h"
 // #include "ll_i2c.h"
 // #include "ll_pwm.h"
 // #include "ll_spi.h"
-#include "uart.h"
+// #include "uart.h"
 
 /* ================================ IRQ Definition ================================ */
 
@@ -128,6 +128,8 @@ typedef enum {
 #define SYS_CLK_FREQ        HXTAL_FREQ                      /** system clock frequency in Hz */
 #define MTIME_TIMEBASE      1                               /** tick per milliseconds */
 #define MTIME_FREQ          100
+
+
 
 #ifdef __cplusplus
 }

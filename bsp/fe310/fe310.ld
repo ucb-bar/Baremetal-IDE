@@ -1,10 +1,6 @@
 /**
-  * @file linker.ld
-  * @brief Linker script to place sections and symbol values. Should be used together
-  * with other linker script that defines memory regions FLASH and RAM.
-  * It references following symbols, which must be defined in code:
-  *   Reset_Handler : Entry of reset handler
-  * 
+  * @file fe310.ld
+  * @brief Linker script to describe the memory layout of the FE310 SoC
   * It defines following symbols, which code can use without definition:
   *   __boot_hart
   *   __stack_size
@@ -33,6 +29,7 @@
   *   __heap_start
   *   __heap_end
   *   __stack_start
+  *   __sp
   *   __stack_end
   *   __stack_shift
   *
@@ -59,11 +56,11 @@ SECTIONS {
   PROVIDE(__boot_hart = 0);
   
   /* Default stack size */
-  __stack_size = DEFINED(__stack_size) ? __stack_size : 1K;
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 2K;
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
-  __heap_size = DEFINED(__heap_size) ? __heap_size : 1K;
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 4K;
   PROVIDE(__heap_size = __heap_size);
   
   /*
@@ -208,8 +205,8 @@ SECTIONS {
   /* Reserve stack space */
   .stack (NOLOAD) : ALIGN(16) {
     PROVIDE_HIDDEN(__stack_start = .);
-    . += __stack_size; /* Hart 0 */
-    PROVIDE(_sp = .);
+    . += __stack_size;
+    PROVIDE(__sp = .);
     PROVIDE_HIDDEN(__stack_end = .);
   }> SCRATCH
 
