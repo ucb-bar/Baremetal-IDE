@@ -85,6 +85,10 @@ INCLUDES  += -I$(BSP_DIR)$(CHIP)
 # ### DRIVER sources ###
 
 
+INCLUDES  += -I$(DRIVER_DIR)rocket-chip-blocks/uart/
+INCLUDES  += -I$(DRIVER_DIR)rocket-chip-blocks/gpio/
+INCLUDES  += -I$(DRIVER_DIR)rv/
+
 # ### LIB sources ###
 # INCLUDES  += $(foreach LIBRARY_NAME,$(LIBRARIES),-I$(LIB_DIR)$(LIBRARY_NAME)/inc)
 # A_SOURCES += $(foreach LIBRARY_NAME,$(LIBRARIES),$(wildcard $(LIB_DIR)$(LIBRARY_NAME)/src/*.S))
