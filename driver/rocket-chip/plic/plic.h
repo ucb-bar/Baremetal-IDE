@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
 
 
 #define PLIC_BASE               0x0C000000U
@@ -30,6 +30,19 @@ typedef struct {
 
 #define PLIC                    ((PLIC_TypeDef *)PLIC_BASE)
 #define PLIC_CC                 ((PLIC_ContextControl_TypeDef *)(PLIC_BASE + 0x00200000U))
+
+
+void PLIC_disable(uint32_t hart_id, uint32_t irq_id);
+
+void PLIC_enable(uint32_t hart_id, uint32_t irq_id);
+
+void PLIC_setPriority(uint32_t irq_id, uint32_t priority);
+
+void PLIC_setPriorityThreshold(uint32_t hart_id, uint32_t priority);
+
+uint32_t PLIC_claimIRQ(uint32_t hart_id);
+
+void PLIC_completeIRQ(uint32_t hart_id, uint32_t irq_id);
 
 
 #ifdef __cplusplus

@@ -18,8 +18,8 @@
  * @date 2023-05-20
  */
  
-#ifndef __RV_COMMON_H
-#define __RV_COMMON_H
+#ifndef __RV_H
+#define __RV_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -91,4 +91,4 @@ typedef enum {
   TIMEOUT
 } Status;
 
-#endif /* __RV_COMMON_H */
+#endif /* __RV_H */

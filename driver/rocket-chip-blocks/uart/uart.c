@@ -1,5 +1,5 @@
 /**
- * @file hal_uart.c
+ * @file uart.c
  * @author -T.K.- / t_k_233@outlook.com
  * @brief 
  * @version 0.1
@@ -8,11 +8,11 @@
  * 
  */
 
-#include "hal_uart.h"
+#include "uart.h"
 
 extern uint64_t sys_clk_freq;
 
-void HAL_UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
+void UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
   CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXEN_MSK);
   CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_TXEN_MSK);
 
@@ -32,7 +32,7 @@ void HAL_UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
   UARTx->DIV = (sys_clk_freq / UART_init->baudrate) - 1;
 }
 
-Status HAL_UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout) {
+Status UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout) {
   uint32_t rx_data_status;
   while (size > 0) {
     rx_data_status = UARTx->RXDATA;
@@ -47,7 +47,7 @@ Status HAL_UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint3
   return OK;
 }
 
-Status HAL_UART_transmit(UART_TypeDef *UARTx, const uint8_t *data, uint16_t size, uint32_t timeout) {
+Status UART_transmit(UART_TypeDef *UARTx, const uint8_t *data, uint16_t size, uint32_t timeout) {
   while (size > 0) {
     while (READ_BITS(UARTx->TXDATA, UART_TXDATA_FULL_MSK)) {
       // return TIMEOUT;

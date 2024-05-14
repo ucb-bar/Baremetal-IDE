@@ -1,11 +1,11 @@
-#ifndef __LL_UART_H
-#define __LL_UART_H
+#ifndef __UART_H
+#define __UART_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
 
 #define UART_FIFO_DEPTH                         8
 
@@ -50,8 +50,62 @@ typedef struct {
   __IO uint32_t DIV;                            /** Baud rate divisor */
 } UART_TypeDef;
 
+
+typedef enum {
+  UART_MODE_RX          = 0x01,
+  UART_MODE_TX          = 0x02,
+  UART_MODE_TX_RX       = 0x03,
+} UART_Mode;
+
+typedef enum {
+  UART_STOPBITS_1       = 0,
+  UART_STOPBITS_2       = UART_TXCTRL_NSTOP_MSK,
+} UART_StopBits;
+
+typedef struct {
+  uint32_t baudrate;  // the default baudrate divisor is 0xAD, 173
+  UART_Mode mode;
+  UART_StopBits stopbits;
+} UART_InitTypeDef;
+
+
+static inline uint8_t UART_getRXFIFODepth(UART_TypeDef *UARTx) {
+  return READ_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK) >> UART_RXCTRL_RXCNT_POS;
+}
+
+static inline uint8_t UART_getTXFIFODepth(UART_TypeDef *UARTx) {
+  return READ_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK) >> UART_TXCTRL_TXCNT_POS;
+}
+
+static inline void UART_disableRXInterrupt(UART_TypeDef *UARTx) {
+  CLEAR_BITS(UARTx->IE, UART_IE_RXWM_MSK);
+}
+
+static inline void UART_enableRXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
+  CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK);
+  SET_BITS(UARTx->RXCTRL, fifo_level << UART_RXCTRL_RXCNT_POS);
+  SET_BITS(UARTx->IE, UART_IE_RXWM_MSK);
+}
+
+static inline void UART_disableTXInterrupt(UART_TypeDef *UARTx) {
+  CLEAR_BITS(UARTx->IE, UART_IE_TXWM_MSK);
+}
+
+static inline void UART_enableTXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
+  CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK);
+  SET_BITS(UARTx->TXCTRL, fifo_level << UART_TXCTRL_TXCNT_POS);
+  SET_BITS(UARTx->IE, UART_IE_TXWM_MSK);
+}
+
+void UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init);
+
+Status UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout);
+
+Status UART_transmit(UART_TypeDef *UARTx, const uint8_t *data, uint16_t size, uint32_t timeout);
+
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __LL_UART_H */
+#endif /* __UART_H */

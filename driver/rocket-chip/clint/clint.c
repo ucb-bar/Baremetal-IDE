@@ -8,18 +8,10 @@
  * 
  */
 
-#include "hal_clint.h"
+#include "clint.h"
 
-/**
- * @brief Get current time
- * 
- * This function returns the current time as stated in the mtime register.
- * 
- * @param CLINTx CLINT peripheral
- * @return uint64_t current time
- */
-uint64_t HAL_CLINT_getTime() {
-  #if __riscv_xlen == 32
+uint64_t CLINT_getTime() {
+  #if RISCV_XLEN == 32
   uint32_t time_lo;
   uint32_t time_hi;
 
@@ -34,17 +26,8 @@ uint64_t HAL_CLINT_getTime() {
   #endif
 }
 
-/**
- * @brief Set target interrupt time
- * 
- * This function sets the target interrupt time for the given hart.
- * 
- * @param CLINTx CLINT peripheral
- * @param hartid hart ID
- * @param time time to set
- */
-void HAL_CLINT_setTimerInterruptTarget(uint32_t hartid, uint64_t time) {
-  #if __riscv_xlen == 32
+void CLINT_setTimerInterruptTarget(uint32_t hartid, uint64_t time) {
+  #if RISCV_XLEN == 32
   *((__IO uint32_t *)(&CLINT->MTIMECMP[hartid] + 1)) = 0xFFFFFFFF;
   *((__IO uint32_t *)(&CLINT->MTIMECMP[hartid])) = (uint32_t)time;
   *((__IO uint32_t *)(&CLINT->MTIMECMP[hartid])) = (uint32_t)(time >> 32);

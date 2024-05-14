@@ -17,10 +17,10 @@ extern "C" {
 
 #include <stdio.h>
 #include <string.h>
+
+#include "rv.h"
 #include "rv_arch.h"
-#include "rv_common.h"
 #include "core.h"
-// #include "hal_clint.h"
 
 typedef enum {
   UserSoftwareInterrupt         = 0,
@@ -38,31 +38,35 @@ typedef enum {
 } InterruptType;
 
 
-static inline size_t HAL_CORE_getHartId() {
+static inline size_t getHartId() {
   return READ_CSR("mhartid");
 }
 
-static inline uint64_t HAL_getCycles() {
+static inline uint64_t getCycles() {
   return READ_CSR("mcycle");
 }
 
-static inline void HAL_CORE_disableGlobalInterrupt() {
+static inline void disableGlobalInterrupt() {
   CLEAR_CSR_BITS("mstatus", 1U << 3U);
 }
 
-static inline void HAL_CORE_enableGlobalInterrupt() {
+static inline void enableGlobalInterrupt() {
   SET_CSR_BITS("mstatus", 1U << 3U);
 }
 
-static inline void HAL_CORE_disableIRQ(InterruptType IRQn) {
+static inline void disableIRQ(InterruptType IRQn) {
   CLEAR_CSR_BITS("mie", 1U << (uint32_t)IRQn);
 }
 
-static inline void HAL_CORE_enableIRQ(InterruptType IRQn) {
+static inline void enableIRQ(InterruptType IRQn) {
   SET_CSR_BITS("mie", 1U << (uint32_t)IRQn);
 }
 
-void HAL_delay(uint64_t time);
+static inline void clearIRQ(InterruptType IRQn) {
+  CLEAR_CSR_BITS("mip", 1U << (uint32_t)IRQn);
+}
+
+void delay(uint64_t time);
 
 
 #ifdef __cplusplus

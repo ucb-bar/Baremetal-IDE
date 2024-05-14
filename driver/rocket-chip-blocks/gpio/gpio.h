@@ -1,11 +1,11 @@
-#ifndef __LL_GPIO_H
-#define __LL_GPIO_H
+#ifndef __GPIO_H
+#define __GPIO_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
 
 
 /* Peripheral Struct Definition */
@@ -84,9 +84,21 @@ typedef enum {
   GPIO_DS_STRONG
 } GPIO_DriveStrength;
 
+typedef struct {
+  GPIO_Mode mode;
+  GPIO_Pull pull;
+  GPIO_DriveStrength drive_strength;
+} GPIO_InitTypeDef;
+
+
+void GPIO_init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_init, GPIO_Pin pin);
+
+uint8_t GPIO_readPin(GPIO_TypeDef *GPIOx, GPIO_Pin pin);
+
+void GPIO_writePin(GPIO_TypeDef *GPIOx, GPIO_Pin pin, uint8_t value);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __LL_GPIO_H */
+#endif /* __GPIO_H */

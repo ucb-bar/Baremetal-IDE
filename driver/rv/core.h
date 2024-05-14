@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
 
 
 /* Core CSR Bit Field Definition */

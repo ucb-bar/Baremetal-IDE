@@ -28,12 +28,12 @@
 #endif
 
 #if RISCV_XLEN == 64
-  #define LOAD ld
-  #define STORE sd
+  #define LREG ld
+  #define SREG sd
   #define REGBYTES 8
 #elif RISCV_XLEN == 32
-  #define LOAD lw
-  #define STORE sw
+  #define LREG lw
+  #define SREG sw
   #define REGBYTES 4
 #else
 #error "Unsupported RISCV_XLEN"

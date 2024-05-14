@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
 
 
 #define CLINT_BASE               0x02000000U
@@ -18,6 +18,34 @@ typedef struct {
 } CLINT_TypeDef;
 
 #define CLINT                    ((CLINT_TypeDef *)CLINT_BASE)
+
+
+static inline void CLINT_clearSoftwareInterrupt(uint32_t hartid) {
+  CLEAR_BITS(CLINT->MSIP[hartid], 1U);
+}
+
+static inline void CLINT_triggerSoftwareInterrupt(uint32_t hartid) {
+  SET_BITS(CLINT->MSIP[hartid], 1U);
+}
+
+/**
+ * @brief Get current time
+ * 
+ * This function returns the current time as stated in the mtime register.
+ * 
+ * @return uint64_t current time
+ */
+uint64_t CLINT_getTime();
+
+/**
+ * @brief Set target interrupt time
+ * 
+ * This function sets the target interrupt time for the given hart.
+ * 
+ * @param hartid hart ID
+ * @param time time to set
+ */
+void CLINT_setTimerInterruptTarget(uint32_t hartid, uint64_t time);
 
 
 #ifdef __cplusplus
