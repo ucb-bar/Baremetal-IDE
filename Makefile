@@ -80,15 +80,8 @@ C_SOURCES += $(wildcard $(APP_SRC_DIR)*.c) $(wildcard $(APP_SRC_DIR)*/*.c)
 
 ### BSP sources ###
 INCLUDES  += -I$(BSP_DIR)$(CHIP)
-# A_SOURCES += $(BSP_DIR)$(CHIP)/boot/bootrom.S
-# A_SOURCES += $(BSP_DIR)$(CHIP)/boot/startup.S
 
 # ### DRIVER sources ###
-
-
-INCLUDES  += -I$(DRIVER_DIR)rocket-chip-blocks/uart/
-INCLUDES  += -I$(DRIVER_DIR)rocket-chip-blocks/gpio/
-INCLUDES  += -I$(DRIVER_DIR)rv/
 
 # ### LIB sources ###
 # INCLUDES  += $(foreach LIBRARY_NAME,$(LIBRARIES),-I$(LIB_DIR)$(LIBRARY_NAME)/inc)
@@ -184,18 +177,18 @@ $(TARGET_VERILOG): $(TARGET_ELF)
 
 $(TARGET_ELF): $(OBJECTS)
 	@echo "[LD] linking $@"
-	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
-	$(SIZE) $(TARGET_ELF)
+	@$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
+	@$(SIZE) $(TARGET_ELF)
 
 $(A_OBJECTS): $(BUILD_DIR)%.o: %.S
 	@echo "[CC] compiling $@"
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(C_OBJECTS): $(BUILD_DIR)%.o: %.c
 	@echo "[CC] compiling $@"
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 
 #################################
