@@ -20,7 +20,7 @@ extern "C" {
 #include "rv_arch.h"
 #include "rv_common.h"
 #include "core.h"
-#include "hal_clint.h"
+// #include "hal_clint.h"
 
 typedef enum {
   UserSoftwareInterrupt         = 0,

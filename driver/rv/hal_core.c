@@ -47,10 +47,10 @@ extern uint64_t mtime_freq;
  * @param time time to delay, in milliseconds
  */
 void HAL_delay(uint64_t time) {
-  uint64_t target_tick = HAL_CLINT_getTime() + (time * mtime_freq);
-  while (HAL_CLINT_getTime() < target_tick) {
-    asm("nop");
-  }
+  // uint64_t target_tick = HAL_CLINT_getTime() + (time * mtime_freq);
+  // while (HAL_CLINT_getTime() < target_tick) {
+  //   asm("nop");
+  // }
 }
 
 
@@ -130,8 +130,8 @@ __attribute__((weak)) void HAL_hypervisorSoftwareInterruptCallback() {
 
 __attribute__((weak)) void HAL_machineSoftwareInterruptCallback() {
   printf("machine software irq\n");
-  uint32_t hartid = HAL_CORE_getHartId();
-  HAL_CLINT_clearSoftwareInterrupt(hartid);
+  // uint32_t hartid = HAL_CORE_getHartId();
+  // HAL_CLINT_clearSoftwareInterrupt(hartid);
   // HAL_CORE_clearIRQ(MachineSoftware_IRQn);
 }
 
@@ -152,8 +152,8 @@ __attribute__((weak)) void HAL_hypervisorTimerInterruptCallback() {
 
 __attribute__((weak)) void HAL_machineTimerInterruptCallback() {
   printf("machine timer irq\n");
-  uint32_t hartid = HAL_CORE_getHartId();
-  HAL_CLINT_setTimerInterruptTarget(hartid, 0xFFFFFFFFFFFFFFFF);
+  // uint32_t hartid = HAL_CORE_getHartId();
+  // HAL_CLINT_setTimerInterruptTarget(hartid, 0xFFFFFFFFFFFFFFFF);
 }
 
 __attribute__((weak)) void HAL_machineExternalInterruptCallback() {
@@ -185,6 +185,18 @@ void __init_tls(void) {
   memcpy(__thread_self, __tdata_start, (size_t)__tdata_size);
   memset(__thread_self + (size_t)__tbss_offset, 0, (size_t)__tbss_size);
 }
+
+
+void __attribute__((weak)) handle_trap(uintptr_t epc, uintptr_t cause, uintptr_t tval, uintptr_t regs[32])
+{
+    /* Extract low-order bits of exception code as positive int */
+    int code = cause & ((1UL << ((sizeof(int)<<3)-1)) - 1);
+    /* Encode interrupt as negative value */
+    code = ((intptr_t)cause < 0) ? -code : code;
+    _exit(code);
+    __builtin_unreachable();
+}
+
 
 uintptr_t trap_handler(uintptr_t m_epc, uintptr_t m_cause, uintptr_t m_tval, uintptr_t regs[32]) {
   // switch (m_cause) {
@@ -236,3 +248,15 @@ uintptr_t trap_handler(uintptr_t m_epc, uintptr_t m_cause, uintptr_t m_tval, uin
   return m_epc;
 }
 
+
+/*
+ * Main function for secondary harts
+ * 
+ * Multi-threaded programs should provide their own implementation.
+ */
+void  __attribute__ ((weak,noreturn)) __main(void)
+{
+    for (;;) {
+        __asm__ __volatile__ ("wfi");
+    }
+}
