@@ -6,10 +6,6 @@
 extern "C" {
 #endif
 
-#include "rv_arch.h"
-#include "rv_common.h"
-
-
 /**
  * System Clock Configuration
  */

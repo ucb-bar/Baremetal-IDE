@@ -1,131 +1,134 @@
 OUTPUT_ARCH ("riscv")
-ENTRY (_start)
 
-SECTIONS
-{
-    . = 0x80000000;
+/* Entry point */
+ENTRY(_start)
 
-    /* Keep under a power of 2 to reserve space for TCB */
-    PROVIDE (__stack_size_min = 24K);
+MEMORY {
+  DRAM     (rwx): ORIGIN = 0x80000000, LENGTH = 16384M
+}
 
-    .text : {
-        *(.text.init)
-        *(.text.unlikely .text.unlikely.*)
-        *(.text.startup .text.startup.*)
-        *(.text .text.*)
-        *(.gnu.linkonce.t.*)
-    }
-    PROVIDE (_etext = .);
+SECTIONS {
+  /* Default boot hart */
+  PROVIDE(__boot_hart = 0);
 
-    /* Static Thread Local Storage template */
-    .tdata : {
-        PROVIDE_HIDDEN (__tdata_start = .);
-        *(.tdata .tdata.*)
-        *(.gnu.linkonce.td.*)
-        PROVIDE_HIDDEN (__tdata_end = .);
-    }
-    PROVIDE (__tdata_size = SIZEOF (.tdata));
+  /* Keep under a power of 2 to reserve space for TCB */
+  PROVIDE (__stack_size_min = 24K);
 
-    .tbss (NOLOAD) : {
-        PROVIDE_HIDDEN (__tbss_start = .);
-        PROVIDE_HIDDEN (__tbss_offset = ABSOLUTE (__tbss_start - __tdata_start));
-        *(.tbss .tbss.*)
-        *(.gnu.linkonce.tb.*)
-        *(.tcommon)
-        PROVIDE_HIDDEN (__tbss_end = .);
-    }
-    PROVIDE (__tbss_size = SIZEOF (.tbss));
+  .text : {
+      *(.text.init)
+      *(.text.unlikely .text.unlikely.*)
+      *(.text.startup .text.startup.*)
+      *(.text .text.*)
+      *(.gnu.linkonce.t.*)
+  }> DRAM
+  PROVIDE (_etext = .);
 
-    .rodata : {
-        *(.rodata .rodata.*)
-        *(.gnu.linkonce.r.*)
-    }
+  /* Static Thread Local Storage template */
+  .tdata : {
+      PROVIDE_HIDDEN (__tdata_start = .);
+      *(.tdata .tdata.*)
+      *(.gnu.linkonce.td.*)
+      PROVIDE_HIDDEN (__tdata_end = .);
+  }> DRAM
+  PROVIDE (__tdata_size = SIZEOF (.tdata));
 
-    .preinit_array : {
-        PROVIDE_HIDDEN (__preinit_array_start = .);
-        KEEP (*(.preinit_array))
-        PROVIDE_HIDDEN (__preinit_array_end = .);
-    }
+  .tbss (NOLOAD) : {
+      PROVIDE_HIDDEN (__tbss_start = .);
+      PROVIDE_HIDDEN (__tbss_offset = ABSOLUTE (__tbss_start - __tdata_start));
+      *(.tbss .tbss.*)
+      *(.gnu.linkonce.tb.*)
+      *(.tcommon)
+      PROVIDE_HIDDEN (__tbss_end = .);
+  }> DRAM
+  PROVIDE (__tbss_size = SIZEOF (.tbss));
 
-    .init_array : {
-        PROVIDE_HIDDEN (__init_array_start = .);
-        KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
-        KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
-        PROVIDE_HIDDEN (__init_array_end = .);
-    }
+  .rodata : {
+      *(.rodata .rodata.*)
+      *(.gnu.linkonce.r.*)
+  }> DRAM
 
-    .fini_array : {
-        PROVIDE_HIDDEN (__fini_array_start = .);
-        KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
-        KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
-        PROVIDE_HIDDEN (__fini_array_end = .);
-    }
+  .preinit_array : {
+      PROVIDE_HIDDEN (__preinit_array_start = .);
+      KEEP (*(.preinit_array))
+      PROVIDE_HIDDEN (__preinit_array_end = .);
+  }> DRAM
 
-    .ctors : {
-        KEEP (*crtbegin.o(.ctors))
-        KEEP (*crtbegin?.o(.ctors))
-        KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o) .ctors))
-        KEEP (*(SORT(.ctors.*)))
-        KEEP (*(.ctors))
-    }
+  .init_array : {
+      PROVIDE_HIDDEN (__init_array_start = .);
+      KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
+      KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
+      PROVIDE_HIDDEN (__init_array_end = .);
+  }> DRAM
 
-    .dtors : {
-        KEEP (*crtbegin.o(.dtors))
-        KEEP (*crtbegin?.o(.dtors))
-        KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o) .dtors))
-        KEEP (*(SORT(.dtors.*)))
-        KEEP (*(.dtors))
-    }
+  .fini_array : {
+      PROVIDE_HIDDEN (__fini_array_start = .);
+      KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
+      KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
+      PROVIDE_HIDDEN (__fini_array_end = .);
+  }> DRAM
 
-    /* Host-Target Interface */
-    .htif ALIGN(0x40) : {
-        *(.htif)
-    }
+  .ctors : {
+      KEEP (*crtbegin.o(.ctors))
+      KEEP (*crtbegin?.o(.ctors))
+      KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o) .ctors))
+      KEEP (*(SORT(.ctors.*)))
+      KEEP (*(.ctors))
+  }> DRAM
 
-    .data : ALIGN (8) {
-        *(.data)
-        *(.gnu.linkonce.d.*)
-    }
+  .dtors : {
+      KEEP (*crtbegin.o(.dtors))
+      KEEP (*crtbegin?.o(.dtors))
+      KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o) .dtors))
+      KEEP (*(SORT(.dtors.*)))
+      KEEP (*(.dtors))
+  }> DRAM
 
-    .sdata : {
-        PROVIDE (__global_pointer$ = . + 0x800);
-        *(.sdata .sdata.*)
-        *(.gnu.linkonce.s.*)
-        *(.srodata.cst16)
-        *(.srodata.cst8)
-        *(.srodata.cst4)
-        *(.srodata.cst2)
-        *(.srodata .srodata.*)
-    }
+  /* Host-Target Interface */
+  .htif ALIGN(0x40) : {
+      *(.htif)
+  }> DRAM
 
-    PROVIDE (_edata = .);
+  .data : ALIGN (8) {
+      *(.data)
+      *(.gnu.linkonce.d.*)
+  }> DRAM
 
-    .bss : ALIGN (8) {
-        PROVIDE_HIDDEN (__bss_start = .);
-        *(.sbss .sbss.*)
-        *(.gnu.linkonce.sb.*)
-        *(.bss .bss.*)
-        *(.gnu.linkonce.b.*)
-        *(COMMON)
-        PROVIDE_HIDDEN (__bss_end = .);
-    }
+  .sdata : {
+      PROVIDE (__global_pointer$ = . + 0x800);
+      *(.sdata .sdata.*)
+      *(.gnu.linkonce.s.*)
+      *(.srodata.cst16)
+      *(.srodata.cst8)
+      *(.srodata.cst4)
+      *(.srodata.cst2)
+      *(.srodata .srodata.*)
+  }> DRAM
 
-    . = ALIGN (8);
-    PROVIDE (__end = .);
+  PROVIDE (_edata = .);
 
-    /* Reserve heap space */
-    PROVIDE(__heap_size = 128K);
-    . += __heap_size;
-    . = ALIGN (4K);
-    PROVIDE (__heap_end = .);
+  .bss : ALIGN (8) {
+      PROVIDE_HIDDEN (__bss_start = .);
+      *(.sbss .sbss.*)
+      *(.gnu.linkonce.sb.*)
+      *(.bss .bss.*)
+      *(.gnu.linkonce.b.*)
+      *(COMMON)
+      PROVIDE_HIDDEN (__bss_end = .);
+  }> DRAM
 
-    /* Place Thread Control Block (TCB) at bottom of hart stack */
-    PROVIDE (__tcb_size = __tbss_end - __tdata_start);
-    PROVIDE (__stack_align = MAX (ALIGNOF (.tdata), 0x10));
-    PROVIDE (__stack_start = ALIGN (__stack_align));
-    PROVIDE (__stack_shift = LOG2CEIL( ALIGN (__stack_size_min + __tcb_size, __stack_align)));
-    PROVIDE (__stack_size = 1 << __stack_shift);
+  . = ALIGN (8);
+  PROVIDE (__end = .);
 
-    /* Default boot hart */
-    PROVIDE (__boot_hart = 0);
+  /* Reserve heap space */
+  PROVIDE(__heap_size = 128K);
+  . += __heap_size;
+  . = ALIGN (4K);
+  PROVIDE (__heap_end = .);
+
+  /* Place Thread Control Block (TCB) at bottom of hart stack */
+  PROVIDE (__tcb_size = __tbss_end - __tdata_start);
+  PROVIDE (__stack_align = MAX (ALIGNOF (.tdata), 0x10));
+  PROVIDE (__stack_start = ALIGN (__stack_align));
+  PROVIDE (__stack_shift = LOG2CEIL( ALIGN (__stack_size_min + __tcb_size, __stack_align)));
+  PROVIDE (__stack_size = 1 << __stack_shift);
 }
