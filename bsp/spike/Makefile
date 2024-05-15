@@ -9,4 +9,7 @@ CODEMODEL 	?= medany
 A_SOURCES += $(BSP_DIR)$(CHIP)/boot/startup.S
 
 include $(DRIVER_DIR)rv/Makefile
+
 include $(DRIVER_DIR)htif/Makefile
+
+include $(LIB_DIR)syscall/Makefile
