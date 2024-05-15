@@ -1,19 +1,10 @@
-#include <unistd.h>
-
-#include "clint.h"
+#include "time.h"
 
 extern uint64_t mtime_freq;
 
-/**
- * @brief Sleep for given time
- * 
- * This function put the hart to sleep for the given amount of time.
- * 
- * @param __seconds time to sleep
- */
-__attribute__((weak)) unsigned sleep(unsigned int __seconds) {
+__attribute__((weak)) unsigned int sleep(unsigned int seconds) {
   #ifdef CLINT
-  uint64_t target_tick = CLINT_getTime() + (__seconds * mtime_freq);
+  uint64_t target_tick = CLINT_getTime() + (seconds * mtime_freq);
   while (CLINT_getTime() < target_tick) {
     asm("nop");
   }
