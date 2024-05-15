@@ -153,7 +153,7 @@ SECTIONS {
 
   PROVIDE(__tdata_size = SIZEOF(.tdata));
 
-  /* Section for zero-initialized thread-local uninitialized data */
+  /* Section for zero-initialized thread-local small data */
   .tbss (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__tbss_start = .);
     PROVIDE_HIDDEN(__tbss_offset = ABSOLUTE(__tbss_start - __tdata_start));
@@ -165,14 +165,14 @@ SECTIONS {
   
   PROVIDE(__tbss_size = SIZEOF(.tbss));
 
-  /* Section for zero-initialized uninitialized data */
+  /* Section for zero-initialized small data */
   .sbss (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__bss_start = .);
     *(.sbss .sbss.*)
     *(.gnu.linkonce.sb.*)
   }> DTIM
   
-  /* Section for uninitialized data */
+  /* Section for zero-initialized data */
   .bss (NOLOAD) : ALIGN(8) {
     *(.bss .bss.*)
     *(.gnu.linkonce.b.*)
