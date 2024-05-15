@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-  
     # Do not ignore bash profile files. From:
     defaults:
       run:
@@ -24,7 +23,19 @@ jobs:
       run: |
         wget https://github.com/ucb-bar/RISC-V-GNU-Toolchain-Prebuilt/releases/download/v2023.12.30/riscv64-unknown-toolchain.tar.xz
         tar -xf riscv64-unknown-toolchain.tar.xz
-    - name: Make
+    - name: Make default
       run: |
         export PATH="$GITHUB_WORKSPACE/riscv64-unknown-toolchain/bin/:$PATH"
+        make clean
         make
+    - name: Make bearlyml
+      run: |
+        export PATH="$GITHUB_WORKSPACE/riscv64-unknown-toolchain/bin/:$PATH"
+        make clean
+        make TARGET=./examples/chipyard-tests/hello/
+        # spike build/hello.elf
+    - name: Make fe310
+      run: |
+        export PATH="$GITHUB_WORKSPACE/riscv64-unknown-toolchain/bin/:$PATH"
+        make clean
+        make CHIP=fe310
