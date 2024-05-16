@@ -188,10 +188,9 @@ uintptr_t trap_handler(uintptr_t m_epc, uintptr_t m_cause, uintptr_t m_tval, uin
  * 
  * Multi-threaded programs should provide their own implementation.
  */
-void  __attribute__ ((weak,noreturn)) __main(void)
-{
-    for (;;) {
-        __asm__ __volatile__ ("wfi");
-    }
+void  __attribute__ ((weak,noreturn)) __main(void) {
+  while (1) {
+    __asm__ __volatile__ ("wfi");
+  }
 }
 
