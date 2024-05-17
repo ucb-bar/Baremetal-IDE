@@ -39,7 +39,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
-uint8_t counter = 0;
+volatile uint8_t counter = 0;
 
 /* USER CODE END PV */
 
@@ -56,6 +56,8 @@ ssize_t _write(int fd, const void *ptr, size_t len) {
   return -1;
 }
 
+// this function will be called once at the beginning of the program
+// use it to initialize the hardware
 void APP_init() {
   // set up UART registers
   UART_InitTypeDef UART_init_config;
@@ -63,34 +65,17 @@ void APP_init() {
   UART_init_config.mode = UART_MODE_TX_RX;
   UART_init_config.stopbits = UART_STOPBITS_2;
   UART_init(UART0, &UART_init_config);
-
-  GPIO_InitTypeDef GPIO_init_config;
-  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_5);
-  
-  GPIO_init_config.mode = GPIO_MODE_ALTERNATE_FUNCTION_0;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_16 | GPIO_PIN_17);
-
-  UART0->DIV = 139;
 }
 
 
-
+// this function will be called in an infinite loop
 void APP_main() {
   uint64_t mhartid = READ_CSR("mhartid");
 
   printf("Hello world from hart %d: %d\n", mhartid, counter);
 
-  // char *ptr = malloc(1);
-
-  GPIO_writePin(GPIOA, GPIO_PIN_5, counter % 2);
-  
-  counter += 1;
-
-  // free(ptr);
-
-  usleep(200000);
-  // sleep(1);
+  // sleep for 1000 ms
+  msleep(1000);
 }
 /* USER CODE END PUC */
 
