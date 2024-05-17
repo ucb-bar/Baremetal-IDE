@@ -1,15 +1,12 @@
 /**
-  * @file linker.ld
-  * @brief Linker script to place sections and symbol values. Should be used together
-  * with other linker script that defines memory regions FLASH and RAM.
-  * It references following symbols, which must be defined in code:
-  *   Reset_Handler : Entry of reset handler
-  * 
+  * @file fe310.ld
+  * @brief Linker script to describe the memory layout of the FE310 SoC
   * It defines following symbols, which code can use without definition:
   *   __boot_hart
   *   __stack_size
   *   __heap_size
   *   __text_start
+  *   __text_load_start
   *   __text_end
   *   __data_start
   *   __data_load_start
@@ -32,6 +29,7 @@
   *   __heap_start
   *   __heap_end
   *   __stack_start
+  *   __sp
   *   __stack_end
   *   __stack_shift
   *
@@ -56,11 +54,11 @@ SECTIONS {
   PROVIDE(__boot_hart = 0);
   
   /* Default stack size */
-  __stack_size = DEFINED(__stack_size) ? __stack_size : 4K;
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 1K;
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
-  __heap_size = DEFINED(__heap_size) ? __heap_size : 8K;
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 1K;
   PROVIDE(__heap_size = __heap_size);
   
   /*
@@ -103,7 +101,6 @@ SECTIONS {
     PROVIDE(__text_end = .);
   }> SCRATCH
   
-
   /* Section containing read-only data */
   .rodata : {
     . = ALIGN(4);
@@ -164,7 +161,7 @@ SECTIONS {
 
   PROVIDE(__tdata_size = SIZEOF(.tdata));
 
-  /* Section for zero-initialized thread-local uninitialized data */
+  /* Section for zero-initialized thread-local small data */
   .tbss (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__tbss_start = .);
     PROVIDE_HIDDEN(__tbss_offset = ABSOLUTE(__tbss_start - __tdata_start));
@@ -176,14 +173,14 @@ SECTIONS {
 
   PROVIDE(__tbss_size = SIZEOF(.tbss));
 
-  /* Section for zero-initialized uninitialized data */
+  /* Section for zero-initialized small data */
   .sbss (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__bss_start = .);
     *(.sbss .sbss.*)
     *(.gnu.linkonce.sb.*)
   }> SCRATCH
   
-  /* Section for uninitialized data */
+  /* Section for zero-initialized data */
   .bss (NOLOAD) : ALIGN(8) {
     *(.bss .bss.*)
     *(.gnu.linkonce.b.*)
@@ -198,14 +195,14 @@ SECTIONS {
   .heap (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__heap_start = .);
     . += __heap_size;
-    . = ALIGN(4K);
+    . = ALIGN(1K);
     PROVIDE_HIDDEN(__heap_end = .);
   }> SCRATCH
   
   /* Reserve stack space */
   .stack (NOLOAD) : ALIGN(16) {
     PROVIDE_HIDDEN(__stack_start = .);
-    . += __stack_size * 5; /* Hart 0 */
+    . += __stack_size;
     PROVIDE(_sp = .);
     PROVIDE_HIDDEN(__stack_end = .);
   }> SCRATCH

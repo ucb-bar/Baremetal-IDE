@@ -7,16 +7,12 @@ extern "C" {
 #endif
 
 #include "rv_arch.h"
-#include "rv_common.h"
-#include "ll_clint.h"
-#include "ll_core.h"
-#include "ll_gpio.h"
-#include "ll_i2c.h"
-#include "ll_plic.h"
-#include "ll_pwm.h"
-#include "ll_spi.h"
-#include "ll_uart.h"
-
+#include "rv.h"
+#include "gpio.h"
+// #include "ll_i2c.h"
+// #include "ll_pwm.h"
+// #include "ll_spi.h"
+#include "uart.h"
 
 /* ================================ IRQ Definition ================================ */
 typedef enum {
@@ -121,6 +117,14 @@ typedef enum {
 #define SPI1                    ((SPI_TypeDef *)SPI1_BASE)
 #define I2C0                    ((I2C_TypeDef *)I2C0_BASE)
 #define I2C1                    ((I2C_TypeDef *)I2C1_BASE)
+
+/**
+ * System Clock Configuration
+ */
+#define HXTAL_FREQ          100000000                       /** crystal or external clock frequency in Hz */
+#define SYS_CLK_FREQ        HXTAL_FREQ                      /** system clock frequency in Hz */
+#define MTIME_TIMEBASE      32768                           /** tick per milliseconds */
+#define MTIME_FREQ          MTIME_TIMEBASE
 
 
 #ifdef __cplusplus
