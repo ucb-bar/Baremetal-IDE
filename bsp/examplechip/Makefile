@@ -14,3 +14,4 @@ include $(DRIVER_DIR)rocket-chip/Makefile
 include $(DRIVER_DIR)rocket-chip-blocks/Makefile
 
 include $(LIB_DIR)syscall/Makefile
+include $(DRIVER_DIR)htif/Makefile

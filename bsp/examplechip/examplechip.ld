@@ -44,9 +44,9 @@ OUTPUT_ARCH("riscv")
 ENTRY(_start)
 
 MEMORY {
-  SCRATCH  (rwx): ORIGIN = 0x08000000, LENGTH = 64K
+  SCRATCH  (rwx): ORIGIN = 0x80000000, LENGTH = 64K
   FLASH    (rwx): ORIGIN = 0x20000000, LENGTH = 128M
-  DRAM     (rwx): ORIGIN = 0x80000000, LENGTH = 16384M
+  /* DRAM     (rwx): ORIGIN = 0x80000000, LENGTH = 16384M */
 }
 
 SECTIONS {
@@ -58,7 +58,7 @@ SECTIONS {
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
-  __heap_size = DEFINED(__heap_size) ? __heap_size : 1K;
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 512;
   PROVIDE(__heap_size = __heap_size);
   
   /*
@@ -186,6 +186,11 @@ SECTIONS {
     *(.gnu.linkonce.b.*)
     *(COMMON)
     PROVIDE_HIDDEN(__bss_end = .);
+  }> SCRATCH
+
+  /* Host-Target Interface */
+  .htif ALIGN(0x40) : {
+      *(.htif)
   }> SCRATCH
 
   . = ALIGN(8);

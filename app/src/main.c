@@ -51,10 +51,10 @@ volatile uint8_t counter = 0;
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN PUC */
-ssize_t _write(int fd, const void *ptr, size_t len) {
-  UART_transmit(UART0, (const uint8_t *)ptr, len, 100);
-  return -1;
-}
+// ssize_t _write(int fd, const void *ptr, size_t len) {
+//   UART_transmit(UART0, (const uint8_t *)ptr, len, 100);
+//   return -1;
+// }
 
 // this function will be called once at the beginning of the program
 // use it to initialize the hardware
