@@ -1,11 +1,12 @@
-#ifndef __LL_RCC_H
-#define __LL_RCC_H
+#ifndef __HAL_RCC_H
+#define __HAL_RCC_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
+#include "eaglex.h"
 
 
 typedef struct {
@@ -18,11 +19,24 @@ typedef struct {
   __IO uint64_t UNCLUSTER_CLKSEL;   // 0x00110028  on reset: 0x00000000_00000000
   __IO uint64_t UNCLUSTER_CLKDIV;   // 0x00110030  on reset: 0x00000000_00000004
   __IO uint64_t LBWIF_CLKDIV;       // 0x00110038  on reset: 0x00000000_00000008
-} RCC_TypeDef;
+} PRCI_TypeDef;
+
+#define PRCI                     ((PRCI_TypeDef *)PRCI_BASE)
+
+
+
+
+static inline void PRCI_disableCluster(uint32_t cluster_id) {
+  SET_BITS(PRCI->CLUSTER_RESETS, 1U << cluster_id);
+}
+
+static inline void PRCI_enableCluster(uint32_t cluster_id) {
+  CLEAR_BITS(PRCI->CLUSTER_RESETS, 1U << cluster_id);
+}
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __LL_RCC_H */
+#endif /* __HAL_RCC_H */

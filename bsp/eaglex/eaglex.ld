@@ -1,17 +1,15 @@
 /**
-  * @file linker.ld
-  * @brief Linker script to place sections and symbol values. Should be used together
-  * with other linker script that defines memory regions FLASH and RAM.
-  * It references following symbols, which must be defined in code:
-  *   Reset_Handler : Entry of reset handler
-  * 
+  * @file eaglex.ld
+  * @brief Linker script to describe the memory layout of the FE310 SoC
   * It defines following symbols, which code can use without definition:
   *   __boot_hart
   *   __stack_size
   *   __heap_size
   *   __text_start
+  *   __text_load_start
   *   __text_end
   *   __data_start
+  *   __data_load_start
   *   __preinit_array_start
   *   __preinit_array_end
   *   __init_array_start
@@ -31,12 +29,11 @@
   *   __heap_start
   *   __heap_end
   *   __stack_start
+  *   __sp
   *   __stack_end
   *   __stack_shift
   *
-  * Copyright (c) 2022 UC Berkeley
-  *
-  * @date 2022
+  * @date 2024
   */
 
 OUTPUT_ARCH("riscv")
@@ -55,11 +52,11 @@ SECTIONS {
   PROVIDE(__boot_hart = 20);
   
   /* Default stack size */
-  __stack_size = DEFINED(__stack_size) ? __stack_size : 512;
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 128;
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
-  __heap_size = DEFINED(__heap_size) ? __heap_size : 8K;
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 1K;
   PROVIDE(__heap_size = __heap_size);
   
   /*
@@ -101,7 +98,7 @@ SECTIONS {
     *(.gnu.linkonce.t.*)
     PROVIDE(__text_end = .);
   }> SCRATCH
-  
+  PROVIDE(__text_load_start = LOADADDR(.text));
 
   /* Section containing read-only data */
   .rodata : {
@@ -142,6 +139,8 @@ SECTIONS {
     KEEP(*(.fini_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
     PROVIDE_HIDDEN(__fini_array_end = .);
   }> SCRATCH
+  
+  PROVIDE(__data_load_start = LOADADDR(.data));
 
   /* Section for initialized small data */
   .sdata : {
@@ -195,15 +194,15 @@ SECTIONS {
   .heap (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__heap_start = .);
     . += __heap_size;
-    . = ALIGN(4K);
+    . = ALIGN(1K);
     PROVIDE_HIDDEN(__heap_end = .);
   }> SCRATCH
   
   /* Reserve stack space */
   .stack (NOLOAD) : ALIGN(16) {
     PROVIDE_HIDDEN(__stack_start = .);
-    . += __stack_size * __n_harts;
-    PROVIDE(_sp = .);
+    . += (__stack_size * __n_harts);
+    PROVIDE(__sp = .);
     PROVIDE_HIDDEN(__stack_end = .);
   }> SCRATCH
 

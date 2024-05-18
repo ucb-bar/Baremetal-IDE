@@ -8,6 +8,6 @@
  * 
  */
 
-#include "eaglex_hal_rcc.h"
+#include "eaglex_prci.h"
 
 void HAL_RCC_initSystemClock() {}
