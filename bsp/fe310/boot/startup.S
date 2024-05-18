@@ -111,8 +111,8 @@ trap_vector:
   LREG x31, 31*REGBYTES(sp)
   /* Restore sp last */
   LREG x2, 2*REGBYTES(sp)
-
   mret
+
 
 .align 4
 .section .text.init

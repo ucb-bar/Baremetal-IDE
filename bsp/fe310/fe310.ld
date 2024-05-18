@@ -33,9 +33,7 @@
   *   __stack_end
   *   __stack_shift
   *
-  * Copyright (c) 2022 UC Berkeley
-  *
-  * @date 2022
+  * @date 2024
   */
 
 OUTPUT_ARCH("riscv")
@@ -47,7 +45,7 @@ MEMORY {
   ROM      (r)  : ORIGIN = 0x00010000, LENGTH = 8K
   ITIM     (rwx): ORIGIN = 0x08000000, LENGTH = 8K
   FLASH    (rwx): ORIGIN = 0x20000000, LENGTH = 512M
-  DTIM     (rw) : ORIGIN = 0x80000000, LENGTH = 16384M
+  DTIM     (rw) : ORIGIN = 0x80000000, LENGTH = 16K
 }
 
 SECTIONS {
@@ -55,11 +53,11 @@ SECTIONS {
   PROVIDE(__boot_hart = 0);
   
   /* Default stack size */
-  __stack_size = DEFINED(__stack_size) ? __stack_size : 2K;
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 8K;
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
-  __heap_size = DEFINED(__heap_size) ? __heap_size : 4K;
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 0;
   PROVIDE(__heap_size = __heap_size);
   
   /* Section containing the program */
@@ -171,7 +169,7 @@ SECTIONS {
     *(.sbss .sbss.*)
     *(.gnu.linkonce.sb.*)
   }> DTIM
-  
+
   /* Section for zero-initialized data */
   .bss (NOLOAD) : ALIGN(8) {
     *(.bss .bss.*)
@@ -189,13 +187,13 @@ SECTIONS {
     . += __heap_size;
     . = ALIGN(4K);
     PROVIDE_HIDDEN(__heap_end = .);
-  }> DTIM
+  }> ITIM
   
   /* Reserve stack space */
   .stack (NOLOAD) : ALIGN(16) {
     PROVIDE_HIDDEN(__stack_start = .);
     . += __stack_size;
-    PROVIDE(_sp = .);
+    PROVIDE(__sp = .);
     PROVIDE_HIDDEN(__stack_end = .);
   }> ITIM
 

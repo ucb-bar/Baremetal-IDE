@@ -9,9 +9,9 @@ extern "C" {
 #include "rv_arch.h"
 #include "rv.h"
 #include "gpio.h"
-// #include "ll_i2c.h"
-// #include "ll_pwm.h"
-// #include "ll_spi.h"
+// #include "i2c.h"
+// #include "pwm.h"
+// #include "spi.h"
 #include "uart.h"
 
 /* ================================ IRQ Definition ================================ */
