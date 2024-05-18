@@ -178,7 +178,7 @@ $(TARGET_VERILOG): $(TARGET_ELF)
 
 $(TARGET_ELF): $(OBJECTS)
 	@echo "[LD] linking $@"
-	@$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
+	@$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 	@$(SIZE) $(TARGET_ELF)
 
 $(A_OBJECTS): $(BUILD_DIR)%.o: %.S
