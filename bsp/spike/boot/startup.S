@@ -240,8 +240,26 @@ fpu_init_exit:
   la t0, trap_vector
   csrw mtvec, t0
 
+tls_init_entry:
   /* Initialize TLS */
-  call __init_tls
+  mv t0, tp
+  la t1, __tdata_start
+  la t2, __tdata_end
+
+  # see if:
+  # - tdata section is already at correct location?
+  # - tdata section is of size 0?
+  beq t0, t1, tls_init_exit
+  bge t1, t2, tls_init_exit
+
+tls_init_loop:
+  LREG  t3, 0(t0)
+  SREG  t3, 0(tp)
+  addi  t0, t0, REGBYTES
+  addi  t1, t1, REGBYTES
+  blt   t1, t2, tls_init_loop
+
+tls_init_exit:
 
   /* Skip global initialization if not the designated boot hart */
   la t0, __boot_hart
