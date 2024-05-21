@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "fe310.h"
+#include "arty.h"
 
 #include "nn.h"
 
@@ -44,27 +44,7 @@ extern uint8_t externdata[];
 extern size_t externdata_start[];
 extern size_t externdata_end[];
 
-typedef struct {
-  Tensor input;
-  Tensor fc1_weight;
-  Tensor fc1_bias;
-  Tensor fc1_out;
-  Tensor fc2_weight;
-  Tensor fc2_bias;
-  Tensor fc2_out;
-  Tensor fc3_weight;
-  Tensor fc3_bias;
-  Tensor fc3_out;
-  Tensor fc4_weight;
-  Tensor fc4_bias;
-  Tensor output;
-  
-  float input_data[N_OBS];
-  float fc1_out_data[FC1_SIZE];
-  float fc2_out_data[FC2_SIZE];
-  float fc3_out_data[FC3_SIZE];
-  float output_data[N_ACS];
-} Model;
+
 
 
 Model model;
@@ -94,7 +74,6 @@ void init(Model *model) {
 
   NN_initTensor(&model->fc4_weight, 2, (size_t[]){ FC3_SIZE, N_ACS }, DTYPE_F32, (float *)(array_pointer));
   array_pointer += FC3_SIZE * N_ACS * sizeof(float);
-  printf("ptr: %d\n", (int)array_pointer - (int)externdata_start);
   NN_initTensor(&model->fc4_bias, 2, (size_t[]){ 1, N_ACS }, DTYPE_F32, (float *)(array_pointer));
   array_pointer += N_ACS * sizeof(float);
   NN_initTensor(&model->output, 2, (size_t[]){ 1, N_ACS }, DTYPE_F32, (float *)model->output_data);
@@ -126,13 +105,6 @@ void APP_init() {
   UART_init_config.stopbits = UART_STOPBITS_2;
   UART_init(UART0, &UART_init_config);
 
-  GPIO_InitTypeDef GPIO_init_config;
-  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_5);
-  
-  GPIO_init_config.mode = GPIO_MODE_ALTERNATE_FUNCTION_0;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_16 | GPIO_PIN_17);
-
   setvbuf(stdout, NULL, _IONBF, 0);
 
   init(&model);
@@ -148,6 +120,8 @@ void APP_main() {
   forward(&model);
 
   NN_printf(&model.output);
+
+  msleep(1000);
 }
 
 
