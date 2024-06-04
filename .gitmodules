@@ -1,6 +1,3 @@
 [submodule "lib/baremetal-nn"]
 	path = lib/baremetal-nn
 	url = https://github.com/ucb-bar/Baremetal-NN.git
-[submodule "lib/libgloss-htif"]
-	path = lib/libgloss-htif
-	url = https://github.com/ucb-bar/libgloss-htif.git
