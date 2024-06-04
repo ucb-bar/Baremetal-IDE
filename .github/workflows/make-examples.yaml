@@ -23,19 +23,18 @@ jobs:
       run: |
         wget https://github.com/ucb-bar/RISC-V-GNU-Toolchain-Prebuilt/releases/download/v2023.12.30/riscv64-unknown-toolchain.tar.xz
         tar -xf riscv64-unknown-toolchain.tar.xz
-    - name: Make default
+    - name: Make default (spike)
       run: |
         export PATH="$GITHUB_WORKSPACE/riscv64-unknown-toolchain/bin/:$PATH"
         make clean
-        make
-    - name: Make bearlyml
+        make TARGET=examples/chipyard-tests/hello
+    - name: Make bearlyml (RV64)
       run: |
         export PATH="$GITHUB_WORKSPACE/riscv64-unknown-toolchain/bin/:$PATH"
         make clean
-        make TARGET=./examples/chipyard-tests/hello/
-        # spike build/hello.elf
-    - name: Make fe310
+        make CHIP=bearlyml TARGET=./examples/chipyard-tests/hello/
+    - name: Make fe310 (RV32)
       run: |
         export PATH="$GITHUB_WORKSPACE/riscv64-unknown-toolchain/bin/:$PATH"
         make clean
-        make CHIP=fe310
+        make CHIP=fe310 TARGET=./examples/chipyard-tests/hello/
