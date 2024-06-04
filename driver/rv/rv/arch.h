@@ -21,10 +21,10 @@
 #define __RV_ARCH_H
 
 #ifdef __riscv_xlen
-#define RISCV_XLEN __riscv_xlen
+  #define RISCV_XLEN __riscv_xlen
 #else
-#warning "__riscv_xlen not defined, defaulting to 64"
-#define RISCV_XLEN 64
+  #warning "__riscv_xlen not defined, defaulting to 64"
+  #define RISCV_XLEN 64
 #endif
 
 #if RISCV_XLEN == 64
@@ -36,7 +36,7 @@
   #define SREG sw
   #define REGBYTES 4
 #else
-#error "Unsupported RISCV_XLEN"
+  #error "Unsupported RISCV_XLEN"
 #endif
 
 #endif /* __RV_ARCH_H */
