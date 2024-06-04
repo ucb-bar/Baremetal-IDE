@@ -6,8 +6,8 @@
 extern "C" {
 #endif
 
-#include "rv_arch.h"
-#include "rv_common.h"
+#include <rv/arch.h>
+#include <rv.h>
 
 /* ================================ IRQ Definition ================================ */
 
@@ -70,6 +70,11 @@ typedef enum {
 #define SYS_CLK_FREQ        HXTAL_FREQ / 2                      /** system clock frequency in Hz */
 #define MTIME_TIMEBASE      1                               /** tick per milliseconds */
 #define MTIME_FREQ          100
+
+// weak definition of clock frequency
+__attribute__((weak)) uint64_t sys_clk_freq = SYS_CLK_FREQ;
+__attribute__((weak)) uint64_t mtime_freq = MTIME_FREQ;
+
 
 #ifdef __cplusplus
 }

@@ -6,8 +6,8 @@
 extern "C" {
 #endif
 
-#include <rv/arch.h>
-#include <rv.h>
+#include "rv_arch.h"
+#include "rv.h"
 #include "gpio.h"
 // #include "i2c.h"
 // #include "pwm.h"
@@ -86,7 +86,7 @@ typedef enum {
 #define PRCI_BASE               0x10008000U
 #define OPT_CTRL_BASE           0x10010000U
 #define GPIO_BASE               0x10012000U
-#define UART_BASE               0x10013000U
+#define UART_BASE               0x10020000U
 #define QSPI_BASE               0x10014000U
 #define PWM_BASE                0x10015000U
 #define I2C_BASE                0x10016000U
@@ -124,10 +124,9 @@ typedef enum {
 /**
  * System Clock Configuration
  */
-#define HXTAL_FREQ          18000000                        /** crystal or external clock frequency in Hz */
-#define SYS_CLK_FREQ        HXTAL_FREQ                      /** system clock frequency in Hz */
-#define MTIME_TIMEBASE      32768                           /** tick per second */
-#define MTIME_FREQ          MTIME_TIMEBASE
+#define HXTAL_FREQ          100000000                       /** crystal or external clock frequency in Hz */
+#define SYS_CLK_FREQ        (HXTAL_FREQ / 2)                /** system clock frequency in Hz */
+#define MTIME_FREQ          (SYS_CLK_FREQ / 1000)           /** mtime clock frequency in Hz */
 
 
 #ifdef __cplusplus

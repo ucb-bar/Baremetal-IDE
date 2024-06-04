@@ -1,12 +1,12 @@
 
-ARCH 		= rv64imafc
-ABI 		= lp64f
+ARCH 		= rv64imafdc
+ABI 		= lp64d
 CODEMODEL 	= medany
 
 INCLUDES  += -I$(BSP_DIR)$(CHIP)
 
 A_SOURCES += $(BSP_DIR)$(CHIP)/boot/startup.S
-C_SOURCES += $(BSP_DIR)$(CHIP)/bearlyml.c
+C_SOURCES += $(BSP_DIR)$(CHIP)/arty.c
 
 include $(DRIVER_DIR)rv/Makefile
 

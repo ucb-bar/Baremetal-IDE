@@ -1,0 +1,169 @@
+{
+  "name": "BearlyML23",
+  "version": 0.8,
+  "description": "Sp23 tapeout class chip",
+  "harts": [
+    {
+      "name": "Rocket",
+      "arch": "rv64imac",
+      "abi": "lp64",
+      "codemodel": "medany",
+      "freq": 100000000
+    }
+  ],
+  "resetVector": "0x10000",
+  "peripherals": [
+    {
+      "name": "DEBUG_CONTROLLER",
+      "description": "Debug Controller",
+      "group": "DEBUG_CONTROLLER",
+      "baseAddress": "0x00000000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "BOOTSEL",
+      "description": "Boot mode selection",
+      "group": "BOOTSEL",
+      "baseAddress": "0x00001000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": [
+        {
+          "name": "BOOTSEL",
+          "description": "Boot address selection",
+          "addressOffset": "0x00",
+          "size": "0x20",
+          "access": "read-only",
+          "resetValue": "0x00000000",
+          "fields": [
+            {
+              "name": "BOOTSEL",
+              "description": "boot mode selection",
+              "bitOffset": 0,
+              "bitWidth": 1,
+              "access": "read-only",
+              "enumeratedValues": {
+                "enumeratedValue": [
+                  {
+                    "name": "QSPI",
+                    "description": "Self-Boot Mode",
+                    "value": 1
+                  },
+                  {
+                    "name": "WFI",
+                    "description": "Tethered Boot Mode",
+                    "value": 0
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ERROR_DEVICE",
+      "description": "Error Device",
+      "group": "ERROR_DEVICE",
+      "baseAddress": "0x00003000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "BOOTROM",
+      "description": "BootROM",
+      "group": "BOOTROM",
+      "baseAddress": "0x00010000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x10000",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "CLINT",
+      "description": "Core Local Interruptor",
+      "group": "CLINT",
+      "baseAddress": "0x02000000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "CACHE_CONTROLLER",
+      "description": "Cache Controller",
+      "group": "CACHE_CONTROLLER",
+      "baseAddress": "0x02010000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "SRAM",
+      "description": "Scratchpad",
+      "group": "SRAM",
+      "baseAddress": "0x08000000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x10000",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "PLIC",
+      "description": "Platform Level Interrupt Controller",
+      "group": "PLIC",
+      "baseAddress": "0x0C000000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "RCC",
+      "description": "Reset and Clock Control",
+      "group": "RCC",
+      "baseAddress": "0x10000000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": {}
+    },
+    {
+      "name": "UART0",
+      "description": "UART",
+      "group": "UART",
+      "baseAddress": "0x10020000",
+      "addressBlock": {
+        "offset": "0x0",
+        "size": "0x400",
+        "usage": "registers"
+      },
+      "registers": {}
+    }
+  ]
+}

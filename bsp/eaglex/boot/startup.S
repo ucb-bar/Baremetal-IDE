@@ -23,8 +23,8 @@
  * @date 2023-05-20
  */
 
-#include "rv_arch.h"
-#include "rv_encoding.h"
+#include <rv/arch.h>
+#include <rv/encoding.h>
 
 .align 2
 .section .text.trap_vector
