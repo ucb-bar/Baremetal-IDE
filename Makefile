@@ -59,7 +59,6 @@ ABI 		?= lp64d
 CODEMODEL 	?= medany
 
 # Spec Settings
-# SPEC 		?= nano.specs
 SPEC 		?= nosys.specs
 
 # Linker Script
@@ -106,31 +105,34 @@ OBJECTS = $(A_OBJECTS) $(C_OBJECTS)
 # Flags
 #################################
 
+OPTIMIZATION_FLAGS := -O0
+F_FLAGS := -ffunction-sections -fdata-sections -fno-common -fno-builtin-printf
+WARNING_FLAGS := -Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual
+ARCH_FLAGS := -march=$(ARCH) -mabi=$(ABI) -mcmodel=$(CODEMODEL) -fno-pie
+SPEC_FLAGS := --specs="$(SPEC)"
+
 ifneq ($(CHIP),)
 CHIP_FLAGS += -DCHIP=$(CHIP)
 endif
 
-SPEC_FLAGS := --specs="$(SPEC)"
-
-ARCH_FLAGS := -march=$(ARCH) -mabi=$(ABI) -mcmodel=$(CODEMODEL) -fno-pie
-
 # compiler Flags
-CFLAGS := -g -std=gnu11 -O0
-CFLAGS += -fno-common -fno-builtin-printf
-CFLAGS += -Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual
+CFLAGS := -g -std=gnu11
+CFLAGS += $(OPTIMIZATION_FLAGS)
+CFLAGS += $(F_FLAGS)
+CFLAGS += $(WARNING_FLAGS)
+CFLAGS += $(ARCH_FLAGS)
 CFLAGS += $(SPEC_FLAGS)
 CFLAGS += $(CHIP_FLAGS)
-CFLAGS += $(ARCH_FLAGS)
 CFLAGS += $(INCLUDES)
 
 # linker Flags
 LFLAGS := -static
 LFLAGS += -nostartfiles
-LFLAGS += -u _printf_float
+# LFLAGS += -u _printf_float
 ifdef STACK_SIZE
 LFLAGS += -Xlinker --defsym=__stack_size=$(STACK_SIZE)
 endif
-LFLAGS += -lm
+# LFLAGS += -lm
 LFLAGS += -T $(LD_SCRIPT)
 
 
