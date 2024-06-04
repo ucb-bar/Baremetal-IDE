@@ -6,6 +6,8 @@
 extern "C" {
 #endif
 
+#include <rv.h>
+
 /**
  * System Clock Configuration
  */
@@ -13,6 +15,10 @@ extern "C" {
 #define SYS_CLK_FREQ        HXTAL_FREQ                      /** system clock frequency in Hz */
 #define MTIME_TIMEBASE      1                               /** tick per milliseconds */
 #define MTIME_FREQ          100
+
+// weak definition of clock frequency
+__attribute__((weak)) uint64_t sys_clk_freq = SYS_CLK_FREQ;
+__attribute__((weak)) uint64_t mtime_freq = MTIME_FREQ;
 
 #ifdef __cplusplus
 }

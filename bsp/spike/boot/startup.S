@@ -20,8 +20,8 @@
  *       as part of the startup or initialization code.
  */
  
-#include "rv_arch.h"
-#include "rv_encoding.h"
+#include <rv/arch.h>
+#include <rv/encoding.h>
 
 
 /* Signal barrier release */
@@ -284,10 +284,10 @@ bss_init_exit:
   call __libc_init_array
 
 boot_primary:
-  /* Release signal barrier */
-  li t0, -1
-  fence w, w
-  sw t0, __boot_sync, t1
+  # /* Release signal barrier */
+  # li t0, -1
+  # fence w, w
+  # sw t0, __boot_sync, t1
 
   /* Call main function */
   li a0, 1            /* argc = 1 */
@@ -299,13 +299,13 @@ boot_primary:
   j infinite_loop
 
 boot_secondary:  
-  /* Wait at barrier */
-  barrier_wait_1:
-    auipc t1, %pcrel_hi(__boot_sync)
-  barrier_wait_2:
-    lw t0, %pcrel_lo(barrier_wait_1)(t1)
-    beqz t0, barrier_wait_2
-    fence r, r
+  # /* Wait at barrier */
+  # barrier_wait_1:
+  #   auipc t1, %pcrel_hi(__boot_sync)
+  # barrier_wait_2:
+  #   lw t0, %pcrel_lo(barrier_wait_1)(t1)
+  #   beqz t0, barrier_wait_2
+  #   fence r, r
 
   /* Call __main function */
   li a0, 1            /* argc = 1 */
