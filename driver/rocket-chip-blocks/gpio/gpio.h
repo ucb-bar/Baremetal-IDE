@@ -91,7 +91,7 @@ typedef struct {
 } GPIO_InitTypeDef;
 
 
-#ifndef GPIOA
+#ifndef GPIOA_BASE
   #define GPIOA_BASE                0x10010000U
   #define GPIOA                     ((GPIOA_TypeDef *)GPIOA_BASE)
 #endif

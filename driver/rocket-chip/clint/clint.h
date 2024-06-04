@@ -15,7 +15,7 @@ typedef struct {
 } CLINT_TypeDef;
 
 
-#ifndef CLINT
+#ifndef CLINT_BASE
   #define CLINT_BASE                0x02000000U
   #define CLINT                     ((CLINT_TypeDef *)CLINT_BASE)
 #endif

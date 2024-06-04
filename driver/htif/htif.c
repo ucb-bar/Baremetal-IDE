@@ -1,6 +1,6 @@
 #include <stdint.h>
+#include <rv/atomic.h>
 
-#include "rv_atomic.h"
 #include "spinlock.h"
 #include "htif.h"
 

@@ -68,7 +68,7 @@ typedef struct {
   UART_StopBits stopbits;
 } UART_InitTypeDef;
 
-#ifndef UART0
+#ifndef UART0_BASE
   #define UART0_BASE                0x10020000U
   #define UART0                     ((UART0_TypeDef *)UART0_BASE)
 #endif

@@ -26,10 +26,10 @@ typedef struct {
 } PLIC_ContextControl_TypeDef;
 
 
-#ifndef PLIC
+#ifndef PLIC_BASE
   #define PLIC_BASE                 0x0C000000U
   #define PLIC                      ((PLIC_TypeDef *)PLIC_BASE)
-  #define PLIC_CC                 ((PLIC_ContextControl_TypeDef *)(PLIC_BASE + 0x00200000U))
+  #define PLIC_CC                   ((PLIC_ContextControl_TypeDef *)(PLIC_BASE + 0x00200000U))
 #endif
 
 

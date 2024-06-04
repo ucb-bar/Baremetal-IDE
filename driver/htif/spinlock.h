@@ -1,7 +1,7 @@
 #ifndef _CHIPYARD_SPINLOCK_H
 #define _CHIPYARD_SPINLOCK_H
 
-#include "rv_atomic.h"
+#include <rv/atomic.h>
 
 typedef struct {
     atomic_t lock;
