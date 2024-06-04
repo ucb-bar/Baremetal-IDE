@@ -7,9 +7,6 @@ extern "C" {
 
 #include "rv.h"
 
-
-#define CLINT_BASE               0x02000000U
-
 /* Peripheral Struct Definition */
 typedef struct {
   __IO uint32_t MSIP[4096];                     /** MSIP Registers (1 bit wide) */
@@ -17,7 +14,11 @@ typedef struct {
   __IO uint64_t MTIME;                          /** Timer Register */
 } CLINT_TypeDef;
 
-#define CLINT                    ((CLINT_TypeDef *)CLINT_BASE)
+
+#ifndef CLINT
+  #define CLINT_BASE                0x02000000U
+  #define CLINT                     ((CLINT_TypeDef *)CLINT_BASE)
+#endif
 
 
 static inline void CLINT_clearSoftwareInterrupt(uint32_t hartid) {

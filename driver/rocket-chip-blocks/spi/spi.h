@@ -99,6 +99,10 @@ typedef struct {
   uint32_t clock;
 } SPI_InitTypeDef;
 
+#ifndef QSPI0
+  #define QSPI0_BASE                0x10030000U
+  #define QSPI0                     ((QSPI0_TypeDef *)QSPI0_BASE)
+#endif
 
 void SPI_init(SPI_TypeDef *SPIx, SPI_InitTypeDef *SPI_init);
 

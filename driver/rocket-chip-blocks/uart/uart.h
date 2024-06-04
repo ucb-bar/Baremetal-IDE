@@ -68,6 +68,10 @@ typedef struct {
   UART_StopBits stopbits;
 } UART_InitTypeDef;
 
+#ifndef UART0
+  #define UART0_BASE                0x10020000U
+  #define UART0                     ((UART0_TypeDef *)UART0_BASE)
+#endif
 
 static inline uint8_t UART_getRXFIFODepth(UART_TypeDef *UARTx) {
   return READ_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK) >> UART_RXCTRL_RXCNT_POS;

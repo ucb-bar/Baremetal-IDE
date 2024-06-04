@@ -8,8 +8,6 @@ extern "C" {
 #include "rv.h"
 
 
-#define PLIC_BASE               0x0C000000U
-
 /* Peripheral Struct Definition */
 typedef struct {
   __IO uint32_t priority_threshold;
@@ -28,8 +26,11 @@ typedef struct {
 } PLIC_ContextControl_TypeDef;
 
 
-#define PLIC                    ((PLIC_TypeDef *)PLIC_BASE)
-#define PLIC_CC                 ((PLIC_ContextControl_TypeDef *)(PLIC_BASE + 0x00200000U))
+#ifndef PLIC
+  #define PLIC_BASE                 0x0C000000U
+  #define PLIC                      ((PLIC_TypeDef *)PLIC_BASE)
+  #define PLIC_CC                 ((PLIC_ContextControl_TypeDef *)(PLIC_BASE + 0x00200000U))
+#endif
 
 
 void PLIC_disable(uint32_t hart_id, uint32_t irq_id);

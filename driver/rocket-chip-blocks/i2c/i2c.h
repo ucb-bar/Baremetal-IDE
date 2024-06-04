@@ -64,6 +64,11 @@ static inline State I2C_getFlag(I2C_TypeDef *I2Cx, I2C_Flag flag) {
   return READ_BITS(I2Cx->STAT_CMD, flag) ? SET : RESET;
 }
 
+#ifndef I2C0
+  #define I2C0_BASE                 0x10040000U
+  #define I2C0                      ((I2C0_TypeDef *)I2C0_BASE)
+#endif
+
 void I2C_init(I2C_TypeDef *I2Cx, I2C_InitTypeDef *I2C_init);
 
 Status I2C_waitForFlag(I2C_TypeDef *I2Cx, I2C_Flag flag, State state, uint32_t timestart, uint32_t timeout);

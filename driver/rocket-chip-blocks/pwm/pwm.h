@@ -87,6 +87,11 @@ typedef struct {
   uint8_t pwmcmp3ip       : 1;
 } PWM_InitTypeDef;
 
+#ifndef PWM0
+  #define PWM0_BASE                 0x10050000U
+  #define PWM0                      ((PWM0_TypeDef *)PWM0_BASE)
+#endif
+
 static inline void PWM_enable(PWM_TypeDef *PWMx) {
   SET_BITS(PWMx->PWM_CFG, PWM_PWMENALWAYS_MSK);
 }
