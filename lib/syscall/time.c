@@ -1,15 +1,19 @@
 #include "time.h"
 
+#ifdef DEVICE_TIME_CLINT
+  #include "clint.h"
+#endif
+
 extern uint64_t mtime_freq;
 
 __attribute__((weak)) unsigned int sleep(unsigned int seconds) {
   #ifdef CLINT
-  uint64_t target_tick = CLINT_getTime() + (seconds * mtime_freq);
-  while (CLINT_getTime() < target_tick) {
-    asm("nop");
-  }
+    uint64_t target_tick = CLINT_getTime() + (seconds * mtime_freq);
+    while (CLINT_getTime() < target_tick) {
+      asm("nop");
+    }
   #else
-  #warning "No CLINT peripheral found. Delay function is not available."
+    #warning "No CLINT peripheral found. Delay function is not available."
   #endif
 
   return 0;
