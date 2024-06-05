@@ -1,5 +1,5 @@
 
-ARCH 		= rv32imac
+ARCH 		= rv32gc
 ABI 		= ilp32
 CODEMODEL 	= medany
 
