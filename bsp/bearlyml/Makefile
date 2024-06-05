@@ -1,6 +1,6 @@
 
-ARCH 		= rv64imafc
-ABI 		= lp64f
+ARCH 		= rv64imafdc
+ABI 		= lp64d
 CODEMODEL 	= medany
 
 INCLUDES  += -I$(BSP_DIR)$(CHIP)
