@@ -1,0 +1,198 @@
+<device xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="1.1"
+  xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_1.xsd">
+  <name>BearlyML</name>
+  <version>0.0.1</version>
+  <description>description_text</description>
+  <cpu>
+    <name>Rocket</name>
+    <revision>rv64imac</revision>
+    <endian>little</endian>
+    <mpuPresent>false</mpuPresent>
+    <fpuPresent>false</fpuPresent>
+    <nvicPrioBits>1</nvicPrioBits>
+    <vendorSystickConfig>true</vendorSystickConfig>
+  </cpu>
+  <addressUnitBits>8</addressUnitBits>
+  <width>64</width>
+  <size>32</size>
+  <access>read-write</access>
+  <resetValue>0x00000000</resetValue>
+  <resetMask>0xFFFFFFFF</resetMask>
+  <peripherals>
+    <peripheral>
+      <name>DEBUG_CONTROLLER</name>
+      <description>Debug Controller</description>
+      <groupName>DEBUG_CONTROLLER</groupName>
+      <baseAddress>0x00000000</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x400</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers />
+    </peripheral>
+    <peripheral>
+      <name>ERROR_DEVICE</name>
+      <description>Error Device</description>
+      <groupName>ERROR_DEVICE</groupName>
+      <baseAddress>0x00003000</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x400</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers />
+    </peripheral>
+    <peripheral>
+      <name>BOOTSEL</name>
+      <description>Boot mode selection</description>
+      <groupName>BOOTSEL</groupName>
+      <baseAddress>0x00003000</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x400</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers />
+    </peripheral>
+    <peripheral>
+      <name>RCC</name>
+      <description>Reset and Clock Control</description>
+      <groupName>RCC</groupName>
+      <baseAddress>0x00110000</baseAddress>
+      <addressBlock>
+        <offset>0x0</offset>
+        <size>0x400</size>
+        <usage>registers</usage>
+      </addressBlock>
+      <registers>
+        <register>
+          <name>CLUSTER_RESETS</name>
+          <description>cluster reset signals</description>
+          <addressOffset>0x00</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00000000000003FF</resetValue>
+          <fields />
+        </register>
+        <register>
+          <name>CLUSTER_CLKSEL</name>
+          <description>cluster reset signals</description>
+          <addressOffset>0x08</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000000024924924</resetValue>
+          <fields>
+            <field>
+              <name>HART0</name>
+              <description>clock select for hart 0</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>3</bitWidth>
+            </field>
+            <field>
+              <name>HART0</name>
+              <description>clock select for hart 1</description>
+              <bitOffset>3</bitOffset>
+              <bitWidth>3</bitWidth>
+              <enumeratedValues>
+                <name>CLKSEL</name>
+                <usage>read-write</usage>
+                <enumeratedValue><name>PLL</name><description></description><value>0</value></enumeratedValue>
+                <enumeratedValue><name>PLLRefClk</name><description></description><value>1</value></enumeratedValue>
+                <enumeratedValue><name>not useful</name><description></description><value>2</value></enumeratedValue>
+                <enumeratedValue><name>not useful</name><description></description><value>3</value></enumeratedValue>
+                <enumeratedValue><name>CCLK2</name><description></description><value>4</value></enumeratedValue>
+                <enumeratedValue><name>?</name><description></description><value>5</value></enumeratedValue>
+              </enumeratedValues>
+            </field>
+            <field>
+              <name>HART0</name>
+              <description>clock select for hart 2</description>
+              <bitOffset>6</bitOffset>
+              <bitWidth>3</bitWidth>
+              <enumeratedValues>
+                <name>CLKSEL</name>
+                <usage>read-write</usage>
+                <enumeratedValue><name>PLL</name><description></description><value>0</value></enumeratedValue>
+                <enumeratedValue><name>PLLRefClk</name><description></description><value>1</value></enumeratedValue>
+                <enumeratedValue><name>CCLK0</name><description></description><value>2</value></enumeratedValue>
+                <enumeratedValue><name>CCLK1</name><description></description><value>3</value></enumeratedValue>
+                <enumeratedValue><name>CCLK2</name><description></description><value>4</value></enumeratedValue>
+                <enumeratedValue><name>?</name><description></description><value>5</value></enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <name>BOOT</name>
+          <description>boot select</description>
+          <addressOffset>0x10</addressOffset>
+          <size>0x20</size>
+          <access>read-only</access>
+          <resetValue>0x00000000</resetValue>
+          <fields />
+        </register>
+        <register>
+          <name>SWITCHER_SEL</name>
+          <description></description>
+          <addressOffset>0x18</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000000000000001</resetValue>
+          <fields />
+        </register>
+        <register>
+          <name>HBWIF_RESETS</name>
+          <description></description>
+          <addressOffset>0x20</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x00000000000000FF</resetValue>
+          <fields />
+        </register>
+        <register>
+          <name>UNCLUSTER_CLKSEL</name>
+          <description></description>
+          <addressOffset>0x28</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000000000000000</resetValue>
+          <fields>
+            <field>
+              <name>CLKSEL</name>
+              <description>clock select</description>
+              <bitOffset>0</bitOffset>
+              <bitWidth>2</bitWidth>
+              <enumeratedValues>
+                <name>CLKSEL</name>
+                <usage>read-write</usage>
+                <enumeratedValue><name>PLL</name><description></description><value>0</value></enumeratedValue>
+                <enumeratedValue><name>CCLK2</name><description>DUT CCLK0</description><value>1</value></enumeratedValue>
+                <enumeratedValue><name>CCLK2</name><description>DUT CCLK1</description><value>2</value></enumeratedValue>
+                <enumeratedValue><name>FMC</name><description>DUT CCLK2</description><value>3</value></enumeratedValue>
+              </enumeratedValues>
+            </field>
+          </fields>
+        </register>
+        <register>
+          <name>UNCLUSTER_CLKDIV</name>
+          <description></description>
+          <addressOffset>0x30</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000000000000004</resetValue>
+          <fields />
+        </register>
+        <register>
+          <name>LBWIF_CLKDIV</name>
+          <description></description>
+          <addressOffset>0x38</addressOffset>
+          <size>0x20</size>
+          <access>read-write</access>
+          <resetValue>0x0000000000000008</resetValue>
+          <fields />
+        </register>
+      </registers>
+    </peripheral>
+  </peripherals>
+</device>
