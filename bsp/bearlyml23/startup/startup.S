@@ -26,7 +26,7 @@
 #include "rv_arch.h"
 #include "rv_encoding.h"
 
-.align 2
+.align 4
 .section .text.trap_vector
 .globl trap_vector
 trap_vector:

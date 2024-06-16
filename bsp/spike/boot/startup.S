@@ -44,7 +44,7 @@ L2:
   .endm
 
 
-.align 2
+.align 4
 .section .text.trap_vector
 .globl trap_vector
 trap_vector:
