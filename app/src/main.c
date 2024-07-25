@@ -15,7 +15,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "include/gemmini_testutils.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -46,6 +46,9 @@ uint8_t counter = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 
+#define FLOAT false
+#define NUM_INT 8
+#define NUM_FP 5
 
 /* USER CODE END PFP */
 
@@ -53,7 +56,7 @@ uint8_t counter = 0;
 /* USER CODE BEGIN PUC */
 ssize_t _write(int fd, const void *ptr, size_t len) {
   UART_transmit(UART0, (const uint8_t *)ptr, len, 100);
-  return -1;
+  return len;
 }
 
 void APP_init() {
@@ -64,12 +67,12 @@ void APP_init() {
   UART_init_config.stopbits = UART_STOPBITS_2;
   UART_init(UART0, &UART_init_config);
 
-  GPIO_InitTypeDef GPIO_init_config;
-  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_5);
+  // GPIO_InitTypeDef GPIO_init_config;
+  // GPIO_init_config.mode = GPIO_MODE_OUTPUT;
+  // GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_5);
   
-  GPIO_init_config.mode = GPIO_MODE_ALTERNATE_FUNCTION_0;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_16 | GPIO_PIN_17);
+  // GPIO_init_config.mode = GPIO_MODE_ALTERNATE_FUNCTION_0;
+  // GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_16 | GPIO_PIN_17);
 
   UART0->DIV = 139;
 }
@@ -79,15 +82,46 @@ void APP_init() {
 void APP_main() {
   uint64_t mhartid = READ_CSR("mhartid");
 
+
+
+    for(int i = 0; i < NUM_INT; i++){
+        int cfgid = i;
+        bool acquired = rr_acquire_single(cfgid, i);
+        if(acquired){
+            printf("int gemmini %d acquired to cfgid %d\n", i, cfgid);
+            
+        }
+    }
+    
   printf("Hello world from hart %d: %d\n", mhartid, counter);
 
-  // char *ptr = malloc(1);
+    for(int i = 0; i < NUM_INT; i++){
+      rr_set_opc(XCUSTOM_ACC, i);
+      gemmini_flush(0);
+    }
+    for(int i = 0; i < NUM_INT; i++)
+      rr_release(i);
+    printf("all int gemmini flushed\n");
 
-  GPIO_writePin(GPIOA, GPIO_PIN_5, counter % 2);
-  
-  counter += 1;
 
-  // free(ptr);
+    for(int i = 0; i < NUM_FP; i++){
+        int cfgid = i;
+        bool acquired = rr_acquire_single(cfgid, i+NUM_INT);
+        if(acquired){
+            printf("fp gemmini %d acquired to cfgid %d\n", i+NUM_INT, cfgid);
+            //break;
+        }
+    }
+    for(int i = 0; i < NUM_FP; i++){
+      rr_set_opc(XCUSTOM_ACC, i);
+      gemmini_flush(0);
+    }
+    for(int i = 0; i < NUM_FP; i++)
+      rr_release(i);
+    printf("all fp gemmini flushed\n");
+
+
+
 
   usleep(200000);
   // sleep(1);

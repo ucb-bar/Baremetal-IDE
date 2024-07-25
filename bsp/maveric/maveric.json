@@ -1,0 +1,760 @@
+{
+  "#address-cells": [
+    2
+  ],
+  "#size-cells": [
+    2
+  ],
+  "aliases": {
+    "serial0": [
+      "&/soc/serial@10020000"
+    ]
+  },
+  "chosen": {
+    "stdout-path": [
+      "&/soc/serial@10020000"
+    ]
+  },
+  "compatible": [
+    "ucb-bar,chipyard-dev"
+  ],
+  "cpus": {
+    "#address-cells": [
+      1
+    ],
+    "#size-cells": [
+      0
+    ],
+    "cpu@0": {
+      "clock-frequency": [
+        0
+      ],
+      "compatible": [
+        "sifive,rocket0",
+        "riscv"
+      ],
+      "d-cache-block-size": [
+        64
+      ],
+      "d-cache-sets": [
+        64
+      ],
+      "d-cache-size": [
+        16384
+      ],
+      "d-tlb-sets": [
+        1
+      ],
+      "d-tlb-size": [
+        32
+      ],
+      "device_type": [
+        "cpu"
+      ],
+      "hardware-exec-breakpoint-count": [
+        1
+      ],
+      "i-cache-block-size": [
+        64
+      ],
+      "i-cache-sets": [
+        64
+      ],
+      "i-cache-size": [
+        16384
+      ],
+      "i-tlb-sets": [
+        1
+      ],
+      "i-tlb-size": [
+        32
+      ],
+      "interrupt-controller": {
+        "#interrupt-cells": [
+          1
+        ],
+        "compatible": [
+          "riscv,cpu-intc"
+        ],
+        "interrupt-controller": []
+      },
+      "mmu-type": [
+        "riscv,sv39"
+      ],
+      "next-level-cache": [
+        "&/soc/cache-controller@2010000"
+      ],
+      "reg": [
+        {
+          "base": 0,
+          "size": 1,
+          "r": false,
+          "w": false,
+          "x": false,
+          "c": false,
+          "a": false
+        }
+      ],
+      "riscv,isa": [
+        "rv64imafdczicsr_zifencei_zihpm_xrocket"
+      ],
+      "riscv,pmpgranularity": [
+        4
+      ],
+      "riscv,pmpregions": [
+        8
+      ],
+      "status": [
+        "okay"
+      ],
+      "timebase-frequency": [
+        1000000
+      ],
+      "tlb-split": []
+    },
+    "cpu@1": {
+      "clock-frequency": [
+        0
+      ],
+      "compatible": [
+        "sifive,rocket0",
+        "riscv"
+      ],
+      "d-cache-block-size": [
+        64
+      ],
+      "d-cache-sets": [
+        64
+      ],
+      "d-cache-size": [
+        16384
+      ],
+      "d-tlb-sets": [
+        1
+      ],
+      "d-tlb-size": [
+        32
+      ],
+      "device_type": [
+        "cpu"
+      ],
+      "hardware-exec-breakpoint-count": [
+        1
+      ],
+      "i-cache-block-size": [
+        64
+      ],
+      "i-cache-sets": [
+        64
+      ],
+      "i-cache-size": [
+        16384
+      ],
+      "i-tlb-sets": [
+        1
+      ],
+      "i-tlb-size": [
+        32
+      ],
+      "interrupt-controller": {
+        "#interrupt-cells": [
+          1
+        ],
+        "compatible": [
+          "riscv,cpu-intc"
+        ],
+        "interrupt-controller": []
+      },
+      "mmu-type": [
+        "riscv,sv39"
+      ],
+      "next-level-cache": [
+        "&/soc/cache-controller@2010000"
+      ],
+      "reg": [
+        {
+          "base": 1,
+          "size": 1,
+          "r": false,
+          "w": false,
+          "x": false,
+          "c": false,
+          "a": false
+        }
+      ],
+      "riscv,isa": [
+        "rv64imafdczicsr_zifencei_zihpm_xrocket"
+      ],
+      "riscv,pmpgranularity": [
+        4
+      ],
+      "riscv,pmpregions": [
+        8
+      ],
+      "status": [
+        "okay"
+      ],
+      "timebase-frequency": [
+        1000000
+      ],
+      "tlb-split": []
+    },
+    "cpu@2": {
+      "clock-frequency": [
+        0
+      ],
+      "compatible": [
+        "sifive,rocket0",
+        "riscv"
+      ],
+      "d-cache-block-size": [
+        64
+      ],
+      "d-cache-sets": [
+        64
+      ],
+      "d-cache-size": [
+        16384
+      ],
+      "d-tlb-sets": [
+        1
+      ],
+      "d-tlb-size": [
+        32
+      ],
+      "device_type": [
+        "cpu"
+      ],
+      "hardware-exec-breakpoint-count": [
+        1
+      ],
+      "i-cache-block-size": [
+        64
+      ],
+      "i-cache-sets": [
+        64
+      ],
+      "i-cache-size": [
+        16384
+      ],
+      "i-tlb-sets": [
+        1
+      ],
+      "i-tlb-size": [
+        32
+      ],
+      "interrupt-controller": {
+        "#interrupt-cells": [
+          1
+        ],
+        "compatible": [
+          "riscv,cpu-intc"
+        ],
+        "interrupt-controller": []
+      },
+      "mmu-type": [
+        "riscv,sv39"
+      ],
+      "next-level-cache": [
+        "&/soc/cache-controller@2010000"
+      ],
+      "reg": [
+        {
+          "base": 2,
+          "size": 1,
+          "r": false,
+          "w": false,
+          "x": false,
+          "c": false,
+          "a": false
+        }
+      ],
+      "riscv,isa": [
+        "rv64imafdczicsr_zifencei_zihpm_xrocket"
+      ],
+      "riscv,pmpgranularity": [
+        4
+      ],
+      "riscv,pmpregions": [
+        8
+      ],
+      "status": [
+        "okay"
+      ],
+      "timebase-frequency": [
+        1000000
+      ],
+      "tlb-split": []
+    },
+    "cpu@3": {
+      "clock-frequency": [
+        0
+      ],
+      "compatible": [
+        "sifive,rocket0",
+        "riscv"
+      ],
+      "d-cache-block-size": [
+        64
+      ],
+      "d-cache-sets": [
+        64
+      ],
+      "d-cache-size": [
+        16384
+      ],
+      "d-tlb-sets": [
+        1
+      ],
+      "d-tlb-size": [
+        32
+      ],
+      "device_type": [
+        "cpu"
+      ],
+      "hardware-exec-breakpoint-count": [
+        1
+      ],
+      "i-cache-block-size": [
+        64
+      ],
+      "i-cache-sets": [
+        64
+      ],
+      "i-cache-size": [
+        16384
+      ],
+      "i-tlb-sets": [
+        1
+      ],
+      "i-tlb-size": [
+        32
+      ],
+      "interrupt-controller": {
+        "#interrupt-cells": [
+          1
+        ],
+        "compatible": [
+          "riscv,cpu-intc"
+        ],
+        "interrupt-controller": []
+      },
+      "mmu-type": [
+        "riscv,sv39"
+      ],
+      "next-level-cache": [
+        "&/soc/cache-controller@2010000"
+      ],
+      "reg": [
+        {
+          "base": 3,
+          "size": 1,
+          "r": false,
+          "w": false,
+          "x": false,
+          "c": false,
+          "a": false
+        }
+      ],
+      "riscv,isa": [
+        "rv64imafdczicsr_zifencei_zihpm_xrocket"
+      ],
+      "riscv,pmpgranularity": [
+        4
+      ],
+      "riscv,pmpregions": [
+        8
+      ],
+      "status": [
+        "okay"
+      ],
+      "timebase-frequency": [
+        1000000
+      ],
+      "tlb-split": []
+    },
+    "timebase-frequency": [
+      1000000
+    ]
+  },
+  "htif": {
+    "compatible": [
+      "ucb,htif0"
+    ]
+  },
+  "memory@70000000": {
+    "device_type": [
+      "memory"
+    ],
+    "reg": [
+      {
+        "base": 1879048192,
+        "size": 1048576,
+        "r": true,
+        "w": true,
+        "x": true,
+        "c": false,
+        "a": false
+      }
+    ]
+  },
+  "memory@80000000": {
+    "device_type": [
+      "memory"
+    ],
+    "reg": [
+      {
+        "base": 2147483648,
+        "size": 4294967296,
+        "r": true,
+        "w": true,
+        "x": true,
+        "c": true,
+        "a": true
+      }
+    ]
+  },
+  "model": [
+    "ucb-bar,chipyard"
+  ],
+  "soc": {
+    "#address-cells": [
+      2
+    ],
+    "#size-cells": [
+      2
+    ],
+    "boot-address-reg@1000": {
+      "reg": [
+        {
+          "base": 4096,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "cache-controller@2010000": {
+      "cache-block-size": [
+        64
+      ],
+      "cache-level": [
+        2
+      ],
+      "cache-sets": [
+        4096
+      ],
+      "cache-size": [
+        524288
+      ],
+      "cache-unified": [],
+      "compatible": [
+        "sifive,inclusivecache0",
+        "cache"
+      ],
+      "next-level-cache": [
+        "&/memory@80000000"
+      ],
+      "reg": [
+        {
+          "base": 33619968,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ],
+      "sifive,mshr-count": [
+        4
+      ]
+    },
+    "clint@2000000": {
+      "compatible": [
+        "riscv,clint0"
+      ],
+      "interrupts-extended": [
+        "&/cpus/cpu@0/interrupt-controller",
+        3,
+        "&/cpus/cpu@0/interrupt-controller",
+        7,
+        "&/cpus/cpu@1/interrupt-controller",
+        3,
+        "&/cpus/cpu@1/interrupt-controller",
+        7,
+        "&/cpus/cpu@2/interrupt-controller",
+        3,
+        "&/cpus/cpu@2/interrupt-controller",
+        7,
+        "&/cpus/cpu@3/interrupt-controller",
+        3,
+        "&/cpus/cpu@3/interrupt-controller",
+        7
+      ],
+      "reg": [
+        {
+          "base": 33554432,
+          "size": 65536,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "clk-div-ctrl@120000": {
+      "reg": [
+        {
+          "base": 1179648,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "clk-sel-ctrl@130000": {
+      "reg": [
+        {
+          "base": 1245184,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "clock-gater@100000": {
+      "reg": [
+        {
+          "base": 1048576,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "compatible": [
+      "ucb-bar,chipyard-soc",
+      "simple-bus"
+    ],
+    "debug-controller@0": {
+      "compatible": [
+        "sifive,debug-013",
+        "riscv,debug-013"
+      ],
+      "debug-attach": [
+        "jtag"
+      ],
+      "interrupts-extended": [
+        "&/cpus/cpu@0/interrupt-controller",
+        65535,
+        "&/cpus/cpu@1/interrupt-controller",
+        65535,
+        "&/cpus/cpu@2/interrupt-controller",
+        65535,
+        "&/cpus/cpu@3/interrupt-controller",
+        65535
+      ],
+      "reg": [
+        {
+          "base": 0,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": true,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "interrupt-controller@c000000": {
+      "#interrupt-cells": [
+        1
+      ],
+      "compatible": [
+        "riscv,plic0"
+      ],
+      "interrupt-controller": [],
+      "interrupts-extended": [
+        "&/cpus/cpu@0/interrupt-controller",
+        11,
+        "&/cpus/cpu@0/interrupt-controller",
+        9,
+        "&/cpus/cpu@1/interrupt-controller",
+        11,
+        "&/cpus/cpu@1/interrupt-controller",
+        9,
+        "&/cpus/cpu@2/interrupt-controller",
+        11,
+        "&/cpus/cpu@2/interrupt-controller",
+        9,
+        "&/cpus/cpu@3/interrupt-controller",
+        11,
+        "&/cpus/cpu@3/interrupt-controller",
+        9
+      ],
+      "reg": [
+        {
+          "base": 201326592,
+          "size": 67108864,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ],
+      "riscv,max-priority": [
+        1
+      ],
+      "riscv,ndev": [
+        1
+      ]
+    },
+    "ranges": [],
+    "ringpll-ctrl@140000": {
+      "reg": [
+        {
+          "base": 1310720,
+          "size": 2048,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "rom@10000": {
+      "compatible": [
+        "sifive,rom0"
+      ],
+      "reg": [
+        {
+          "base": 65536,
+          "size": 65536,
+          "r": true,
+          "w": false,
+          "x": true,
+          "c": false,
+          "a": false
+        }
+      ],
+      "reg-names": [
+        "mem"
+      ]
+    },
+    "serial@10020000": {
+      "clocks": [
+        "&/soc/subsystem_pbus_clock"
+      ],
+      "compatible": [
+        "sifive,uart0"
+      ],
+      "interrupt-parent": [
+        "&/soc/interrupt-controller@c000000"
+      ],
+      "interrupts": [
+        1
+      ],
+      "reg": [
+        {
+          "base": 268566528,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    },
+    "subsystem_mbus_clock": {
+      "#clock-cells": [
+        0
+      ],
+      "clock-frequency": [
+        500000000
+      ],
+      "clock-output-names": [
+        "subsystem_mbus_clock"
+      ],
+      "compatible": [
+        "fixed-clock"
+      ]
+    },
+    "subsystem_pbus_clock": {
+      "#clock-cells": [
+        0
+      ],
+      "clock-frequency": [
+        500000000
+      ],
+      "clock-output-names": [
+        "subsystem_pbus_clock"
+      ],
+      "compatible": [
+        "fixed-clock"
+      ]
+    },
+    "tile-reset-setter@110000": {
+      "reg": [
+        {
+          "base": 1114112,
+          "size": 4096,
+          "r": true,
+          "w": true,
+          "x": false,
+          "c": false,
+          "a": true
+        }
+      ],
+      "reg-names": [
+        "control"
+      ]
+    }
+  }
+}
