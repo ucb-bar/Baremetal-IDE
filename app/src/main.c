@@ -73,8 +73,6 @@ void APP_init() {
   
   // GPIO_init_config.mode = GPIO_MODE_ALTERNATE_FUNCTION_0;
   // GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_16 | GPIO_PIN_17);
-
-  UART0->DIV = 139;
 }
 
 
