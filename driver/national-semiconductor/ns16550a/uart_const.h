@@ -1,3 +1,5 @@
+/* adapted from https://github.com/safinsingh/ns16550a.git */
+
 #define UART_ADDRESS              0x10000000
 #define LINE_STATUS_REGISTER      0x5
 #define LINE_CONTROL_REGISTER     0x3

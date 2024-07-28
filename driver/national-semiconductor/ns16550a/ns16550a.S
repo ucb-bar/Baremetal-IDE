@@ -1,4 +1,8 @@
-
+/** 
+ * original author: safinsingh
+ * available at: https://github.com/safinsingh/ns16550a.git
+ */
+ 
 .global uart_init
 .global uart_putc
 .global uart_getc
