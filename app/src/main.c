@@ -15,6 +15,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
+// #define FLOAT true // for FP Gemmini
+
 #include "include/gemmini_testutils.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -46,10 +49,28 @@ uint8_t counter = 0;
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 
-#define FLOAT false
+#define CLOCK_GATE false 
+#define BASE_ADDR 0x70000000L
+#define PageSize 4096
+
+#define REPEAT 4
+#define NUM_EN_ARRAY 1
+
+#define NO_BIAS 1
+#define FULL_BIAS_WIDTH 1
+
+#if FULL_BIAS_WIDTH
+typedef acc_t ACC_T;
+#else
+typedef elem_t ACC_T;
+#endif
+
 #define NUM_INT 8
 #define NUM_FP 5
 
+#define MAT_DIM_I FLOAT ? (8*DIM) : (4*DIM)
+#define MAT_DIM_J FLOAT ? (8*DIM) : (4*DIM)
+#define MAT_DIM_K (16*DIM)
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -78,51 +99,85 @@ void APP_init() {
 
 
 void APP_main() {
-  uint64_t mhartid = READ_CSR("mhartid");
+    printf("hello\n");
 
+  
 
-
-    for(int i = 0; i < NUM_INT; i++){
+    for(int i = 0; i < NUM_INT+NUM_FP; i++){
         int cfgid = i;
-        bool acquired = rr_acquire_single(cfgid, i);
-        if(acquired){
-            printf("int gemmini %d acquired to cfgid %d\n", i, cfgid);
-            
+        bool acquired = false;
+        while(!acquired) {
+          acquired = rr_acquire_single(cfgid, i);
         }
+        //if(acquired){
+            //printf("int gemmini %d acquired to cfgid %d\n", i, cfgid);
+            //break;
+        //}
     }
-    
-  printf("Hello world from hart %d: %d\n", mhartid, counter);
-
-    for(int i = 0; i < NUM_INT; i++){
+    for(int i = 0; i < NUM_INT+NUM_FP; i++){
       rr_set_opc(XCUSTOM_ACC, i);
-      gemmini_flush(0);
+      //gemmini_flush(0);
+      gemmini_clk_gate(0); // disable gemmini clock
     }
-    for(int i = 0; i < NUM_INT; i++)
+    for(int i = 0; i < NUM_INT+NUM_FP; i++)
       rr_release(i);
-    printf("all int gemmini flushed\n");
+    printf("all gemmini clk gated\n");
 
+    // this seems max tile 
+    int tile_I = FLOAT ? 4 : 8;
+    int tile_J = FLOAT ? 4 : 8;
+    int tile_K = 16;
+    int dim_I = DIM * tile_I;
+    int dim_J = DIM * tile_J;
+    int dim_K = DIM * tile_K;
+    int tile_macs = dim_I * dim_J * dim_K;
 
-    for(int i = 0; i < NUM_FP; i++){
+    for(int i = 0; i < NUM_EN_ARRAY; i++){
         int cfgid = i;
-        bool acquired = rr_acquire_single(cfgid, i+NUM_INT);
+        int acc_id = FLOAT ? NUM_INT + i : i;
+        bool acquired = rr_acquire_single(cfgid, acc_id);
         if(acquired){
-            printf("fp gemmini %d acquired to cfgid %d\n", i+NUM_INT, cfgid);
+            printf("gemmini %d acquired to cfgid %d\n", acc_id, cfgid);
             //break;
         }
+        rr_set_opc(XCUSTOM_ACC, cfgid); 
+        gemmini_clk_gate(1); // enable clock
+        gemmini_flush(0);
     }
-    for(int i = 0; i < NUM_FP; i++){
-      rr_set_opc(XCUSTOM_ACC, i);
-      gemmini_flush(0);
-    }
-    for(int i = 0; i < NUM_FP; i++)
+
+    printf("Starting gemmini matmul\n");
+    unsigned long start = read_cycles();
+
+    for(int turn = 0; turn < REPEAT; turn++)
+      for(int i = 0; i < NUM_EN_ARRAY; i++){
+        rr_set_opc(XCUSTOM_ACC, i);
+        tiled_matmul_small(dim_I, dim_J, dim_K,
+            NULL, NULL, NULL, NULL,
+            dim_K, dim_J, dim_J, dim_J,
+            MVIN_SCALE_IDENTITY, MVIN_SCALE_IDENTITY, MVIN_SCALE_IDENTITY,
+            tile_I, tile_J, tile_K,
+            NO_ACTIVATION, ACC_SCALE_IDENTITY, false,
+            false, false,
+            false, !FULL_BIAS_WIDTH,
+            turn == 0);
+      }
+    for (int i = 0; i < NUM_EN_ARRAY; i++)
+      rr_fence(i);
+    unsigned long end = read_cycles();
+    printf("Cycles taken: %u\n", end-start);
+
+    const uint64_t total_macs = tile_macs * REPEAT * NUM_EN_ARRAY;
+    const uint64_t ideal_cycles = total_macs / (DIM * DIM * NUM_EN_ARRAY);
+    const uint64_t utilization = 100 * ideal_cycles / (end-start);
+    printf("Total macs: %llu\n", total_macs);
+    printf("Ideal cycles: %llu\n", ideal_cycles);
+    printf("Utilization: %llu%%\n", utilization);
+
+    for (int i = 0; i < NUM_EN_ARRAY; i++)
       rr_release(i);
-    printf("all fp gemmini flushed\n");
 
 
-
-
-  usleep(200000);
-  // sleep(1);
+  // sleep(10);
 }
 /* USER CODE END PUC */
 

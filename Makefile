@@ -105,7 +105,7 @@ OBJECTS = $(A_OBJECTS) $(C_OBJECTS)
 # Flags
 #################################
 
-OPTIMIZATION_FLAGS := -O0
+OPTIMIZATION_FLAGS := -O2
 F_FLAGS := -ffunction-sections -fdata-sections -fno-common -fno-builtin-printf
 WARNING_FLAGS := -Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual
 ARCH_FLAGS := -march=$(ARCH) -mabi=$(ABI) -mcmodel=$(CODEMODEL) -fno-pie

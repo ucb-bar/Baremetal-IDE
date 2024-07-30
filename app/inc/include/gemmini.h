@@ -300,6 +300,12 @@ static acc_scale_t_bits acc_scale_t_to_acc_scale_t_bits(acc_scale_t x) {
     ROCC_INSTRUCTION(XCUSTOM_ACC, rd, config_reg, _placeholder, k_COUNTER) \
   }
 
+// clk gate
+#define gemmini_clk_gate(enable) \
+    ROCC_INSTRUCTION_RS1_RS2(XCUSTOM_ACC, (1 << 1) | (enable), 0, k_CLK_GATE)
+
+
+
 // Read counter
 static uint32_t counter_read(size_t index) {
   uint32_t config_reg = (index & 0x7) << 4;
@@ -837,6 +843,64 @@ static void tiled_matmul_outer(size_t dim_I, size_t dim_J, size_t dim_K,
   gemmini_fence();
 }
 
+static void tiled_matmul_small(size_t dim_I, size_t dim_J, size_t dim_K,
+        const elem_t* A, const elem_t* B,
+        const void * D, void * C,
+        size_t stride_A, size_t stride_B, size_t stride_D, size_t stride_C,
+        scale_t A_scale_factor, scale_t B_scale_factor, scale_acc_t D_scale_factor,
+        size_t tile_I, size_t tile_J, size_t tile_K,
+        int act, acc_scale_t scale, 
+        bool repeating_bias,
+        bool a_transpose, bool b_transpose,
+        bool full_C, bool low_D,
+        bool config) {
+
+  const size_t dim_I_padded = (dim_I / DIM + (dim_I % DIM != 0)) * DIM;
+  const size_t dim_J_padded = (dim_J / DIM + (dim_J % DIM != 0)) * DIM;
+  const size_t dim_K_padded = (dim_K / DIM + (dim_K % DIM != 0)) * DIM;
+  // These lines here are supposed to help us deal with when the dimensions of
+  // the systolic array aren't divisible by the tiling factors
+  const size_t I = tile_I;
+  const size_t J = tile_J;
+  const size_t K = tile_K;
+
+  // These lines are supposed to figure out how much padding the hardware is
+  // supposed to add for the final tile
+  const size_t pad_I = dim_I_padded - dim_I;
+  const size_t pad_J = dim_J_padded - dim_J;
+  const size_t pad_K = dim_K_padded - dim_K;
+
+  const bool no_bias = D == NULL;
+  const size_t sizeof_D = low_D ? sizeof(elem_t) : sizeof(acc_t) ;
+  const size_t sizeof_C = full_C ? sizeof(acc_t) : sizeof(elem_t);
+
+  if(config){
+    gemmini_extended_config_ex(WEIGHT_STATIONARY, act & 3, 0, 1, a_transpose, b_transpose);
+    gemmini_extended_config_st(stride_C * sizeof_C, act & 3, scale);
+    gemmini_extended3_config_ld(stride_A * sizeof(elem_t), A_scale_factor, false, 0);
+    gemmini_extended3_config_ld(stride_B * sizeof(elem_t), B_scale_factor, false, 1)
+    gemmini_extended3_config_ld(repeating_bias ? 0 : (stride_D * sizeof_D), D_scale_factor, low_D, 2);
+  }
+
+  //printf("a_reuse: %d, b_reuse: %d, a_spad_id: %d, b_spad_id: %d, a: %llu, b: %llu \n", a_reuse, b_reuse, a_spad_id, b_spad_id, a, b);
+  /*
+  sp_tiled_matmul_ws(A, B, D, C,
+      A_scale_factor, B_scale_factor, D_scale_factor,
+      I, J, K,
+      pad_I, pad_J, pad_K,
+      stride_A, stride_B, stride_D, stride_C,
+      a_transpose, b_transpose,
+      full_C, low_D,
+      no_bias, repeating_bias,
+      act, 0, 0);//, a_spad_id, b_spad_id
+  */
+  gemmini_loop_ws(I, J, K, pad_I, pad_J, pad_K, A, B, no_bias ? NULL : D, C,
+    stride_A, stride_B, repeating_bias ? 0 : stride_D, stride_C,
+    a_transpose, b_transpose,
+    full_C, low_D, !no_bias || D == NULL,
+    act, 0, 0, false);
+}
+
 
 static acc_t int_sqrt(acc_t n) {
   if (n == 0) return 0;
@@ -1241,6 +1305,18 @@ static void tiled_matmul_auto(size_t dim_I, size_t dim_J, size_t dim_K,
     exit(EXIT_SUCCESS);
 #endif
 #endif
+    const int spad_rows = tiled_matmul_total_spad_rows(tile_I, tile_J, tile_K);
+    const int acc_rows = tiled_matmul_total_acc_rows(tile_I, tile_J);
+    printf("tile_I: %d\n", tile_I);
+    printf("tile_J: %d\n", tile_J);
+    printf("tile_K: %d\n\n", tile_K);
+
+    printf("spad_rows: %d\n", spad_rows);
+    printf("acc_rows: %d\n\n", acc_rows);
+
+    printf("spad_row utilization: %d%%\n", (spad_rows * 100) / max_spad_rows);
+    printf("acc_row utilization: %d%%\n\n", (acc_rows * 100) / max_acc_rows);
+
 
     //printf("DIM: %d\n", DIM);
     //printf("tile_I: %d\n", tile_I);

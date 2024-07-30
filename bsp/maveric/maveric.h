@@ -124,7 +124,7 @@ typedef enum {
 /**
  * System Clock Configuration
  */
-#define HXTAL_FREQ          20000000                        /** crystal or external clock frequency in Hz */
+#define HXTAL_FREQ          400000000                        /** crystal or external clock frequency in Hz */
 #define SYS_CLK_FREQ        (HXTAL_FREQ / 1)                /** system clock frequency in Hz */
 #define MTIME_FREQ          (SYS_CLK_FREQ / 1000)           /** mtime clock frequency in Hz */
 
