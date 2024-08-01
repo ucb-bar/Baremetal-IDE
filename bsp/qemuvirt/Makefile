@@ -14,5 +14,6 @@ include $(DRIVER_DIR)rv/Makefile
 
 include $(DRIVER_DIR)national-semiconductor/Makefile
 include $(DRIVER_DIR)syscon/Makefile
+include $(DRIVER_DIR)rocket-chip/Makefile
 
 include $(LIB_DIR)syscall/Makefile
