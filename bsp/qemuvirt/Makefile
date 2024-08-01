@@ -13,5 +13,6 @@ C_SOURCES += $(BSP_DIR)$(CHIP)/qemuvirt.c
 include $(DRIVER_DIR)rv/Makefile
 
 include $(DRIVER_DIR)national-semiconductor/Makefile
+include $(DRIVER_DIR)syscon/Makefile
 
 include $(LIB_DIR)syscall/Makefile
