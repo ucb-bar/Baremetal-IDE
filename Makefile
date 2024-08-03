@@ -132,8 +132,8 @@ LFLAGS += -nostartfiles
 ifdef STACK_SIZE
 LFLAGS += -Xlinker --defsym=__stack_size=$(STACK_SIZE)
 endif
-# LFLAGS += -lm
-LFLAGS += -T $(LD_SCRIPT)
+LFLAGS += -lm
+LFLAGS += -T $(LD_SCRIPT) 
 
 
 #################################
