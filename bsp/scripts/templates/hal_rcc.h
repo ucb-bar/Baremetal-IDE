@@ -1,13 +1,3 @@
-/**
- * @file hal_rcc.h
- * @author -T.K.- / t_k_233@outlook.com
- * @brief 
- * @version 0.1
- * 
- * @copyright Copyright (c) 2023
- * 
- */
-
 #ifndef __HAL_RCC_H
 #define __HAL_RCC_H
 

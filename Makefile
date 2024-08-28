@@ -265,3 +265,6 @@ test:
 	@echo $(shell basename $(TARGET))
 	@echo $(C_SOURCES)
 	@echo $(APP_SRC_DIR)
+
+create_project:
+	python3 bsp/scripts/create_project.py $(chip)
