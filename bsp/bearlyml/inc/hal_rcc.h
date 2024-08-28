@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
 #include "ll_pll.h"
 #include "ll_rcc.h"
 

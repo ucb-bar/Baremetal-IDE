@@ -15,8 +15,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
-
+#include <rv.h>
 #define DMA_ERR_POS                        (0U)
 #define DMA_ERR_MSK                        (0x1U << DMA_ERR_POS)
 #define DMA_COMPL_POS                      (1U)

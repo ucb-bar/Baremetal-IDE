@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "rv.h"
 
 
 typedef struct {

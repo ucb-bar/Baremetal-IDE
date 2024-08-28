@@ -9,12 +9,12 @@
  * The trap_vector section sets up a trap frame and invokes the trap_handler.
  * The _start section initializes registers, initializes the FPU if present, initializes global and thread pointers,
  * sets up the stack pointer, initializes the trap vector, initializes TLS, zeros the BSS segment,
- * and calls global constructors before entering the boot_manager or boot_other section.
+ * and calls global constructors before entering the boot_primary or boot_secondary section.
  *
- * The boot_manager section is executed by the designated boot hart and calls system_init,
+ * The boot_primary section is executed by the designated boot hart and calls system_init,
  * initializes command line arguments (argc, argv, envp), and calls the main function.
  *
- * The boot_other section is executed by non-boot harts and calls the __main function before exiting.
+ * The boot_secondary section is executed by non-boot harts and calls the __main function before exiting.
  *
  * @note This file contains assembly code specific to the RISC-V architecture and should be included
  *       as part of the startup or initialization code.
@@ -22,9 +22,9 @@
  * @author -T.K.-
  * @date 2023-05-20
  */
- 
-#include "rv_arch.h"
-#include "rv_encoding.h"
+
+#include <rv/arch.h>
+#include <rv/encoding.h>
 
 .align 4
 .section .text.trap_vector
@@ -34,38 +34,38 @@ trap_vector:
   addi sp, sp, -(32*REGBYTES)
 
   /* Save trap frame */
-  STORE x1, 1*REGBYTES(sp)
+  SREG x1, 1*REGBYTES(sp)
   csrr x1, mscratch
-  STORE x1, 2*REGBYTES(sp)
-  STORE x3, 3*REGBYTES(sp)
-  STORE x4, 4*REGBYTES(sp)
-  STORE x5, 5*REGBYTES(sp)
-  STORE x6, 6*REGBYTES(sp)
-  STORE x7, 7*REGBYTES(sp)
-  STORE x8, 8*REGBYTES(sp)
-  STORE x9, 9*REGBYTES(sp)
-  STORE x10, 10*REGBYTES(sp)
-  STORE x11, 11*REGBYTES(sp)
-  STORE x12, 12*REGBYTES(sp)
-  STORE x13, 13*REGBYTES(sp)
-  STORE x14, 14*REGBYTES(sp)
-  STORE x15, 15*REGBYTES(sp)
-  STORE x16, 16*REGBYTES(sp)
-  STORE x17, 17*REGBYTES(sp)
-  STORE x18, 18*REGBYTES(sp)
-  STORE x19, 19*REGBYTES(sp)
-  STORE x20, 20*REGBYTES(sp)
-  STORE x21, 21*REGBYTES(sp)
-  STORE x22, 22*REGBYTES(sp)
-  STORE x23, 23*REGBYTES(sp)
-  STORE x24, 24*REGBYTES(sp)
-  STORE x25, 25*REGBYTES(sp)
-  STORE x26, 26*REGBYTES(sp)
-  STORE x27, 27*REGBYTES(sp)
-  STORE x28, 28*REGBYTES(sp)
-  STORE x29, 29*REGBYTES(sp)
-  STORE x30, 30*REGBYTES(sp)
-  STORE x31, 31*REGBYTES(sp)
+  SREG x1, 2*REGBYTES(sp)
+  SREG x3, 3*REGBYTES(sp)
+  SREG x4, 4*REGBYTES(sp)
+  SREG x5, 5*REGBYTES(sp)
+  SREG x6, 6*REGBYTES(sp)
+  SREG x7, 7*REGBYTES(sp)
+  SREG x8, 8*REGBYTES(sp)
+  SREG x9, 9*REGBYTES(sp)
+  SREG x10, 10*REGBYTES(sp)
+  SREG x11, 11*REGBYTES(sp)
+  SREG x12, 12*REGBYTES(sp)
+  SREG x13, 13*REGBYTES(sp)
+  SREG x14, 14*REGBYTES(sp)
+  SREG x15, 15*REGBYTES(sp)
+  SREG x16, 16*REGBYTES(sp)
+  SREG x17, 17*REGBYTES(sp)
+  SREG x18, 18*REGBYTES(sp)
+  SREG x19, 19*REGBYTES(sp)
+  SREG x20, 20*REGBYTES(sp)
+  SREG x21, 21*REGBYTES(sp)
+  SREG x22, 22*REGBYTES(sp)
+  SREG x23, 23*REGBYTES(sp)
+  SREG x24, 24*REGBYTES(sp)
+  SREG x25, 25*REGBYTES(sp)
+  SREG x26, 26*REGBYTES(sp)
+  SREG x27, 27*REGBYTES(sp)
+  SREG x28, 28*REGBYTES(sp)
+  SREG x29, 29*REGBYTES(sp)
+  SREG x30, 30*REGBYTES(sp)
+  SREG x31, 31*REGBYTES(sp)
 
   /* Invoke higher-level trap handler */
   csrr a0, mepc
@@ -79,40 +79,40 @@ trap_vector:
   li t0, MSTATUS_MPP
   csrs mstatus, t0
 
-  LOAD x1, 1*REGBYTES(sp)
-  LOAD x3, 3*REGBYTES(sp)
-  LOAD x4, 4*REGBYTES(sp)
-  LOAD x5, 5*REGBYTES(sp)
-  LOAD x6, 6*REGBYTES(sp)
-  LOAD x7, 7*REGBYTES(sp)
-  LOAD x8, 8*REGBYTES(sp)
-  LOAD x9, 9*REGBYTES(sp)
-  LOAD x10, 10*REGBYTES(sp)
-  LOAD x11, 11*REGBYTES(sp)
-  LOAD x12, 12*REGBYTES(sp)
-  LOAD x13, 13*REGBYTES(sp)
-  LOAD x14, 14*REGBYTES(sp)
-  LOAD x15, 15*REGBYTES(sp)
-  LOAD x16, 16*REGBYTES(sp)
-  LOAD x17, 17*REGBYTES(sp)
-  LOAD x18, 18*REGBYTES(sp)
-  LOAD x19, 19*REGBYTES(sp)
-  LOAD x20, 20*REGBYTES(sp)
-  LOAD x21, 21*REGBYTES(sp)
-  LOAD x22, 22*REGBYTES(sp)
-  LOAD x23, 23*REGBYTES(sp)
-  LOAD x24, 24*REGBYTES(sp)
-  LOAD x25, 25*REGBYTES(sp)
-  LOAD x26, 26*REGBYTES(sp)
-  LOAD x27, 27*REGBYTES(sp)
-  LOAD x28, 28*REGBYTES(sp)
-  LOAD x29, 29*REGBYTES(sp)
-  LOAD x30, 30*REGBYTES(sp)
-  LOAD x31, 31*REGBYTES(sp)
+  LREG x1, 1*REGBYTES(sp)
+  LREG x3, 3*REGBYTES(sp)
+  LREG x4, 4*REGBYTES(sp)
+  LREG x5, 5*REGBYTES(sp)
+  LREG x6, 6*REGBYTES(sp)
+  LREG x7, 7*REGBYTES(sp)
+  LREG x8, 8*REGBYTES(sp)
+  LREG x9, 9*REGBYTES(sp)
+  LREG x10, 10*REGBYTES(sp)
+  LREG x11, 11*REGBYTES(sp)
+  LREG x12, 12*REGBYTES(sp)
+  LREG x13, 13*REGBYTES(sp)
+  LREG x14, 14*REGBYTES(sp)
+  LREG x15, 15*REGBYTES(sp)
+  LREG x16, 16*REGBYTES(sp)
+  LREG x17, 17*REGBYTES(sp)
+  LREG x18, 18*REGBYTES(sp)
+  LREG x19, 19*REGBYTES(sp)
+  LREG x20, 20*REGBYTES(sp)
+  LREG x21, 21*REGBYTES(sp)
+  LREG x22, 22*REGBYTES(sp)
+  LREG x23, 23*REGBYTES(sp)
+  LREG x24, 24*REGBYTES(sp)
+  LREG x25, 25*REGBYTES(sp)
+  LREG x26, 26*REGBYTES(sp)
+  LREG x27, 27*REGBYTES(sp)
+  LREG x28, 28*REGBYTES(sp)
+  LREG x29, 29*REGBYTES(sp)
+  LREG x30, 30*REGBYTES(sp)
+  LREG x31, 31*REGBYTES(sp)
   /* Restore sp last */
-  LOAD x2, 2*REGBYTES(sp)
-
+  LREG x2, 2*REGBYTES(sp)
   mret
+
 
 .align 4
 .section .text.init
@@ -220,12 +220,30 @@ fpu_init_exit:
   la t0, trap_vector
   csrw mtvec, t0
 
+tls_init_entry:
   /* Initialize TLS */
-  call __init_tls
+  mv t0, tp
+  la t1, __tdata_start
+  la t2, __tdata_end
+
+  # see if:
+  # - tdata section is already at correct location?
+  # - tdata section is of size 0?
+  beq t0, t1, tls_init_exit
+  bge t1, t2, tls_init_exit
+
+tls_init_loop:
+  LREG  t3, 0(t0)
+  SREG  t3, 0(tp)
+  addi  t0, t0, REGBYTES
+  addi  t1, t1, REGBYTES
+  blt   t1, t2, tls_init_loop
+
+tls_init_exit:
 
   /* Skip global initialization if not the designated boot hart */
   la t0, __boot_hart
-  bne s0, t0, boot_other
+  bne s0, t0, boot_secondary
 
 data_init_entry:
   la t0, __data_load_start
@@ -239,11 +257,12 @@ data_init_entry:
   bge t1, t2, data_init_exit
 
 data_init_loop:
-  LOAD   t3, 0(t0)
-  STORE t3, 0(t1)
-  addi t0, t0, REGBYTES
-  addi t1, t1, REGBYTES
-  blt  t1, t2, data_init_loop
+  LREG  t3, 0(t0)
+  SREG  t3, 0(t1)
+  addi  t0, t0, REGBYTES
+  addi  t1, t1, REGBYTES
+  blt   t1, t2, data_init_loop
+
 data_init_exit:
 
 bss_init_entry:
@@ -253,7 +272,7 @@ bss_init_entry:
   bgeu t0, t1, bss_init_exit
 
 bss_init_loop:
-  STORE zero, (t0)
+  SREG zero, (t0)
   addi t0, t0, REGBYTES
   bltu t0, t1, bss_init_loop
 
@@ -264,18 +283,17 @@ bss_init_exit:
   call atexit
   call __libc_init_array
 
-boot_manager:
+boot_primary:
+  /* Call main function */
   li a0, 1            /* argc = 1 */
   la a1, argv         /* argv = { "", NULL } */
-  LOAD a2, environ    /* envp */
+  LREG a2, environ    /* envp */
   
-  /* Call main function */
   call main
   tail exit
   j infinite_loop
 
-
-boot_other:  
+boot_secondary:  
   /* Call __main function */
   call __main
   tail exit

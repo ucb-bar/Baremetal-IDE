@@ -4,9 +4,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "rv_common.h"
-
+#include <rv.h>
 
 typedef struct {
   __IO uint32_t TILE0_RESET;      /** RocketTile 0 */   // 0x00

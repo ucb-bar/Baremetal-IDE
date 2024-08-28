@@ -47,12 +47,12 @@ extern "C" {
  * This section controls which peripheral device is included in the application program.
  * To save the memory space, the unused peripheral device can be commented out.
  */
-// #include "hal_core.h"
-// #include "hal_clint.h"
-// #include "hal_gpio.h"
-// #include "hal_i2c.h"
-// #include "hal_plic.h"
-// #include "hal_uart.h"
+// #include "core.h"
+// #include "clint.h"
+#include "gpio.h"
+// #include "i2c.h"
+// #include "plic.h"
+#include "uart.h"
 
 /* USER CODE END Includes */
 

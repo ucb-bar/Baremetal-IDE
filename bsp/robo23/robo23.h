@@ -1,25 +1,13 @@
-
-#ifndef __BEARLYML23_H
-#define __BEARLYML23_H
+#ifndef __ROBO23_H
+#define __ROBO23_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "rv_arch.h"
-#include "rv_common.h"
-#include "ll_clint.h"
-#include "ll_core.h"
-#include "ll_dma.h"
-#include "ll_gpio.h"
-#include "ll_i2c.h"
-#include "ll_pll.h"
-#include "ll_plic.h"
-#include "ll_prefetcher.h"
-#include "ll_pwm.h"
-#include "ll_rcc.h"
-#include "ll_spi.h"
-#include "ll_uart.h"
+#include "inc/ll_pll.h"
+#include "inc/ll_rcc.h"
+#include "inc/ll_switchcap.h"
 
 
 /* ================================ IRQ Definition ================================ */
@@ -53,15 +41,14 @@ typedef enum {
 #define CLINT_BASE              0x02000000U
 #define CACHE_CONTROLLER_BASE   0x02010000U
 #define SCRATCH_BASE            0x08000000U
-#define DMA_BASE                0x08800000U
 #define PLIC_BASE               0x0C000000U
 #define RCC_BASE                0x10000000U
 #define PLL_BASE                0x10004000U
+#define SWITCHCAP_BASE          0x10004800U
 #define GPIO_BASE               0x10010000U
 #define UART_BASE               0x10020000U
 #define QSPI_BASE               0x10030000U
 #define I2C_BASE                0x10040000U
-#define PREFETCHER_BASE         0x10050000U
 #define PWM_BASE                0x10060000U
 #define QSPI_FLASH_BASE         0x20000000U
 #define DRAM_BASE               0x80000000U
@@ -70,7 +57,6 @@ typedef enum {
 #define GPIOA_BASE              (GPIO_BASE)
 #define GPIOB_BASE              (GPIO_BASE + 0x1000U)
 #define GPIOC_BASE              (GPIO_BASE + 0x2000U)
-#define GPIOD_BASE              (GPIO_BASE + 0x3000U)
 #define UART0_BASE              (UART_BASE)
 #define UART1_BASE              (UART_BASE + 0x1000U)
 #define UART2_BASE              (UART_BASE + 0x2000U)
@@ -81,20 +67,12 @@ typedef enum {
 #define I2C1_BASE               (I2C_BASE + 0x1000U)
 #define PWM0_BASE               (PWM_BASE)           
 #define PWM1_BASE               (PWM_BASE + 0x1000U)
-#define DMA0_BASE               (DMA_BASE)
-#define DMA1_BASE               (DMA_BASE + 0x1000U)
-#define DMA2_BASE               (DMA_BASE + 0x2000U)
-#define DMA3_BASE               (DMA_BASE + 0x3000U)
 
 /* Peripheral Structure Definition */
 // #define DEBUG_CONTROLLER        (DEBUG_CONTROLLER_BASE)
 // #define ERROR_DEVICE            (ERROR_DEVICE_BASE)
 // #define BOOTSEL                 (BOOTSEL_BASE)
 // #define CACHE_CONTROLLER        (CACHE_CONTROLLER_BASE)
-#define DMA0                    ((DMA_TypeDef *)DMA0_BASE)
-#define DMA1                    ((DMA_TypeDef *)DMA1_BASE)
-#define DMA2                    ((DMA_TypeDef *)DMA2_BASE)
-#define DMA3                    ((DMA_TypeDef *)DMA3_BASE)
 #define PLIC                    ((PLIC_TypeDef *)PLIC_BASE)
 #define PLIC_CC                 ((PLIC_ContextControl_TypeDef *)(PLIC_BASE + 0x00200000U))
 #define CLINT                   ((CLINT_TypeDef *)CLINT_BASE)
@@ -103,7 +81,6 @@ typedef enum {
 #define GPIOA                   ((GPIO_TypeDef *)GPIOA_BASE)
 #define GPIOB                   ((GPIO_TypeDef *)GPIOB_BASE)
 #define GPIOC                   ((GPIO_TypeDef *)GPIOC_BASE)
-#define GPIOD                   ((GPIO_TypeDef *)GPIOD_BASE)
 #define UART0                   ((UART_TypeDef *)UART0_BASE)
 #define UART1                   ((UART_TypeDef *)UART1_BASE)
 #define UART2                   ((UART_TypeDef *)UART2_BASE)
@@ -114,11 +91,23 @@ typedef enum {
 #define I2C1                    ((I2C_TypeDef *)I2C1_BASE)
 #define PWM0                    ((PWM_TypeDef *)PWM0_BASE)
 #define PWM1                    ((PWM_TypeDef *)PWM1_BASE)
-#define PREFETCHER              ((PREFETCHER_TypeDef *)PREFETCHER_BASE)
+#define SWITCHCAP               ((SWITCHCAP_TypeDef *)SWITCHCAP_BASE)
 
+
+/**
+ * System Clock Configuration
+ */
+#define HXTAL_FREQ          100000000                        /** crystal or external clock frequency in Hz */
+#define SYS_CLK_FREQ        HXTAL_FREQ / 2                      /** system clock frequency in Hz */
+#define MTIME_TIMEBASE      1                               /** tick per milliseconds */
+#define MTIME_FREQ          100
+
+// weak definition of clock frequency
+__attribute__((weak)) uint64_t sys_clk_freq = SYS_CLK_FREQ;
+__attribute__((weak)) uint64_t mtime_freq = MTIME_FREQ;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BEARLYML23_H */
+#endif /* __ROBO23_H */

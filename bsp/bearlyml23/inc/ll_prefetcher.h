@@ -5,9 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
-
-
+#include <rv.h>
 typedef struct {
   __IO uint32_t EN;
 } PREFETCHER_TypeDef;
