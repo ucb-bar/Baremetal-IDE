@@ -39,8 +39,8 @@ extern "C" {
   #define STR2(s) #s
 
   #include FORMATSTR(CHIP.h)
-#else
-  #include "examplechip.h"
+// #else
+//   #include "examplechip.h"
 #endif
 
 /**
