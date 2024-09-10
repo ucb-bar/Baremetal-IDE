@@ -33,7 +33,7 @@ set(CMAKE_OBJDUMP       "${TOOLCHAIN_PREFIX}objdump")
 set(CMAKE_SIZE          "${TOOLCHAIN_PREFIX}size")
 
 
-set(CMAKE_EXECUTABLE_SUFFIX            ".riscv")
+set(CMAKE_EXECUTABLE_SUFFIX            ".elf")
 
 
 #################################
@@ -51,7 +51,7 @@ set(SPECS               "nosys.specs")
 set(SPEC_FLAGS          -specs=${SPECS})
 
 # linker script
-set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/bsp/spike/spike.ld")
+set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
 
 add_compile_options(-std=gnu99)
 add_compile_options(-O2 -Wall -Wextra)
@@ -76,25 +76,30 @@ add_link_options(-T ${LINKER_SCRIPT})
 
 add_executable(app
     app/src/main.c
-    bsp/spike/boot/startup.S
-    bsp/spike/spike.c
-    driver/htif/htif.c
-    driver/rv/trap.c
-    lib/syscall/exit.c
-    lib/syscall/read.c
-    lib/syscall/write.c
-    lib/syscall/close.c
-    lib/syscall/lseek.c
-    lib/syscall/fstat.c
-    lib/syscall/isatty.c
-    lib/syscall/sbrk.c
-    lib/syscall/getpid.c
-    lib/syscall/kill.c)
 
-target_include_directories(app PRIVATE app/inc)
-target_include_directories(app PRIVATE bsp/spike)
-target_include_directories(app PRIVATE driver/htif)
-target_include_directories(app PRIVATE driver/rv)
-target_include_directories(app PRIVATE lib/syscall)
-target_compile_definitions(app PRIVATE -DCHIP=spike)
-target_compile_definitions(app PRIVATE -DDEVICE_TERMINAL_HTIF)
+    glossy/src/sys/close.c
+    glossy/src/sys/exit.c
+    glossy/src/sys/fstat.c
+    glossy/src/sys/getpid.c
+    glossy/src/sys/isatty.c
+    glossy/src/sys/kill.c
+    glossy/src/sys/lseek.c
+    glossy/src/sys/read.c
+    glossy/src/sys/sbrk.c
+    glossy/src/sys/time.c
+    glossy/src/sys/write.c
+)
+
+target_include_directories(app PUBLIC app/inc)
+
+target_compile_definitions(app PUBLIC -D CHIP=spike)
+target_compile_definitions(app PUBLIC -D DEVICE_TERMINAL_HTIF)
+
+add_subdirectory(driver/htif)
+add_subdirectory(driver/common)
+add_subdirectory(driver/rocket-chip/clint)
+add_subdirectory(glossy)
+
+target_link_libraries(app PUBLIC glossy-tmp)
+
+# target_include_directories(app PRIVATE driver/htif)

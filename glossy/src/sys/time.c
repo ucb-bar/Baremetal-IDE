@@ -4,11 +4,11 @@
   #include "clint.h"
 #endif
 
-extern uint64_t mtime_freq;
+extern uint64_t mtime_frequency;
 
 __attribute__((weak)) unsigned int sleep(unsigned int seconds) {
-  #ifdef CLINT
-    uint64_t target_tick = CLINT_getTime() + (seconds * mtime_freq);
+  #ifdef CLINT_BASE
+    uint64_t target_tick = CLINT_getTime() + (seconds * mtime_frequency);
     while (CLINT_getTime() < target_tick) {
       asm("nop");
     }
@@ -20,8 +20,8 @@ __attribute__((weak)) unsigned int sleep(unsigned int seconds) {
 }
 
 __attribute__((weak)) int msleep(useconds_t msec) {
-  #ifdef CLINT
-  uint64_t target_tick = CLINT_getTime() + ((msec * mtime_freq) / 1000);
+  #ifdef CLINT_BASE
+  uint64_t target_tick = CLINT_getTime() + ((msec * mtime_frequency) / 1000);
   while (CLINT_getTime() < target_tick) {
     asm("nop");
   }
@@ -33,8 +33,8 @@ __attribute__((weak)) int msleep(useconds_t msec) {
 }
 
 __attribute__((weak)) int usleep(useconds_t usec) {
-  #ifdef CLINT
-  uint64_t target_tick = CLINT_getTime() + ((usec * mtime_freq) / 1000000);
+  #ifdef CLINT_BASE
+  uint64_t target_tick = CLINT_getTime() + ((usec * mtime_frequency) / 1000000);
   while (CLINT_getTime() < target_tick) {
     asm("nop");
   }

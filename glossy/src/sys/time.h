@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-// #include "clint.h"
+uint64_t mtime_frequency = MTIME_FREQUENCY;
 
 /**
  * @brief Sleep for a specified number of seconds

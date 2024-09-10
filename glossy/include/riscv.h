@@ -21,24 +21,24 @@
 #ifndef __RV_H
 #define __RV_H
 
-#include <stdint.h>
-#include <stddef.h>
-
-
-/* ================ Memory register attributes ================ */
-#ifdef __cplusplus
-  #define   __I     volatile             /** Defines "read only" permissions */
+#ifdef __riscv_xlen
+  #define RISCV_XLEN __riscv_xlen
 #else
-  #define   __I     volatile const       /** Defines "read only" permissions */
+  #warning "__riscv_xlen not defined, defaulting to 64"
+  #define RISCV_XLEN 64
 #endif
-#define     __O     volatile             /** Defines "write only" permissions */
-#define     __IO    volatile             /** Defines "read / write" permissions */
 
-/* following defines should be used for structure members */
-#define     __IM     volatile const      /** Defines "read only" structure member permissions */
-#define     __OM     volatile            /** Defines "write only" structure member permissions */
-#define     __IOM    volatile            /** Defines "read / write" structure member permissions */
-
+#if RISCV_XLEN == 64
+  #define LREG ld
+  #define SREG sd
+  #define REGBYTES 8
+#elif RISCV_XLEN == 32
+  #define LREG lw
+  #define SREG sw
+  #define REGBYTES 4
+#else
+  #error "Unsupported RISCV_XLEN"
+#endif
 
 /* ================ Bit Operation definitions ================ */
 #define SET_BITS(REG, BIT)                    ((REG) |= (BIT))
@@ -71,24 +71,5 @@
   asm volatile ("csrrc %0, " REG ", %1" : "=r"(__tmp) : "rK"(BIT)); \
   __tmp; })
 
-
-/* ================ Common definitions ================ */
-typedef enum {
-  RESET = 0UL,
-  SET   = !RESET,
-
-  DISABLE = RESET,
-  ENABLE  = SET,
-  
-  LOW   = RESET,
-  HIGH  = SET,
-} State;
-
-typedef enum {
-  OK = 0U,
-  ERROR,
-  BUSY,
-  TIMEOUT
-} Status;
 
 #endif /* __RV_H */

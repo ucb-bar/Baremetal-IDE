@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#include <rv.h>
+#include "riscv.h"
 
 /**
  * System Clock Configuration

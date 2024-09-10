@@ -32,16 +32,8 @@ extern "C" {
 #include <stdint.h>
 #include <time.h>
 
-#ifdef CHIP
-  // automatically include the correct chip header file
-  // see https://stackoverflow.com/questions/58517780/how-to-include-makefile-variable-in-include-preprocessor-directive
-  #define FORMATSTR(s) STR2(s)
-  #define STR2(s) #s
-
-  #include FORMATSTR(CHIP.h)
-#else
-  #include "examplechip.h"
-#endif
+#include "riscv.h"
+#include "hal.h"
 
 /**
  * This section controls which peripheral device is included in the application program.

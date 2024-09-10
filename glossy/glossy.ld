@@ -1,6 +1,6 @@
 /**
-  * @file spike.ld
-  * @brief Linker script to describe the memory layout of the RISC-V Spike platform.
+  * @file glossy-htif.ld
+  * @brief Linker script to describe the memory layout of a generic RISC-V platform with HTIF interface.
   * It defines following symbols, which code can use without definition:
   *   __boot_hart
   *   __stack_size
@@ -33,14 +33,11 @@
   *   __stack_end
   *   __stack_shift
   *
-  * Copyright (c) 2022 UC Berkeley
-  *
-  * @date 2022
   */
-  
+
 OUTPUT_ARCH("riscv")
 
-/* Entry point */
+/* Program entry point */
 ENTRY(_start)
 
 MEMORY {
@@ -52,7 +49,7 @@ SECTIONS {
   PROVIDE(__boot_hart = 0);
 
   /* Default stack size */
-  __stack_size = DEFINED(__stack_size) ? __stack_size : 64K;
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 24K;
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
@@ -92,30 +89,32 @@ SECTIONS {
     *(.gnu.linkonce.d.*)
   }> DRAM
   
+  PROVIDE(__data_load_start = LOADADDR(.data));
+
   .preinit_array : {
     PROVIDE_HIDDEN(__preinit_array_start = .);
     KEEP(*(.preinit_array))
     PROVIDE_HIDDEN(__preinit_array_end = .);
   }> DRAM
-
+  
   .init_array : {
-    PROVIDE_HIDDEN (__init_array_start = .);
+    PROVIDE_HIDDEN(__init_array_start = .);
     KEEP(*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
-    KEEP(*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
-    PROVIDE_HIDDEN (__init_array_end = .);
+    KEEP(*(.init_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
+    PROVIDE_HIDDEN(__init_array_end = .);
   }> DRAM
 
   .fini_array : {
-    PROVIDE_HIDDEN (__fini_array_start = .);
+    PROVIDE_HIDDEN(__fini_array_start = .);
     KEEP(*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
-    KEEP(*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
-    PROVIDE_HIDDEN (__fini_array_end = .);
+    KEEP(*(.fini_array EXCLUDE_FILE(*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
+    PROVIDE_HIDDEN(__fini_array_end = .);
   }> DRAM
-  
+
   .ctors : {
     KEEP(*crtbegin.o(.ctors))
     KEEP(*crtbegin?.o(.ctors))
-    KEEP(*(EXCLUDE_FILE (*crtend.o *crtend?.o) .ctors))
+    KEEP(*(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors))
     KEEP(*(SORT(.ctors.*)))
     KEEP(*(.ctors))
   }> DRAM
@@ -123,7 +122,7 @@ SECTIONS {
   .dtors : {
     KEEP(*crtbegin.o(.dtors))
     KEEP(*crtbegin?.o(.dtors))
-    KEEP(*(EXCLUDE_FILE (*crtend.o *crtend?.o) .dtors))
+    KEEP(*(EXCLUDE_FILE(*crtend.o *crtend?.o) .dtors))
     KEEP(*(SORT(.dtors.*)))
     KEEP(*(.dtors))
   }> DRAM
@@ -144,7 +143,7 @@ SECTIONS {
     PROVIDE(__data_end = .);
   }> DRAM
   PROVIDE(__tdata_size = SIZEOF(.tdata));
-    
+
   /* Section for zero-initialized thread-local uninitialized data */
   .tbss (NOLOAD) : ALIGN(8) {
     PROVIDE_HIDDEN(__tbss_start = .);
@@ -154,22 +153,17 @@ SECTIONS {
     *(.tcommon)
     PROVIDE_HIDDEN(__tbss_end = .);
   }> DRAM
-  PROVIDE(__tbss_size = SIZEOF (.tbss));
+  PROVIDE(__tbss_size = SIZEOF(.tbss));
   
   /* Section for uninitialized data */
   .bss : ALIGN (8) {
-      PROVIDE_HIDDEN(__bss_start = .);
-      *(.sbss .sbss.*)
-      *(.gnu.linkonce.sb.*)
-      *(.bss .bss.*)
-      *(.gnu.linkonce.b.*)
-      *(COMMON)
-      PROVIDE_HIDDEN(__bss_end = .);
-  }> DRAM
-
-  /* Host-Target Interface */
-  .htif ALIGN(0x40) : {
-      *(.htif)
+    PROVIDE_HIDDEN(__bss_start = .);
+    *(.sbss .sbss.*)
+    *(.gnu.linkonce.sb.*)
+    *(.bss .bss.*)
+    *(.gnu.linkonce.b.*)
+    *(COMMON)
+    PROVIDE_HIDDEN(__bss_end = .);
   }> DRAM
 
   . = ALIGN (8);

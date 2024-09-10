@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv.h"
+#include "hal.h"
 
 /* Peripheral Struct Definition */
 typedef struct {
