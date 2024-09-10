@@ -51,27 +51,9 @@ uint8_t counter = 0;
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN PUC */
-ssize_t _write(int fd, const void *ptr, size_t len) {
-  UART_transmit(UART0, (const uint8_t *)ptr, len, 100);
-  return -1;
-}
+
 
 void APP_init() {
-  // set up UART registers
-  UART_InitTypeDef UART_init_config;
-  UART_init_config.baudrate = 115200;
-  UART_init_config.mode = UART_MODE_TX_RX;
-  UART_init_config.stopbits = UART_STOPBITS_2;
-  UART_init(UART0, &UART_init_config);
-
-  GPIO_InitTypeDef GPIO_init_config;
-  GPIO_init_config.mode = GPIO_MODE_OUTPUT;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_5);
-  
-  GPIO_init_config.mode = GPIO_MODE_ALTERNATE_FUNCTION_0;
-  GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_16 | GPIO_PIN_17);
-
-  UART0->DIV = 139;
 }
 
 
@@ -81,15 +63,7 @@ void APP_main() {
 
   printf("Hello world from hart %d: %d\n", mhartid, counter);
 
-  // char *ptr = malloc(1);
-
-  GPIO_writePin(GPIOA, GPIO_PIN_5, counter % 2);
-  
-  counter += 1;
-
-  // free(ptr);
-
-  usleep(200000);
+  // usleep(200000);
   // sleep(1);
 }
 /* USER CODE END PUC */
@@ -115,6 +89,7 @@ int main(int argc, char **argv) {
   /* USER CODE BEGIN WHILE */
   while (1) {
     APP_main();
+    return 0;
   }
   /* USER CODE END WHILE */
 }
