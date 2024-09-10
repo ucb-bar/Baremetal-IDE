@@ -23,14 +23,30 @@ set(CMAKE_SYSTEM_PROCESSOR    "riscv"   CACHE STRING "")
 
 set(TOOLCHAIN_PREFIX    "riscv64-unknown-elf-")
 
-set(CMAKE_AR            "${TOOLCHAIN_PREFIX}ar")
-set(CMAKE_ASM_COMPILER  "${TOOLCHAIN_PREFIX}gcc")
-set(CMAKE_C_COMPILER    "${TOOLCHAIN_PREFIX}gcc")
-set(CMAKE_CXX_COMPILER  "${TOOLCHAIN_PREFIX}g++")
-set(CMAKE_LINKER        "${TOOLCHAIN_PREFIX}ld")
-set(CMAKE_OBJCOPY       "${TOOLCHAIN_PREFIX}objcopy")
-set(CMAKE_OBJDUMP       "${TOOLCHAIN_PREFIX}objdump")
-set(CMAKE_SIZE          "${TOOLCHAIN_PREFIX}size")
+set(CMAKE_AR                "${TOOLCHAIN_PREFIX}ar")
+set(CMAKE_ASM_COMPILER      "${TOOLCHAIN_PREFIX}gcc")
+set(CMAKE_C_COMPILER        "${TOOLCHAIN_PREFIX}gcc")
+set(CMAKE_CXX_COMPILER      "${TOOLCHAIN_PREFIX}g++")
+set(CMAKE_LINKER            "${TOOLCHAIN_PREFIX}ld")
+set(CMAKE_OBJCOPY           "${TOOLCHAIN_PREFIX}objcopy")
+set(CMAKE_OBJDUMP           "${TOOLCHAIN_PREFIX}objdump")
+set(CMAKE_SIZE              "${TOOLCHAIN_PREFIX}size")
+
+SET(CMAKE_FIND_ROOT_PATH    "${TOOLCHAIN_PATH}/riscv64-unknown-elf/")
+SET(CMAKE_INCLUDE_PATH      "${TOOLCHAIN_PATH}/riscv64-unknown-elf/include/")
+SET(CMAKE_LIBRARY_PATH      "${TOOLCHAIN_PATH}/riscv64-unknown-elf/lib/")
+SET(CMAKE_PROGRAM_PATH      "${TOOLCHAIN_PATH}/riscv64-unknown-elf/bin/")
+
+
+SET(CMAKE_CROSSCOMPILING TRUE)
+
+# prevent the toolchain from searching for programs in the host environment
+SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+
+
 
 
 set(CMAKE_EXECUTABLE_SUFFIX            ".elf")
@@ -55,15 +71,15 @@ set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
 
 add_compile_options(-std=gnu99)
 add_compile_options(-O2 -Wall -Wextra)
-add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
-add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
+# add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
+# add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
 add_compile_options(${ARCH_FLAGS})
 add_compile_options(${SPEC_FLAGS})
 
 add_link_options(-static)
 add_link_options(-O2 -Wall -Wextra)
-add_link_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
-add_link_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
+# add_link_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
+# add_link_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
 add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
 add_link_options(-nostartfiles)
@@ -76,30 +92,51 @@ add_link_options(-T ${LINKER_SCRIPT})
 
 add_executable(app
     app/src/main.c
-
-    glossy/src/sys/close.c
-    glossy/src/sys/exit.c
-    glossy/src/sys/fstat.c
-    glossy/src/sys/getpid.c
-    glossy/src/sys/isatty.c
-    glossy/src/sys/kill.c
-    glossy/src/sys/lseek.c
-    glossy/src/sys/read.c
-    glossy/src/sys/sbrk.c
-    glossy/src/sys/time.c
-    glossy/src/sys/write.c
 )
+
+
+# Link app with the object library
+target_link_libraries(app PRIVATE glossy)
+
 
 target_include_directories(app PUBLIC app/inc)
 
+
 target_compile_definitions(app PUBLIC -D CHIP=spike)
 target_compile_definitions(app PUBLIC -D DEVICE_TERMINAL_HTIF)
+
+
 
 add_subdirectory(driver/htif)
 add_subdirectory(driver/common)
 add_subdirectory(driver/rocket-chip/clint)
 add_subdirectory(glossy)
 
-target_link_libraries(app PUBLIC glossy-tmp)
+
+
+target_link_libraries(app PUBLIC -Wl,--whole-archive glossy -Wl,--no-whole-archive)
+
+
 
 # target_include_directories(app PRIVATE driver/htif)
+
+message(STATUS "Glossy Library Path: ${CMAKE_BINARY_DIR}/glossy/libglossy.a")
+
+
+
+set(CMAKE_INSTALL_PREFIX "$ENV{RISCV}/riscv64-unknown-elf")
+
+
+# SET_PROPERTY(TARGET glossy PROPERTY PUBLIC_HEADER
+#   glossy/include/riscv.h
+#   glossy/include/riscv_encoding.h
+#   glossy/include/riscv_interrupt.h
+#   )
+
+# SET_PROPERTY(TARGET glossy PROPERTY RESOURCE glossy/glossy.ld)
+
+# install(TARGETS glossy
+#   LIBRARY DESTINATION "lib"
+#   PUBLIC_HEADER DESTINATION "include/"
+#   RESOURCE DESTINATION "share/"
+# )

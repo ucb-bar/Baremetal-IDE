@@ -30,10 +30,11 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 #include <time.h>
 
 #include "riscv.h"
-#include "hal.h"
+
 
 /**
  * This section controls which peripheral device is included in the application program.

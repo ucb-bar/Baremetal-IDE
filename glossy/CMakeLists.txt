@@ -1,5 +1,6 @@
 
-add_library(glossy-tmp STATIC
+
+add_library(glossy OBJECT
   src/startup/crt0.S
   src/startup/init.S
   src/startup/secondary.c
@@ -21,13 +22,14 @@ add_library(glossy-tmp STATIC
   )
 
 
-target_include_directories(glossy-tmp PUBLIC ${CMAKE_SOURCE_DIR}/glossy/include)
-target_compile_definitions(glossy-tmp PUBLIC -D RISCV)
+target_include_directories(glossy PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+target_compile_definitions(glossy PUBLIC -D CLINT_BASE=0x02000000)
+target_compile_definitions(glossy PUBLIC -D MTIME_FREQUENCY=10000000)
+
+target_compile_definitions(glossy PUBLIC -D DEVICE_TERMINAL_HTIF)
+
+target_link_libraries(glossy PUBLIC htif)
+target_link_libraries(glossy PUBLIC rocket-chip-clint)
 
 
-target_compile_definitions(glossy-tmp PUBLIC -D CLINT_BASE=0x02000000)
-target_compile_definitions(glossy-tmp PUBLIC -D MTIME_FREQUENCY=10000000)
-
-target_compile_definitions(glossy-tmp PUBLIC -D DEVICE_TERMINAL_HTIF)
-target_link_libraries(glossy-tmp PUBLIC htif)
-target_link_libraries(glossy-tmp PUBLIC rocket-chip-clint)

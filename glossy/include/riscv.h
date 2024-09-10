@@ -40,12 +40,6 @@
   #error "Unsupported RISCV_XLEN"
 #endif
 
-/* ================ Bit Operation definitions ================ */
-#define SET_BITS(REG, BIT)                    ((REG) |= (BIT))
-#define CLEAR_BITS(REG, BIT)                  ((REG) &= ~(BIT))
-#define READ_BITS(REG, BIT)                   ((REG) & (BIT))
-#define WRITE_BITS(REG, CLEARMASK, SETMASK)   ((REG) = (((REG) & (~(CLEARMASK))) | (SETMASK)))
-
 
 /* ================ RISC-V specific definitions ================ */
 #define READ_CSR(REG) ({                          \

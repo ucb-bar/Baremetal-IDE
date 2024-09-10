@@ -39,6 +39,13 @@
 #define     __IOM    volatile            /** Defines "read / write" structure member permissions */
 
 
+/* ================ Bit Operation definitions ================ */
+#define SET_BITS(REG, BIT)                    ((REG) |= (BIT))
+#define CLEAR_BITS(REG, BIT)                  ((REG) &= ~(BIT))
+#define READ_BITS(REG, BIT)                   ((REG) & (BIT))
+#define WRITE_BITS(REG, CLEARMASK, SETMASK)   ((REG) = (((REG) & (~(CLEARMASK))) | (SETMASK)))
+
+
 /* ================ Common definitions ================ */
 typedef enum {
   RESET = 0UL,

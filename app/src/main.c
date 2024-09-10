@@ -61,9 +61,9 @@ void APP_init() {
 void APP_main() {
   uint64_t mhartid = READ_CSR("mhartid");
 
-  sleep(1);
+  // sleep(1);
   printf("Hello world from hart %d: %d\n", mhartid, counter);
-  sleep(1);
+  // sleep(1);
   printf("Hello world from hart %d: %d\n", mhartid, counter);
 
 }
