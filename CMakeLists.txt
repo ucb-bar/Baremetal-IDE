@@ -8,6 +8,8 @@
 #     cmake --build ./build/ --target all
 #   Cleaning:
 #     cmake --build ./build/ --target clean
+#   Install:
+#     cmake --build ./build/ --target install
 ########################################################################################################################
 cmake_minimum_required(VERSION 3.10)
 
@@ -106,16 +108,17 @@ set_property(TARGET glossy PROPERTY PUBLIC_HEADER
 
 set_property(TARGET glossy PROPERTY RESOURCE
   glossy/glossy.ld
+  glossy/glossy.specs
 )
 
 install(TARGETS glossy
   LIBRARY DESTINATION "lib"
-  PUBLIC_HEADER DESTINATION "include/"
-  RESOURCE DESTINATION "share/"
+  PUBLIC_HEADER DESTINATION "include"
+  RESOURCE DESTINATION "lib"
 )
 
 install(TARGETS htif
   LIBRARY DESTINATION "lib"
-  PUBLIC_HEADER DESTINATION "include/"
-  RESOURCE DESTINATION "share/"
+  PUBLIC_HEADER DESTINATION "include"
+  RESOURCE DESTINATION "lib"
 )

@@ -1,3 +1,4 @@
+
 add_library(glossy STATIC
   src/startup/crt0.S
   src/startup/init.S
@@ -13,6 +14,7 @@ add_library(glossy STATIC
   src/sys/isatty.c
   src/sys/kill.c
   src/sys/lseek.c
+  src/sys/open.c
   src/sys/read.c
   src/sys/sbrk.c
   src/sys/time.c
