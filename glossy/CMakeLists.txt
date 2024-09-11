@@ -1,6 +1,4 @@
-
-
-add_library(glossy OBJECT
+add_library(glossy STATIC
   src/startup/crt0.S
   src/startup/init.S
   src/startup/secondary.c
@@ -21,7 +19,6 @@ add_library(glossy OBJECT
   src/sys/write.c
 )
 
-
 target_include_directories(glossy PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_compile_definitions(glossy PUBLIC -D CLINT_BASE=0x02000000)
@@ -32,4 +29,6 @@ target_compile_definitions(glossy PUBLIC -D DEVICE_TERMINAL_HTIF)
 target_link_libraries(glossy PUBLIC htif)
 target_link_libraries(glossy PUBLIC clint)
 
-
+set_target_properties(glossy PROPERTIES
+  ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/glossy"
+)

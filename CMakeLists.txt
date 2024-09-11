@@ -64,6 +64,8 @@ add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
 add_link_options(-T ${LINKER_SCRIPT})
 
+# add_link_options(-Wl,-Map,output.map)
+
 
 #################################
 # Build
@@ -84,7 +86,10 @@ add_subdirectory(driver)
 add_subdirectory(glossy)
 add_subdirectory(lib)
 
-target_link_libraries(app PRIVATE glossy)
+# target_link_libraries(app PRIVATE glossy)
+target_link_libraries(app PRIVATE 
+  -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive
+)
 
 
 #################################
