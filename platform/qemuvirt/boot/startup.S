@@ -9,22 +9,40 @@
  * The trap_vector section sets up a trap frame and invokes the trap_handler.
  * The _start section initializes registers, initializes the FPU if present, initializes global and thread pointers,
  * sets up the stack pointer, initializes the trap vector, initializes TLS, zeros the BSS segment,
- * and calls global constructors before entering the boot_primary or boot_secondary section.
+ * and calls global constructors before entering the boot_manager or boot_other section.
  *
- * The boot_primary section is executed by the designated boot hart and calls system_init,
+ * The boot_manager section is executed by the designated boot hart and calls system_init,
  * initializes command line arguments (argc, argv, envp), and calls the main function.
  *
- * The boot_secondary section is executed by non-boot harts and calls the __main function before exiting.
+ * The boot_other section is executed by non-boot harts and calls the __main function before exiting.
  *
  * @note This file contains assembly code specific to the RISC-V architecture and should be included
  *       as part of the startup or initialization code.
- *
- * @author -T.K.-
- * @date 2023-05-20
  */
-
+ 
 #include <rv/arch.h>
 #include <rv/encoding.h>
+
+
+/* Signal barrier release */
+.macro BARRIER_PASS flag
+  li t0, -1
+  fence w, w
+  sw t0, \flag, t1
+.endm
+
+/* Wait at barrier */
+.altmacro
+.macro BARRIER_WAIT flag
+  LOCAL L1, L2
+L1:
+  auipc t1, %pcrel_hi(\flag)
+L2:
+  lw t0, %pcrel_lo(L1)(t1)
+  beqz t0, L2
+  fence r, r
+  .endm
+
 
 .align 4
 .section .text.trap_vector
@@ -111,8 +129,8 @@ trap_vector:
   LREG x31, 31*REGBYTES(sp)
   /* Restore sp last */
   LREG x2, 2*REGBYTES(sp)
-  mret
 
+  mret
 
 .align 4
 .section .text.init
@@ -154,7 +172,7 @@ _start:
   li x30, 0
   li x31, 0
 
-  li t0, (MSTATUS_FS | MSTATUS_XS)
+  li t0, (MSTATUS_FS | MSTATUS_XS | MSTATUS_VS)
   csrs mstatus, t0
 
 #ifdef __riscv_flen
@@ -207,13 +225,15 @@ fpu_init_exit:
 
   /* Initialize thread pointer */
   csrr s0, mhartid
-  la t0, __stack_shift
+  lui t0, %hi(__stack_shift)
+  addi t0, t0, %lo(__stack_shift)
   la tp, __stack_start
   sll t0, s0, t0
   add tp, tp, t0
 
   /* Initialize stack pointer */
-  la t0, __stack_size
+  lui t0, %hi(__stack_size)
+  addi t0, t0, %lo(__stack_size)
   add sp, tp, t0
 
   /* Initialize trap vector */
@@ -245,26 +265,6 @@ tls_init_exit:
   la t0, __boot_hart
   bne s0, t0, boot_secondary
 
-data_init_entry:
-  la t0, __data_load_start
-  la t1, __data_start
-  la t2, __data_end
-
-  # see if:
-  # - data section is already at correct location?
-  # - data section is of size 0?
-  beq t0, t1, data_init_exit
-  bge t1, t2, data_init_exit
-
-data_init_loop:
-  LREG  t3, 0(t0)
-  SREG  t3, 0(t1)
-  addi  t0, t0, REGBYTES
-  addi  t1, t1, REGBYTES
-  blt   t1, t2, data_init_loop
-
-data_init_exit:
-
 bss_init_entry:
   /* Zero BSS segment */
   la t0, __bss_start
@@ -284,6 +284,11 @@ bss_init_exit:
   call __libc_init_array
 
 boot_primary:
+  # /* Release signal barrier */
+  # li t0, -1
+  # fence w, w
+  # sw t0, __boot_sync, t1
+
   /* Call main function */
   li a0, 1            /* argc = 1 */
   la a1, argv         /* argv = { "", NULL } */
@@ -294,7 +299,19 @@ boot_primary:
   j infinite_loop
 
 boot_secondary:  
+  # /* Wait at barrier */
+  # barrier_wait_1:
+  #   auipc t1, %pcrel_hi(__boot_sync)
+  # barrier_wait_2:
+  #   lw t0, %pcrel_lo(barrier_wait_1)(t1)
+  #   beqz t0, barrier_wait_2
+  #   fence r, r
+
   /* Call __main function */
+  li a0, 1            /* argc = 1 */
+  la a1, argv         /* argv = { "", NULL } */
+  LREG a2, environ    /* envp */
+  
   call __main
   tail exit
   j infinite_loop
@@ -313,6 +330,10 @@ argv:
 name:
   .asciz "chipyard"
 
+.bss
+__boot_sync:
+  .word 0
+
 /* Define _init() and _fini() for compatibility */
 .global _init
 .type _init, @function
@@ -321,3 +342,6 @@ name:
 _init:
 _fini:
   ret
+
+.size _init, .-_init
+.size _fini, .-_fini
