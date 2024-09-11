@@ -6,6 +6,10 @@
 #   Build instructions:
 #     cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
 #     cmake --build ./build/ --target all
+#
+#   Building on Windows:
+#     cmake . -S ./ -B ./build/ -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
+#     cmake --build ./build/ --target all
 #   Cleaning:
 #     cmake --build ./build/ --target clean
 #   Install:
@@ -48,7 +52,8 @@ set(SPECS               "nosys.specs")
 set(SPEC_FLAGS          -specs=${SPECS})
 
 # linker script
-set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
+# set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
+set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld")
 
 # target_compile_features(target-riscv INTERFACE c_std_11)
 

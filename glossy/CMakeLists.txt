@@ -29,22 +29,30 @@ string(TOUPPER ${CHIP} CHIP)
 
 
 if (CHIP STREQUAL "BEARLYML")
-  include(${CMAKE_SOURCE_DIR}/platforms/bearlyml/bearlyml.cmake)
+  include(${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.cmake)
   message(STATUS "Chip UART: ${UART_BASE}")
+  message(STATUS "Chip CLINT: ${CLINT_BASE}")
   target_link_libraries(glossy PUBLIC chip-bearlyml)
 else()
   if (CHIP)
     message(WARNING "Chip ${CHIP} not supported, using default baremetal configuration")
   else()
-    message(WARNING "Chip not specified, using default baremetal configuration")
+    message(STATUS "Chip not specified, using default baremetal configuration")
   endif()
-  target_compile_definitions(glossy PUBLIC -D TERMINAL_DEVICE_HTIF)
 
-  target_compile_definitions(glossy PUBLIC -D CLINT_BASE=0x02000000)
-  target_compile_definitions(glossy PUBLIC -D MTIME_FREQUENCY=10000000)
+  add_library(default-config INTERFACE)
+
+  # Default to HTIF terminal
+  target_compile_definitions(default-config INTERFACE -D TERMINAL_DEVICE_HTIF)
+
+  target_compile_definitions(default-config INTERFACE -D CLINT_BASE=0x02000000)
+  target_compile_definitions(default-config INTERFACE -D MTIME_FREQUENCY=10000000)
   
-  target_link_libraries(glossy PUBLIC htif)
-  target_link_libraries(glossy PUBLIC clint)
+  target_link_libraries(default-config INTERFACE clint)
+  target_link_libraries(default-config INTERFACE htif)
+
+  
+  target_link_libraries(glossy PUBLIC default-config)
 endif()
 
 
