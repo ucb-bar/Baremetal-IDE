@@ -23,6 +23,8 @@ project(baremetal-ide LANGUAGES ASM C CXX)
 option(RISCV                "Build for RISC-V"                  ON      )
 option(X86                  "Build for x86"                     OFF     )
 
+option(CHIP                 "Build for a specific platform"     OFF     )
+
 
 #################################
 # Toolchain Targets
