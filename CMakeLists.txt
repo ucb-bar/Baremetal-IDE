@@ -4,7 +4,7 @@
 # usage: 
 #   Edit "VARIABLES"-section to suit project requirements.
 #   Build instructions:
-#     cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug
+#     cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
 #     cmake --build ./build/ --target all
 #   Cleaning:
 #     cmake --build ./build/ --target clean

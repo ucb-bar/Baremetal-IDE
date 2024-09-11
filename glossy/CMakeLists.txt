@@ -19,7 +19,7 @@ add_library(glossy OBJECT
   src/sys/sbrk.c
   src/sys/time.c
   src/sys/write.c
-  )
+)
 
 
 target_include_directories(glossy PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
