@@ -113,3 +113,9 @@ install(TARGETS glossy
   PUBLIC_HEADER DESTINATION "include/"
   RESOURCE DESTINATION "share/"
 )
+
+install(TARGETS htif
+  LIBRARY DESTINATION "lib"
+  PUBLIC_HEADER DESTINATION "include/"
+  RESOURCE DESTINATION "share/"
+)
