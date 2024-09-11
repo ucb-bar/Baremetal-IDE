@@ -11,43 +11,20 @@
 ########################################################################################################################
 cmake_minimum_required(VERSION 3.10)
 
-project(chipyard-tests LANGUAGES ASM C CXX)
+project(baremetal-ide LANGUAGES ASM C CXX)
 
 
 #################################
-# RISCV Toolchain
+# Options
 #################################
 
-set(CMAKE_SYSTEM_NAME         "Generic" CACHE STRING "")
-set(CMAKE_SYSTEM_PROCESSOR    "riscv"   CACHE STRING "")
-
-set(TOOLCHAIN_PREFIX    "riscv64-unknown-elf-")
-
-set(CMAKE_AR                "${TOOLCHAIN_PREFIX}ar")
-set(CMAKE_ASM_COMPILER      "${TOOLCHAIN_PREFIX}gcc")
-set(CMAKE_C_COMPILER        "${TOOLCHAIN_PREFIX}gcc")
-set(CMAKE_CXX_COMPILER      "${TOOLCHAIN_PREFIX}g++")
-set(CMAKE_LINKER            "${TOOLCHAIN_PREFIX}ld")
-set(CMAKE_OBJCOPY           "${TOOLCHAIN_PREFIX}objcopy")
-set(CMAKE_OBJDUMP           "${TOOLCHAIN_PREFIX}objdump")
-set(CMAKE_SIZE              "${TOOLCHAIN_PREFIX}size")
-
-SET(CMAKE_FIND_ROOT_PATH    "${TOOLCHAIN_PATH}/riscv64-unknown-elf/")
-SET(CMAKE_INCLUDE_PATH      "${TOOLCHAIN_PATH}/riscv64-unknown-elf/include/")
-SET(CMAKE_LIBRARY_PATH      "${TOOLCHAIN_PATH}/riscv64-unknown-elf/lib/")
-SET(CMAKE_PROGRAM_PATH      "${TOOLCHAIN_PATH}/riscv64-unknown-elf/bin/")
+option(RISCV                "Build for RISC-V"                  ON      )
+option(X86                  "Build for x86"                     OFF     )
 
 
-SET(CMAKE_CROSSCOMPILING TRUE)
-
-# prevent the toolchain from searching for programs in the host environment
-SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-SET(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
-
-
-
+#################################
+# Toolchain Targets
+#################################
 
 set(CMAKE_EXECUTABLE_SUFFIX            ".elf")
 
@@ -69,20 +46,22 @@ set(SPEC_FLAGS          -specs=${SPECS})
 # linker script
 set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
 
-add_compile_options(-std=gnu99)
-add_compile_options(-O2 -Wall -Wextra)
+# target_compile_features(target-riscv INTERFACE c_std_11)
+
+add_compile_options(-O1)
+add_compile_options(-Wall -Wextra)
+
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
 add_compile_options(${ARCH_FLAGS})
 add_compile_options(${SPEC_FLAGS})
 
 add_link_options(-static)
-add_link_options(-O2 -Wall -Wextra)
 # add_link_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_link_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
+add_link_options(-nostartfiles)
 add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
-add_link_options(-nostartfiles)
 add_link_options(-T ${LINKER_SCRIPT})
 
 
@@ -91,52 +70,41 @@ add_link_options(-T ${LINKER_SCRIPT})
 #################################
 
 add_executable(app
-    app/src/main.c
+  app/src/main.c
 )
-
-
-# Link app with the object library
-target_link_libraries(app PRIVATE glossy)
-
 
 target_include_directories(app PUBLIC app/inc)
 
 
-target_compile_definitions(app PUBLIC -D CHIP=spike)
-target_compile_definitions(app PUBLIC -D DEVICE_TERMINAL_HTIF)
+#################################
+# Dependencies
+#################################
 
-
-
-add_subdirectory(driver/htif)
-add_subdirectory(driver/common)
-add_subdirectory(driver/rocket-chip/clint)
+add_subdirectory(driver)
 add_subdirectory(glossy)
+add_subdirectory(lib)
+
+target_link_libraries(app PRIVATE glossy)
 
 
-
-target_link_libraries(app PUBLIC -Wl,--whole-archive glossy -Wl,--no-whole-archive)
-
-
-
-# target_include_directories(app PRIVATE driver/htif)
-
-message(STATUS "Glossy Library Path: ${CMAKE_BINARY_DIR}/glossy/libglossy.a")
-
-
+#################################
+# Library Installation
+#################################
 
 set(CMAKE_INSTALL_PREFIX "$ENV{RISCV}/riscv64-unknown-elf")
 
+set_property(TARGET glossy PROPERTY PUBLIC_HEADER
+  glossy/include/riscv.h
+  glossy/include/riscv_encoding.h
+  glossy/include/riscv_interrupt.h
+)
 
-# SET_PROPERTY(TARGET glossy PROPERTY PUBLIC_HEADER
-#   glossy/include/riscv.h
-#   glossy/include/riscv_encoding.h
-#   glossy/include/riscv_interrupt.h
-#   )
+set_property(TARGET glossy PROPERTY RESOURCE
+  glossy/glossy.ld
+)
 
-# SET_PROPERTY(TARGET glossy PROPERTY RESOURCE glossy/glossy.ld)
-
-# install(TARGETS glossy
-#   LIBRARY DESTINATION "lib"
-#   PUBLIC_HEADER DESTINATION "include/"
-#   RESOURCE DESTINATION "share/"
-# )
+install(TARGETS glossy
+  LIBRARY DESTINATION "lib"
+  PUBLIC_HEADER DESTINATION "include/"
+  RESOURCE DESTINATION "share/"
+)

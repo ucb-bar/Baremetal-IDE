@@ -7,19 +7,15 @@
 #endif
 
 __attribute__((weak, noreturn)) void _exit(int code) {
-  // while (1) {
-    #if defined(HTIF)
-      *(HTIF->fromhost) = 0;
-      *(HTIF->tohost) = (code << 1) | 0x1;
-    #endif
-    #if defined(SYSCON_POWEROFF)
-      syscon_poweroff();
-    #endif
-  // }
-  while (1)
-  {
-    // nop
+  #if defined(HTIF)
+    *(HTIF->fromhost) = 0;
+    *(HTIF->tohost) = (code << 1) | 0x1;
+  #endif
+  #if defined(SYSCON_POWEROFF)
+    syscon_poweroff();
+  #endif
+
+  while (1) {
     asm volatile ("nop");
   }
-  
 }

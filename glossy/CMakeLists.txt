@@ -30,6 +30,6 @@ target_compile_definitions(glossy PUBLIC -D MTIME_FREQUENCY=10000000)
 target_compile_definitions(glossy PUBLIC -D DEVICE_TERMINAL_HTIF)
 
 target_link_libraries(glossy PUBLIC htif)
-target_link_libraries(glossy PUBLIC rocket-chip-clint)
+target_link_libraries(glossy PUBLIC clint)
 
 
