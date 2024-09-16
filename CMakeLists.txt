@@ -4,7 +4,7 @@
 # usage: 
 #   Edit "VARIABLES"-section to suit project requirements.
 #   Build instructions:
-#     cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
+#     cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
 #     cmake --build ./build/ --target all
 #   Cleaning:
 #     cmake --build ./build/ --target clean
@@ -20,8 +20,8 @@ project(baremetal-ide LANGUAGES ASM C CXX)
 # Options
 #################################
 
-option(RISCV                "Build for RISC-V"                  ON      )
-option(X86                  "Build for x86"                     OFF     )
+option(BAREMETAL_BUILD_RISCV        "Build for RISC-V platform"               ON  )
+option(BAREMETAL_BUILD_X86          "Build for x86 platform"                  OFF )
 
 
 #################################
@@ -48,7 +48,6 @@ set(SPEC_FLAGS          -specs=${SPECS})
 # linker script
 set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
 
-# target_compile_features(target-riscv INTERFACE c_std_11)
 
 add_compile_options(-O1)
 add_compile_options(-Wall -Wextra)
@@ -66,7 +65,6 @@ add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
 add_link_options(-T ${LINKER_SCRIPT})
 
-# add_link_options(-Wl,-Map,output.map)
 
 
 #################################
@@ -88,7 +86,6 @@ add_subdirectory(driver)
 add_subdirectory(glossy)
 add_subdirectory(lib)
 
-# target_link_libraries(app PRIVATE glossy)
 target_link_libraries(app PRIVATE 
   -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive
 )
