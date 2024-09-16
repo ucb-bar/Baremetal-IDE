@@ -91,11 +91,6 @@ typedef struct {
 } GPIO_InitTypeDef;
 
 
-#ifndef GPIOA_BASE
-  #define GPIOA_BASE                0x10010000U
-  #define GPIOA                     ((GPIOA_TypeDef *)GPIOA_BASE)
-#endif
-
 void GPIO_init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_init, GPIO_Pin pin);
 
 uint8_t GPIO_readPin(GPIO_TypeDef *GPIOx, GPIO_Pin pin);

@@ -15,18 +15,12 @@ typedef struct {
 } CLINT_TypeDef;
 
 
-#ifndef CLINT_BASE
-  #define CLINT_BASE                0x02000000U
-  #define CLINT                     ((CLINT_TypeDef *)CLINT_BASE)
-#endif
-
-
-static inline void CLINT_clearSoftwareInterrupt(uint32_t hartid) {
-  CLEAR_BITS(CLINT->MSIP[hartid], 1U);
+static inline void CLINT_clearSoftwareInterrupt(CLINT_TypeDef *clint, uint32_t hartid) {
+  CLEAR_BITS(clint->MSIP[hartid], 1U);
 }
 
-static inline void CLINT_triggerSoftwareInterrupt(uint32_t hartid) {
-  SET_BITS(CLINT->MSIP[hartid], 1U);
+static inline void CLINT_triggerSoftwareInterrupt(CLINT_TypeDef *clint, uint32_t hartid) {
+  SET_BITS(clint->MSIP[hartid], 1U);
 }
 
 /**
@@ -36,7 +30,7 @@ static inline void CLINT_triggerSoftwareInterrupt(uint32_t hartid) {
  * 
  * @return uint64_t current time
  */
-uint64_t CLINT_getTime();
+uint64_t CLINT_getTime(CLINT_TypeDef *clint);
 
 /**
  * @brief Set target interrupt time
@@ -46,7 +40,7 @@ uint64_t CLINT_getTime();
  * @param hartid hart ID
  * @param time time to set
  */
-void CLINT_setTimerInterruptTarget(uint32_t hartid, uint64_t time);
+void CLINT_setTimerInterruptTarget(CLINT_TypeDef *clint, uint32_t hartid, uint64_t time);
 
 
 #ifdef __cplusplus

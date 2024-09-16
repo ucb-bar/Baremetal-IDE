@@ -15,6 +15,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -41,6 +42,8 @@
 
 uint8_t counter = 0;
 
+GPIO_TypeDef *GPIOA = (GPIO_TypeDef *)GPIOA_BASE;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -54,16 +57,32 @@ uint8_t counter = 0;
 
 
 void APP_init() {
+  GPIO_InitTypeDef gpio_init_config;
+  gpio_init_config.mode = GPIO_MODE_OUTPUT;
+  gpio_init_config.pull = GPIO_PULL_NONE;
+  gpio_init_config.drive_strength = GPIO_DS_STRONG;
+
+  GPIO_init(GPIOA, &gpio_init_config, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+
+  
+  GPIO_writePin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
 }
 
 
 
 void APP_main() {
-  uint64_t mhartid = READ_CSR("mhartid");
+  // uint64_t mhartid = READ_CSR("mhartid");
 
-  printf("Hello world from hart %d: %d\n", mhartid, counter);
+  GPIO_writePin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
 
   sleep(1);
+  // printf("Hello world from hart %d: %d\n", mhartid, counter);
+
+  
+  GPIO_writePin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
+  sleep(1);
+  // printf("Hello world from hart %d: %d\n", mhartid, counter);
+
 }
 /* USER CODE END PUC */
 
@@ -88,7 +107,7 @@ int main(int argc, char **argv) {
   /* USER CODE BEGIN WHILE */
   while (1) {
     APP_main();
-    return 0;
+    // return 0;
   }
   /* USER CODE END WHILE */
 }
