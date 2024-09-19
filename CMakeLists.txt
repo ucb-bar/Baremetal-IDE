@@ -27,7 +27,11 @@ project(baremetal-ide LANGUAGES ASM C CXX)
 option(BAREMETAL_BUILD_RISCV        "Build for RISC-V platform"               ON  )
 option(BAREMETAL_BUILD_X86          "Build for x86 platform"                  OFF )
 
-option(CHIP                 "Build for a specific platform"     OFF     )
+option(CHIP                         "Build for a specific platform"           OFF )
+
+option(TERMINAL_DEVICE_HTIF         "Use HTIF as terminal"                    ON  )
+option(TERMINAL_DEVICE_UART0        "Use UART0 device as terminal"            OFF )
+option(TERMINAL_DEVICE_NS16550A     "Use NS16550A device as terminal"         OFF )
 
 
 #################################
@@ -52,8 +56,8 @@ set(SPECS               "nosys.specs")
 set(SPEC_FLAGS          -specs=${SPECS})
 
 # linker script
-# set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
-set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld")
+set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
+# set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld")
 
 
 add_compile_options(-O1)

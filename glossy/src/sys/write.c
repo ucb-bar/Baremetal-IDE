@@ -10,13 +10,13 @@
 #endif
 
 __attribute__((weak)) ssize_t _write(int fd, const void *ptr, size_t len) {
-  #if defined(HTIF)
+  #if defined(TERMINAL_DEVICE_HTIF)
     HTIF_syscall(fd, (uintptr_t)ptr, len, FESVR_write);
     return len;
-  #elif defined(UART0)
+  #elif defined(TERMINAL_DEVICE_UART0)
     UART_transmit((UART_TypeDef *)UART0_BASE, (uint8_t *)ptr, len, 100);
     return len;
-  #elif defined(UART_NS16550A)
+  #elif defined(TERMINAL_DEVICE_NS16550A)
     NS16550A_puts((uint8_t *)ptr, len);
     return len;
   #else

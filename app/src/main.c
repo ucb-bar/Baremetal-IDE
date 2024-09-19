@@ -54,6 +54,7 @@ uint8_t counter = 0;
 
 
 void APP_init() {
+  // torch::executor::runtime_init();
 }
 
 
@@ -63,7 +64,7 @@ void APP_main() {
 
   printf("Hello world from hart %d: %d\n", mhartid, counter);
 
-  sleep(1);
+  // sleep(1);
 }
 /* USER CODE END PUC */
 

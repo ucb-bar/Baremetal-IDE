@@ -3,6 +3,9 @@
 add_library(chip-bearlyml INTERFACE)
 
 
+set(TERMINAL_DEVICE_UART0        ON)
+
+
 set(DEBUG_CONTROLLER_BASE       0x00000000)
 set(ERROR_DEVICE_BASE           0x00003000)
 set(BOOTSEL_BASE                0x00004000)
@@ -36,7 +39,7 @@ set(MTIME_FREQ                  100000)
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld)
 
-target_compile_definitions(chip-bearlyml INTERFACE -D TERMINAL_DEVICE=UART0)
+target_compile_definitions(chip-bearlyml INTERFACE -D TERMINAL_DEVICE_UART0)
 
 target_compile_definitions(chip-bearlyml INTERFACE -D CLINT_BASE=${CLINT_BASE})
 target_compile_definitions(chip-bearlyml INTERFACE -D PLIC_BASE=${PLIC_BASE})

@@ -30,8 +30,6 @@ string(TOUPPER ${CHIP} CHIP)
 
 if (CHIP STREQUAL "BEARLYML")
   include(${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.cmake)
-  message(STATUS "Chip UART: ${UART_BASE}")
-  message(STATUS "Chip CLINT: ${CLINT_BASE}")
   target_link_libraries(glossy PUBLIC chip-bearlyml)
 else()
   if (CHIP)
@@ -42,18 +40,20 @@ else()
 
   add_library(default-config INTERFACE)
 
-  # Default to HTIF terminal
-  target_compile_definitions(default-config INTERFACE -D TERMINAL_DEVICE_HTIF)
+  set(TERMINAL_DEVICE_HTIF        ON)
 
+  # define MMIO devices
   target_compile_definitions(default-config INTERFACE -D CLINT_BASE=0x02000000)
   target_compile_definitions(default-config INTERFACE -D MTIME_FREQUENCY=10000000)
   
   target_link_libraries(default-config INTERFACE clint)
   target_link_libraries(default-config INTERFACE htif)
 
-  
+  target_compile_definitions(default-config INTERFACE -D TERMINAL_DEVICE_HTIF)
+
   target_link_libraries(glossy PUBLIC default-config)
 endif()
+
 
 
 set_target_properties(glossy PROPERTIES
