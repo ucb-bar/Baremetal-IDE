@@ -22,7 +22,7 @@ Please refer to the [Tutorial Website](https://ucb-bar.gitbook.io/chipyard/barem
 ### Compiling for Spike
 
 ```bash
-cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
+cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
 cmake --build ./build/ --target app
 ```
 
