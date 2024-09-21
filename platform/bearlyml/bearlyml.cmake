@@ -9,8 +9,8 @@ add_library(chip-bearlyml-config INTERFACE)
 # so HTIF is not supported
 set(TERMINAL_DEVICE_UART0        ON)
 
-# set(SYS_CLK_FREQ                50000000)
-set(SYS_CLK_FREQ                12500000)
+# set(SYS_CLK_FREQ                50000000)         # for board with 100 MHz crystal
+set(SYS_CLK_FREQ                12500000)         # for board with 25 MHz crystal
 set(MTIME_FREQ                  100000)
 
 set(DEBUG_CONTROLLER_BASE       0x00000000)
