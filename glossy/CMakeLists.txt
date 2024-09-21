@@ -35,7 +35,12 @@ endif()
 
 include(${CMAKE_SOURCE_DIR}/platform/${CHIP}/${CHIP}.cmake)
 
+if (NOT LINKER_SCRIPT)
+  set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
+endif()
+
 message(STATUS "================ Glossy config ================")
+
 
 message(STATUS " Building for CHIP: \"${CHIP}\"")
 message(STATUS " Reading config from \"${CMAKE_SOURCE_DIR}/platform/${CHIP}/${CHIP}.cmake\"")

@@ -50,9 +50,6 @@ set(ARCH_FLAGS          -march=${ARCH} -mabi=${ABI} -mcmodel=${CMODEL})
 set(SPECS               "nosys.specs")
 set(SPEC_FLAGS          -specs=${SPECS})
 
-# linker script
-set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
-# set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld")
 
 
 add_compile_options(-O1)
