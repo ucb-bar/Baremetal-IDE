@@ -51,8 +51,13 @@ set(SPECS               "nosys.specs")
 set(SPEC_FLAGS          -specs=${SPECS})
 
 # linker script
-set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
-# set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld")
+# HACK: ideally this should be handled by glossy, but currently i couldn't 
+# figure out a way to propagate the LINKER_SCRIPT variable to the compile and link commands
+if (NOT CHIP)
+  set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
+else()
+  set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/platform/${CHIP}/${CHIP}.ld")
+endif()
 
 
 add_compile_options(-O1)

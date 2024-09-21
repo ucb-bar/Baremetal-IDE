@@ -40,8 +40,6 @@ set(I2C0_BASE                   0x10024000)
 set(I2C1_BASE                   0x10025000)
 
 
-set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld CACHE STRING "Linker script for BearlyML")
-
 target_compile_definitions(chip-bearlyml-config INTERFACE -D SYS_CLK_FREQ=${SYS_CLK_FREQ})
 target_compile_definitions(chip-bearlyml-config INTERFACE -D MTIME_FREQ=${MTIME_FREQ})
 
