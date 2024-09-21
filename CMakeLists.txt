@@ -8,7 +8,7 @@
 #     cmake --build ./build/ --target all
 #
 #   Building on Windows:
-#     cmake . -S ./ -B ./build/ -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
+#     cmake -S ./ -B ./build/ -G "Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
 #     cmake --build ./build/ --target all
 #   Cleaning:
 #     cmake --build ./build/ --target clean
@@ -28,11 +28,6 @@ option(BAREMETAL_BUILD_RISCV        "Build for RISC-V platform"               ON
 option(BAREMETAL_BUILD_X86          "Build for x86 platform"                  OFF )
 
 option(CHIP                         "Build for a specific platform"           OFF )
-
-option(TERMINAL_DEVICE_HTIF         "Use HTIF as terminal"                    ON  )
-option(TERMINAL_DEVICE_UART0        "Use UART0 device as terminal"            OFF )
-option(TERMINAL_DEVICE_NS16550A     "Use NS16550A device as terminal"         OFF )
-
 
 #################################
 # Toolchain Targets
@@ -96,6 +91,7 @@ target_include_directories(app PUBLIC app/inc)
 add_subdirectory(driver)
 add_subdirectory(glossy)
 add_subdirectory(lib)
+add_subdirectory(examples/blinky)
 
 target_link_libraries(app PRIVATE 
   -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive

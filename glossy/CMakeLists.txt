@@ -24,36 +24,40 @@ add_library(glossy STATIC
 target_include_directories(glossy PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 
-# convert CHIP to uppercase
-string(TOUPPER ${CHIP} CHIP)
+# convert CHIP to lowercase
+string(TOLOWER ${CHIP} CHIP)
 
 
-if (CHIP STREQUAL "BEARLYML")
-  include(${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.cmake)
-  target_link_libraries(glossy PUBLIC chip-bearlyml)
-else()
-  if (CHIP)
-    message(WARNING "Chip ${CHIP} not supported, using default baremetal configuration")
-  else()
-    message(STATUS "Chip not specified, using default baremetal configuration")
-  endif()
-
-  add_library(default-config INTERFACE)
-
-  set(TERMINAL_DEVICE_HTIF        ON)
-
-  # define MMIO devices
-  target_compile_definitions(default-config INTERFACE -D CLINT_BASE=0x02000000)
-  target_compile_definitions(default-config INTERFACE -D MTIME_FREQUENCY=10000000)
-  
-  target_link_libraries(default-config INTERFACE clint)
-  target_link_libraries(default-config INTERFACE htif)
-
-  target_compile_definitions(default-config INTERFACE -D TERMINAL_DEVICE_HTIF)
-
-  target_link_libraries(glossy PUBLIC default-config)
+if (NOT CHIP)
+  message(STATUS "Chip not specified, using default configuration")
+  set(CHIP "default")
 endif()
 
+include(${CMAKE_SOURCE_DIR}/platform/${CHIP}/${CHIP}.cmake)
+
+message(STATUS "================ Glossy config ================")
+
+message(STATUS " Building for CHIP: \"${CHIP}\"")
+message(STATUS " Reading config from \"${CMAKE_SOURCE_DIR}/platform/${CHIP}/${CHIP}.cmake\"")
+
+
+message(STATUS " Sys Clock: ${SYS_CLK_FREQ} Hz")
+message(STATUS " MTIME Frequency: ${MTIME_FREQ} Hz")
+
+if (TERMINAL_DEVICE_HTIF)
+  message(STATUS " Terminal Device: HTIF")
+  target_compile_definitions(chip-${CHIP}-config INTERFACE -D TERMINAL_DEVICE_HTIF)
+elseif (TERMINAL_DEVICE_UART0)
+  message(STATUS " Terminal Device: UART0")
+  target_compile_definitions(chip-${CHIP}-config INTERFACE -D TERMINAL_DEVICE_UART0)
+endif()
+
+message(STATUS " Linker Script: ${LINKER_SCRIPT}")
+
+message(STATUS "===============================================")
+
+
+target_link_libraries(glossy PUBLIC chip-${CHIP}-config)
 
 
 set_target_properties(glossy PROPERTIES
