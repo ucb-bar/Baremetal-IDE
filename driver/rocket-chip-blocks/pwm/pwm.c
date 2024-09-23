@@ -8,7 +8,7 @@
  *
  */
 
-#include "hal_pwm.h"
+#include "pwm.h"
 
 void PWM_init(PWM_TypeDef *PWMx, PWM_InitTypeDef *PWM_init) {
   PWMx->PWM_CFG = *((uint32_t*) PWM_init);

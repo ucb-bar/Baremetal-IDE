@@ -22,18 +22,19 @@ Please refer to the [Tutorial Website](https://ucb-bar.gitbook.io/chipyard/barem
 ### Compiling for Spike
 
 ```bash
-make CHIP=spike
+cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
+cmake --build ./build/ --target app
 ```
 
 ### Compiling for FE310
 
 ```bash
-make CHIP=fe310
+
 ```
 
 ### Compiling example programs
 
 ```bash
-make APP_DIR=./examples/blinky/
+
 ```
 

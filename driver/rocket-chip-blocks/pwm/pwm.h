@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "hal.h"
 
 #define PWM_PWMSCALE_POS                        (0U)
 #define PWM_PWMSCALE_MSK                        (0x7U << PWM_PWMSCALE_POS)

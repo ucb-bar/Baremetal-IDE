@@ -1,0 +1,22 @@
+%include <nano.specs>
+
+%rename cc1 glossy_cc1
+%rename link glossy_link
+%rename startfile glossy_startfile
+%rename endfile glossy_endfile
+
+*cc1:
+%(glossy_cc1)
+
+*nano_libgloss:
+-lglossy -lhtif
+
+*link:
+%(glossy_link) %:replace-outfile(-lgloss -lglossy)
+
+*startfile:
+
+
+*endfile:
+
+

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv.h"
+#include "hal.h"
 
 #define I2C_CTRL_IEN_POS                        (6U)
 #define I2C_CTRL_IEN_MSK                        (0x1U << I2C_CTRL_IEN_POS)
