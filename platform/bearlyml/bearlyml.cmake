@@ -9,8 +9,8 @@ add_library(chip-bearlyml-config INTERFACE)
 # so HTIF is not supported
 set(TERMINAL_DEVICE_UART0        ON)
 
-# set(SYS_CLK_FREQ                50000000)
-set(SYS_CLK_FREQ                12500000)
+# set(SYS_CLK_FREQ                50000000)         # for board with 100 MHz crystal
+set(SYS_CLK_FREQ                12500000)         # for board with 25 MHz crystal
 set(MTIME_FREQ                  100000)
 
 set(DEBUG_CONTROLLER_BASE       0x00000000)
@@ -39,8 +39,6 @@ set(SPI1_BASE                   0x10021000)
 set(I2C0_BASE                   0x10024000)
 set(I2C1_BASE                   0x10025000)
 
-
-set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/platform/bearlyml/bearlyml.ld CACHE STRING "Linker script for BearlyML")
 
 target_compile_definitions(chip-bearlyml-config INTERFACE -D SYS_CLK_FREQ=${SYS_CLK_FREQ})
 target_compile_definitions(chip-bearlyml-config INTERFACE -D MTIME_FREQ=${MTIME_FREQ})
