@@ -1,7 +1,4 @@
-#include <stdint.h>
-#include <rv/atomic.h>
 
-#include "spinlock.h"
 #include "htif.h"
 
 __IO uint64_t tohost __attribute__ ((section (".htif")));

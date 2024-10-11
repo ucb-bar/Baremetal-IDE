@@ -10,28 +10,29 @@
 
 #include "clint.h"
 
-uint64_t CLINT_getTime() {
+
+uint64_t CLINT_getTime(CLINT_TypeDef *clint) {
   #if RISCV_XLEN == 32
-  uint32_t time_lo;
-  uint32_t time_hi;
+    uint32_t time_lo;
+    uint32_t time_hi;
 
-  do {
-    time_hi = *((__IO uint32_t *)(&CLINT->MTIME) + 1);
-    time_lo = *((__IO uint32_t *)(&CLINT->MTIME));
-  } while (*((__IO uint32_t *)(&CLINT->MTIME) + 1) != time_hi);
+    do {
+      time_hi = *((__IO uint32_t *)((clint->MTIME) + 1);
+      time_lo = *((__IO uint32_t *)(clint->MTIME));
+    } while (*((__IO uint32_t *)(clint->MTIME) + 1) != time_hi);
 
-  return (((uint64_t)time_hi) << 32U) | time_lo;
+    return (((uint64_t)time_hi) << 32U) | time_lo;
   #else
-  return CLINT->MTIME;
+    return clint->MTIME;
   #endif
 }
 
-void CLINT_setTimerInterruptTarget(uint32_t hartid, uint64_t time) {
+void CLINT_setTimerInterruptTarget(CLINT_TypeDef *clint, uint32_t hartid, uint64_t time) {
   #if RISCV_XLEN == 32
-  *((__IO uint32_t *)(&CLINT->MTIMECMP[hartid] + 1)) = 0xFFFFFFFF;
-  *((__IO uint32_t *)(&CLINT->MTIMECMP[hartid])) = (uint32_t)time;
-  *((__IO uint32_t *)(&CLINT->MTIMECMP[hartid])) = (uint32_t)(time >> 32);
+  *((__IO uint32_t *)(clint->MTIMECMP[hartid] + 1)) = 0xFFFFFFFF;
+  *((__IO uint32_t *)(clint->MTIMECMP[hartid])) = (uint32_t)time;
+  *((__IO uint32_t *)(clint->MTIMECMP[hartid])) = (uint32_t)(time >> 32);
   #else
-  CLINT->MTIMECMP[hartid] = time;
+  clint->MTIMECMP[hartid] = time;
   #endif
 }

@@ -2,8 +2,12 @@
 #define __HTIF_H
 
 #include <stdint.h>
-#include <rv.h>
+
+#include "atomic.h"
+#include "spinlock.h"
 #include "fesvr.h"
+#include "hal.h"
+
 
 #define HTIF_DEV_SHIFT      56
 #define HTIF_DEV_MASK       0xff

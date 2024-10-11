@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv_common.h"
+#include "hal.h"
 
 #define SPI_CSMODE_AUTO                   0x00U
 #define SPI_CSMODE_HOLD                   0x02U

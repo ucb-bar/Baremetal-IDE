@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "rv.h"
+#include "hal.h"
 
 
 /* Peripheral Struct Definition */
@@ -90,11 +90,6 @@ typedef struct {
   GPIO_DriveStrength drive_strength;
 } GPIO_InitTypeDef;
 
-
-#ifndef GPIOA_BASE
-  #define GPIOA_BASE                0x10010000U
-  #define GPIOA                     ((GPIOA_TypeDef *)GPIOA_BASE)
-#endif
 
 void GPIO_init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_init, GPIO_Pin pin);
 
