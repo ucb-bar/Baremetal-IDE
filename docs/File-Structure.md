@@ -41,7 +41,7 @@ Example:
 
 - RISC-V interrupt types `InterruptType`
 
-- `getHartId()`
+- `get_hart_id()`
 
 - basic newlib syscalls that user can override
 
@@ -56,9 +56,9 @@ Example:
 
 - `UART_TXDATA_DATA_POS`, `UART_TXDATA_DATA_MSK`, and other peripheral-specific register bit definitions
 
-- `void UART_init(UART_Type *UARTx, UART_InitType *UART_init)` and other peripheral initialization routines
+- `void uart_init(UART_Type *UARTx, UART_InitType *UART_init)` and other peripheral initialization routines
 
-- `Status UART_receive(UART_Type *UARTx, uint8_t *data, uint16_t size, uint32_t timeout)` and other functions to invoke peripheral procedures.
+- `Status uart_receive(UART_Type *UARTx, uint8_t *data, uint16_t size, uint32_t timeout)` and other functions to invoke peripheral procedures.
 
 - Default definitions for basic peripherals like `CLINT`, `PLIC`, `UART0`, and `GPIOA` at their default memory location
 
