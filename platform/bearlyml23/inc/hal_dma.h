@@ -36,17 +36,17 @@ typedef enum {
 } DMA_Status;
 
 /* Returns whether the given DMA engine's last operation was completed successfully */
-static inline uint8_t HAL_DMA_operation_complete(DMA_TypeDef* DMAX) {
+static inline uint8_t dma_operation_complete(DMA_Type* DMAX) {
   return READ_BITS(DMAX->STATUS, DMA_COMPL_MSK) != 0;
 }
 
 /* Returns whether the given DMA engine has an operation in progress */
-static inline uint8_t HAL_DMA_operation_inprogress(DMA_TypeDef* DMAX) {
+static inline uint8_t dma_operation_inprogress(DMA_Type* DMAX) {
   return READ_BITS(DMAX->STATUS, DMA_INPROG_MSK) != 0;
 }
 
 /* Returns whether the given DMA engine last operation errored */
-static inline uint8_t HAL_DMA_operation_errored(DMA_TypeDef* DMAX) {
+static inline uint8_t dma_operation_errored(DMA_Type* DMAX) {
   return READ_BITS(DMAX->STATUS, DMA_INPROG_MSK) != 0;
 }
 
@@ -57,7 +57,7 @@ static inline uint8_t HAL_DMA_operation_errored(DMA_TypeDef* DMAX) {
    cache block size. Waits for any previous operations to
    complete before initiating current operation. Non blocking
    and returns immediately after initiating operation. */
-void HAL_DMA_init_memcpy(DMA_TypeDef* DMAX, void* src, void* dst, uint64_t src_stride, uint32_t count);
+void dma_init_memcpy(DMA_Type* DMAX, void* src, void* dst, uint64_t src_stride, uint32_t count);
 
 /* Initializes a saturating matrix-vector product of int8s
    where SRC is a pointer to a matrix of int8s, OPERAND is
@@ -66,16 +66,16 @@ void HAL_DMA_init_memcpy(DMA_TypeDef* DMAX, void* src, void* dst, uint64_t src_s
    of matrix-vector multiplies to perform. SRC must be cache
    block aligned, SRC_STRIDE must be a multiple of a cache
    block size, and COUNT must be <= 32 */
-void HAL_DMA_init_MAC(DMA_TypeDef* DMAX, void* src, int8_t* operand, uint64_t src_stride, uint32_t count);
+void dma_init_MAC(DMA_Type* DMAX, void* src, int8_t* operand, uint64_t src_stride, uint32_t count);
 
 /* Synchronously waits for DMA operation to complete and returns the DMA
    Status Code. Refer to BearlyML23 Doc for interpretation of error codes*/
-DMA_Status HAL_DMA_await_result(DMA_TypeDef* DMAX);
+DMA_Status dma_await_result(DMA_Type* DMAX);
 
 /* Synchronously waits for MAC operation to complete, copies result to
    *dst, and returns the DMA Status Code. Refer to BearlyML23 Doc
    for interpretation of error codes*/
-DMA_Status HAL_DMA_get_MAC_result(DMA_TypeDef* DMAX, int16_t* dst, uint32_t count);
+DMA_Status dma_get_MAC_result(DMA_Type* DMAX, int16_t* dst, uint32_t count);
 
 #ifdef __cplusplus
 }

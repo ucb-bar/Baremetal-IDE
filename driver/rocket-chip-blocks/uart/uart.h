@@ -48,7 +48,7 @@ typedef struct {
   __IO uint32_t IE;                             /** UART interrupt enable */
   __I  uint32_t IP;                             /** UART interrupt pending */
   __IO uint32_t DIV;                            /** Baud rate divisor */
-} UART_TypeDef;
+} UART_Type;
 
 
 typedef enum {
@@ -66,46 +66,46 @@ typedef struct {
   uint32_t baudrate;  // the default baudrate divisor is 0xAD, 173
   UART_Mode mode;
   UART_StopBits stopbits;
-} UART_InitTypeDef;
+} UART_InitType;
 
 #ifndef UART0_BASE
   #define UART0_BASE                0x10020000U
-  #define UART0                     ((UART0_TypeDef *)UART0_BASE)
+  #define UART0                     ((UART0_Type *)UART0_BASE)
 #endif
 
-static inline uint8_t UART_getRXFIFODepth(UART_TypeDef *UARTx) {
+static inline uint8_t uart_get_rx_fifo_depth(UART_Type *UARTx) {
   return READ_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK) >> UART_RXCTRL_RXCNT_POS;
 }
 
-static inline uint8_t UART_getTXFIFODepth(UART_TypeDef *UARTx) {
+static inline uint8_t uart_get_tx_fifo_depth(UART_Type *UARTx) {
   return READ_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK) >> UART_TXCTRL_TXCNT_POS;
 }
 
-static inline void UART_disableRXInterrupt(UART_TypeDef *UARTx) {
+static inline void uart_disable_rx_interrupt(UART_Type *UARTx) {
   CLEAR_BITS(UARTx->IE, UART_IE_RXWM_MSK);
 }
 
-static inline void UART_enableRXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
+static inline void uart_enable_rx_interrupt(UART_Type *UARTx, uint16_t fifo_level) {
   CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXCNT_MSK);
   SET_BITS(UARTx->RXCTRL, fifo_level << UART_RXCTRL_RXCNT_POS);
   SET_BITS(UARTx->IE, UART_IE_RXWM_MSK);
 }
 
-static inline void UART_disableTXInterrupt(UART_TypeDef *UARTx) {
+static inline void uart_disable_tx_interrupt(UART_Type *UARTx) {
   CLEAR_BITS(UARTx->IE, UART_IE_TXWM_MSK);
 }
 
-static inline void UART_enableTXInterrupt(UART_TypeDef *UARTx, uint16_t fifo_level) {
+static inline void uart_enable_tx_interrupt(UART_Type *UARTx, uint16_t fifo_level) {
   CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_TXCNT_MSK);
   SET_BITS(UARTx->TXCTRL, fifo_level << UART_TXCTRL_TXCNT_POS);
   SET_BITS(UARTx->IE, UART_IE_TXWM_MSK);
 }
 
-void UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init);
+void uart_init(UART_Type *UARTx, UART_InitType *UART_init);
 
-Status UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout);
+Status uart_receive(UART_Type *UARTx, uint8_t *data, uint16_t size, uint32_t timeout);
 
-Status UART_transmit(UART_TypeDef *UARTx, const uint8_t *data, uint16_t size, uint32_t timeout);
+Status uart_transmit(UART_Type *UARTx, const uint8_t *data, uint16_t size, uint32_t timeout);
 
 
 #ifdef __cplusplus

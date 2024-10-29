@@ -12,7 +12,7 @@
 
 extern uint64_t sys_clk_freq;
 
-void UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
+void uart_init(UART_Type *UARTx, UART_InitType *UART_init) {
   CLEAR_BITS(UARTx->RXCTRL, UART_RXCTRL_RXEN_MSK);
   CLEAR_BITS(UARTx->TXCTRL, UART_TXCTRL_TXEN_MSK);
 
@@ -32,7 +32,7 @@ void UART_init(UART_TypeDef *UARTx, UART_InitTypeDef *UART_init) {
   UARTx->DIV = (sys_clk_freq / UART_init->baudrate) - 1;
 }
 
-Status UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t timeout) {
+Status uart_receive(UART_Type *UARTx, uint8_t *data, uint16_t size, uint32_t timeout) {
   uint32_t rx_data_status;
   while (size > 0) {
     rx_data_status = UARTx->RXDATA;
@@ -47,7 +47,7 @@ Status UART_receive(UART_TypeDef *UARTx, uint8_t *data, uint16_t size, uint32_t 
   return OK;
 }
 
-Status UART_transmit(UART_TypeDef *UARTx, const uint8_t *data, uint16_t size, uint32_t timeout) {
+Status uart_transmit(UART_Type *UARTx, const uint8_t *data, uint16_t size, uint32_t timeout) {
   while (size > 0) {
     while (READ_BITS(UARTx->TXDATA, UART_TXDATA_FULL_MSK)) {
       // return TIMEOUT;

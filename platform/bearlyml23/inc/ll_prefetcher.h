@@ -10,7 +10,7 @@ extern "C" {
 
 typedef struct {
   __IO uint32_t EN;
-} PREFETCHER_TypeDef;
+} PREFETCHER_Type;
 
 #ifdef __cplusplus
 }

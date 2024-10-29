@@ -74,7 +74,7 @@ typedef struct {
   __IO uint32_t TUPDATEDR;                              // 0xF8
   __IO uint32_t LDO_VREF;                               // 0xFC
   __IO uint32_t PLLFWEN_B;                              // 0x100
-} PLL_TypeDef;
+} PLL_Type;
 
 
 #ifdef __cplusplus

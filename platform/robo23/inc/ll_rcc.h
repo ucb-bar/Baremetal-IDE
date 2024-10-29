@@ -30,7 +30,7 @@ typedef struct {
   __IO uint32_t TILE1_CLK_DIV;                          // 0x300C
   __IO uint32_t TILE2_CLK_DIV;                          // 0x3010
   __IO uint32_t TILE3_CLK_DIV;                          // 0x3014
-} RCC_TypeDef;
+} RCC_Type;
 
 
 #ifdef __cplusplus
