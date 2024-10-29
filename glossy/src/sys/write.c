@@ -11,13 +11,13 @@
 
 __attribute__((weak)) ssize_t _write(int fd, const void *ptr, size_t len) {
   #if defined(TERMINAL_DEVICE_HTIF)
-    HTIF_syscall(fd, (uintptr_t)ptr, len, FESVR_write);
+    htif_syscall(fd, (uintptr_t)ptr, len, FESVR_write);
     return len;
   #elif defined(TERMINAL_DEVICE_UART0)
-    UART_transmit((UART_TypeDef *)UART0_BASE, (uint8_t *)ptr, len, 100);
+    uart_transmit((UART_Type *)UART0_BASE, (uint8_t *)ptr, len, 100);
     return len;
   #elif defined(TERMINAL_DEVICE_NS16550A)
-    NS16550A_puts((uint8_t *)ptr, len);
+    ns16550a_puts((uint8_t *)ptr, len);
     return len;
   #else
     return -1;

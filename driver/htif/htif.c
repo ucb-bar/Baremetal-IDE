@@ -4,14 +4,14 @@
 __IO uint64_t tohost __attribute__ ((section (".htif")));
 __IO uint64_t fromhost __attribute__ ((section (".htif")));
 
-HTIF_TypeDef htif_handler = {
+HTIF_Type htif_handler = {
   .tohost = &tohost,
   .fromhost = &fromhost,
 };
 
 static spinlock_t htif_lock = SPINLOCK_INIT;
 
-long HTIF_syscall(uint64_t a0, uint64_t a1, uint64_t a2, unsigned long n) {
+long htif_syscall(uint64_t a0, uint64_t a1, uint64_t a2, unsigned long n) {
   __IO uint64_t buf[8];
   uint64_t sc;
 

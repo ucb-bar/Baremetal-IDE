@@ -13,7 +13,7 @@ static void sleep(int seconds) {
 
 void hello1() {
   size_t mhartid = READ_CSR("mhartid");
-  const char* march = getMachineArchitecture(READ_CSR("marchid"));
+  const char* march = get_machine_architecture(READ_CSR("marchid"));
     
   sleep(mhartid);
   

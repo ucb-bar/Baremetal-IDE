@@ -11,7 +11,7 @@ extern "C" {
 typedef struct {
   __IO uint64_t DIVISOR;
   __IO uint32_t DEAD_TIME;
-} SWITCHCAP_TypeDef;
+} SWITCHCAP_Type;
 
 #ifdef __cplusplus
 }

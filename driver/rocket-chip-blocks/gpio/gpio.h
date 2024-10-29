@@ -27,7 +27,7 @@ typedef struct {
   __IO uint32_t IOF_EN;                         /** Hardware IO function enable */
   __IO uint32_t IOF_SEL;                        /** Hardware IO function selection */
   __IO uint32_t OUT_XOR;                        /** Output XOR (invert) */
-} GPIO_TypeDef;
+} GPIO_Type;
 
 
 typedef enum {
@@ -88,14 +88,14 @@ typedef struct {
   GPIO_Mode mode;
   GPIO_Pull pull;
   GPIO_DriveStrength drive_strength;
-} GPIO_InitTypeDef;
+} GPIO_InitType;
 
 
-void GPIO_init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_init, GPIO_Pin pin);
+void gpio_init(GPIO_Type *GPIOx, GPIO_InitType *GPIO_init, GPIO_Pin pin);
 
-uint8_t GPIO_readPin(GPIO_TypeDef *GPIOx, GPIO_Pin pin);
+uint8_t gpio_read_pin(GPIO_Type *GPIOx, GPIO_Pin pin);
 
-void GPIO_writePin(GPIO_TypeDef *GPIOx, GPIO_Pin pin, uint8_t value);
+void gpio_write_pin(GPIO_Type *GPIOx, GPIO_Pin pin, uint8_t value);
 
 #ifdef __cplusplus
 }

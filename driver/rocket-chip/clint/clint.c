@@ -11,7 +11,7 @@
 #include "clint.h"
 
 
-uint64_t CLINT_getTime(CLINT_TypeDef *clint) {
+uint64_t clint_get_time(CLINT_Type *clint) {
   #if RISCV_XLEN == 32
     uint32_t time_lo;
     uint32_t time_hi;
@@ -27,7 +27,7 @@ uint64_t CLINT_getTime(CLINT_TypeDef *clint) {
   #endif
 }
 
-void CLINT_setTimerInterruptTarget(CLINT_TypeDef *clint, uint32_t hartid, uint64_t time) {
+void clint_set_timer_interrupt_target(CLINT_Type *clint, uint32_t hartid, uint64_t time) {
   #if RISCV_XLEN == 32
   *((__IO uint32_t *)(clint->MTIMECMP[hartid] + 1)) = 0xFFFFFFFF;
   *((__IO uint32_t *)(clint->MTIMECMP[hartid])) = (uint32_t)time;

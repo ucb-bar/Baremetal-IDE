@@ -59,7 +59,7 @@ typedef struct {
   __IO uint32_t PWM_CMP1;
   __IO uint32_t PWM_CMP2;
   __IO uint32_t PWM_CMP3;
-} PWM_TypeDef;
+} PWM_Type;
 
 
 typedef struct {
@@ -85,26 +85,26 @@ typedef struct {
   uint8_t pwmcmp1ip       : 1;
   uint8_t pwmcmp2ip       : 1;
   uint8_t pwmcmp3ip       : 1;
-} PWM_InitTypeDef;
+} PWM_InitType;
 
 #ifndef PWM0_BASE
   #define PWM0_BASE                 0x10050000U
-  #define PWM0                      ((PWM0_TypeDef *)PWM0_BASE)
+  #define PWM0                      ((PWM0_Type *)PWM0_BASE)
 #endif
 
-static inline void PWM_enable(PWM_TypeDef *PWMx) {
+static inline void pwm_enable(PWM_Type *PWMx) {
   SET_BITS(PWMx->PWM_CFG, PWM_PWMENALWAYS_MSK);
 }
 
-static inline void PWM_disable(PWM_TypeDef *PWMx) {
+static inline void pwm_disable(PWM_Type *PWMx) {
   CLEAR_BITS(PWMx->PWM_CFG, PWM_PWMENALWAYS_MSK);
 }
 
-static inline void PWM_setScale(PWM_TypeDef *PWMx, uint32_t value) {
+static inline void pwm_set_scale(PWM_Type *PWMx, uint32_t value) {
   WRITE_BITS(PWMx->PWM_CFG, PWM_PWMSCALE_MSK, value << PWM_PWMSCALE_POS);
 }
 
-static inline void PWM_setCompareValue(PWM_TypeDef *PWMx, uint32_t idx,
+static inline void pwm_set_compare_value(PWM_Type *PWMx, uint32_t idx,
                                        uint32_t value) {
   switch (idx) {
   case 0:
@@ -122,23 +122,23 @@ static inline void PWM_setCompareValue(PWM_TypeDef *PWMx, uint32_t idx,
   }
 }
 
-static inline void PWM_trigger_oneshot(PWM_TypeDef *PWMx, uint32_t idx) {
+static inline void pwm_trigger_oneshot(PWM_Type *PWMx, uint32_t idx) {
   SET_BITS(PWMx->PWM_CFG, PWM_PWMENONESHOT_MSK);
 }
 
-void PWM_init(PWM_TypeDef *PWMx, PWM_InitTypeDef *PWM_init);
+void pwm_init(PWM_Type *PWMx, PWM_InitType *PWM_init);
 
-void PWM_stop(PWM_TypeDef *PWMx, uint32_t idx);
+void pwm_stop(PWM_Type *PWMx, uint32_t idx);
 
-void PWM_setFrequency(PWM_TypeDef *PWMx, uint32_t idx, uint32_t freq);
+void pwm_set_frequency(PWM_Type *PWMx, uint32_t idx, uint32_t freq);
 
-uint32_t PWM_getFrequency(PWM_TypeDef *PWMx, uint32_t idx);
+uint32_t pwm_get_frequency(PWM_Type *PWMx, uint32_t idx);
 
-void PWM_setDutyCycle(PWM_TypeDef *PWMx, uint32_t idx, uint32_t duty, int phase_corr);
+void pwm_set_duty_cycle(PWM_Type *PWMx, uint32_t idx, uint32_t duty, int phase_corr);
 
-uint32_t PWM_getDutyCycle(PWM_TypeDef *PWMx, uint32_t idx);
+uint32_t pwm_get_duty_cycle(PWM_Type *PWMx, uint32_t idx);
 
-void PWM_trigger(PWM_TypeDef *PWMx, uint32_t idx);
+void pwm_trigger(PWM_Type *PWMx, uint32_t idx);
 
 
 

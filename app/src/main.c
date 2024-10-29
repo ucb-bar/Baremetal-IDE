@@ -53,13 +53,13 @@ uint8_t counter = 0;
 /* USER CODE BEGIN PUC */
 
 
-void APP_init() {
+void app_init() {
   // torch::executor::runtime_init();
 }
 
 
 
-void APP_main() {
+void app_main() {
   uint64_t mhartid = READ_CSR("mhartid");
 
   printf("Hello world from hart %d: %d\n", mhartid, counter);
@@ -82,13 +82,13 @@ int main(int argc, char **argv) {
 
   /* Initialize all configured peripherals */  
   /* USER CODE BEGIN Init */
-  APP_init();
+  app_init();
   /* USER CODE END Init */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    APP_main();
+    app_main();
     return 0;
   }
   /* USER CODE END WHILE */

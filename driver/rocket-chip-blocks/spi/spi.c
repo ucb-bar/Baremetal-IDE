@@ -14,7 +14,7 @@
 extern uint64_t sys_clk_freq;
 
 
-void SPI_init(SPI_TypeDef *SPIx, SPI_InitTypeDef *SPI_init) {
+void spi_init(SPI_Type *SPIx, SPI_InitType *SPI_init) {
   SPIx->SCKDIV = sys_clk_freq / (2 * SPI_init->clock) - 1;
   
   switch (SPI_init->mode) {
@@ -53,7 +53,7 @@ void SPI_init(SPI_TypeDef *SPIx, SPI_InitTypeDef *SPI_init) {
   }
 }
 
-Status SPI_receive(SPI_TypeDef *SPIx, uint8_t *data, uint16_t size, uint64_t timeout) {
+Status spi_receive(SPI_Type *SPIx, uint8_t *data, uint16_t size, uint64_t timeout) {
   while (size > 0) {
     while (READ_BITS(SPIx->RXDATA, SPI_RXDATA_EMPTY_MSK)) {
       // return TIMEOUT;
@@ -65,7 +65,7 @@ Status SPI_receive(SPI_TypeDef *SPIx, uint8_t *data, uint16_t size, uint64_t tim
   return OK;
 }
 
-Status SPI_transmit(SPI_TypeDef *SPIx, uint8_t *data, uint16_t size, uint64_t timeout) {
+Status spi_transmit(SPI_Type *SPIx, uint8_t *data, uint16_t size, uint64_t timeout) {
   while (size > 0) {
     while (READ_BITS(SPIx->TXDATA, SPI_TXDATA_FULL_MSK)) {
       // return TIMEOUT;
@@ -77,7 +77,7 @@ Status SPI_transmit(SPI_TypeDef *SPIx, uint8_t *data, uint16_t size, uint64_t ti
   return OK;
 }
 
-Status SPI_transmitReceive(SPI_TypeDef *SPIx, uint8_t *tx_data, uint8_t *rx_data, uint16_t size, uint64_t timeout) {
+Status spi_transmit_receive(SPI_Type *SPIx, uint8_t *tx_data, uint8_t *rx_data, uint16_t size, uint64_t timeout) {
   while (size > 0) {
     while (READ_BITS(SPIx->TXDATA, SPI_TXDATA_FULL_MSK)) {
       // return TIMEOUT;

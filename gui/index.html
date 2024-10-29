@@ -118,7 +118,7 @@ typedef struct {
   __IO uint32_t IE;                             /** UART interrupt enable */
   __I  uint32_t IP;                             /** UART interrupt pending */
   __IO uint32_t DIV;                            /** Baud rate divisor */
-} UART_TypeDef;
+} UART_Type;
 `;
 
       generated_src += `
@@ -138,7 +138,7 @@ typedef struct {
   __IO uint32_t LOW_IE;                         /** Low interrupt pending */
   __IO uint32_t LOW_IP;                         /** Low interrupt pending */
   __IO uint32_t OUT_XOR;                        /** Output XOR (invert) */
-} GPIO_TypeDef;
+} GPIO_Type;
 `;
 
       generated_src += `\n#define RCC_BASE                0x10011000U`;
@@ -159,11 +159,11 @@ typedef struct {
       
       for (let i=0; i<$("#gpio_list").find(".fields").length; i+=1) {
         let gpio_char = String.fromCharCode(65+i);
-        generated_src += `\n#define GPIO${gpio_char}                   ((GPIO_TypeDef *)GPIO${gpio_char}_BASE)`;
+        generated_src += `\n#define GPIO${gpio_char}                   ((GPIO_Type *)GPIO${gpio_char}_BASE)`;
       }
 
       for (let i=0; i<$("#uart_list").find(".fields").length; i+=1) {
-        generated_src += `\n#define UART${i}                   ((UART_TypeDef *)UART${i}_BASE)`;
+        generated_src += `\n#define UART${i}                   ((UART_Type *)UART${i}_BASE)`;
       }
       generated_src += `\n`;
       
