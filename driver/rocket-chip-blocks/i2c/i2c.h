@@ -37,7 +37,7 @@ typedef struct {
   __IO uint32_t CTRL;                           /** Control */
   __IO uint32_t DATA;                           /** Data */
   __IO uint32_t STAT_CMD;                       /** Status & command */
-} I2C_TypeDef;
+} I2C_Type;
 
 
 typedef enum {
@@ -49,39 +49,39 @@ typedef enum {
 
 typedef struct {
   uint16_t clock;
-} I2C_InitTypeDef;
+} I2C_InitType;
 
 
-static inline void I2C_disable(I2C_TypeDef *I2Cx) {
+static inline void i2c_disable(I2C_Type *I2Cx) {
   CLEAR_BITS(I2Cx->CTRL, I2C_CTRL_EN_MSK);
 }
 
-static inline void I2C_enable(I2C_TypeDef *I2Cx) {
+static inline void i2c_enable(I2C_Type *I2Cx) {
   SET_BITS(I2Cx->CTRL, I2C_CTRL_EN_MSK);
 }
 
-static inline State I2C_getFlag(I2C_TypeDef *I2Cx, I2C_Flag flag) {
+static inline State i2c_get_flag(I2C_Type *I2Cx, I2C_Flag flag) {
   return READ_BITS(I2Cx->STAT_CMD, flag) ? SET : RESET;
 }
 
 #ifndef I2C0_BASE
   #define I2C0_BASE                 0x10040000U
-  #define I2C0                      ((I2C0_TypeDef *)I2C0_BASE)
+  #define I2C0                      ((I2C0_Type *)I2C0_BASE)
 #endif
 
-void I2C_init(I2C_TypeDef *I2Cx, I2C_InitTypeDef *I2C_init);
+void i2c_init(I2C_Type *I2Cx, I2C_InitType *I2C_init);
 
-Status I2C_waitForFlag(I2C_TypeDef *I2Cx, I2C_Flag flag, State state, uint32_t timestart, uint32_t timeout);
+Status i2c_wait_for_flag(I2C_Type *I2Cx, I2C_Flag flag, State state, uint32_t timestart, uint32_t timeout);
 
-Status I2C_waitForTransaction(I2C_TypeDef *I2Cx, uint32_t timestart, uint32_t timeout);
+Status i2c_wait_for_transaction(I2C_Type *I2Cx, uint32_t timestart, uint32_t timeout);
 
-Status I2C_masterReceive(I2C_TypeDef *I2Cx, uint16_t device_addr, uint8_t *buffer, uint16_t size, uint64_t timeout);
+Status i2c_master_receive(I2C_Type *I2Cx, uint16_t device_addr, uint8_t *buffer, uint16_t size, uint64_t timeout);
 
-Status I2C_masterTransmit(I2C_TypeDef *I2Cx, uint16_t device_addr, uint8_t *buffer, uint16_t size, uint64_t timeout);
+Status i2c_master_transmit(I2C_Type *I2Cx, uint16_t device_addr, uint8_t *buffer, uint16_t size, uint64_t timeout);
 
-Status I2C_readMemory(I2C_TypeDef *I2Cx, uint16_t device_addr, uint8_t mem_addr, uint8_t *buffer, uint16_t size, uint64_t timeout);
+Status i2c_read_memory(I2C_Type *I2Cx, uint16_t device_addr, uint8_t mem_addr, uint8_t *buffer, uint16_t size, uint64_t timeout);
 
-Status I2C_writeMemory(I2C_TypeDef *I2Cx, uint16_t device_addr, uint8_t mem_addr, uint8_t *buffer, uint16_t size, uint32_t timeout);
+Status i2c_write_memory(I2C_Type *I2Cx, uint16_t device_addr, uint8_t mem_addr, uint8_t *buffer, uint16_t size, uint32_t timeout);
 
 
 #ifdef __cplusplus

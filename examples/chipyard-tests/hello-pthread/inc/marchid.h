@@ -1,7 +1,7 @@
 #ifndef __MARCHID_H
 #define __MARCHID_H
 
-const char *getMachineArchitecture(size_t marchid) {
+const char *get_machine_architecture(size_t marchid) {
   switch (marchid) {
   case 1:
     return "rocket";

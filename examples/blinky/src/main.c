@@ -42,7 +42,7 @@
 
 uint8_t counter = 0;
 
-GPIO_TypeDef *GPIOA = (GPIO_TypeDef *)GPIOA_BASE;
+GPIO_Type *GPIOA = (GPIO_Type *)GPIOA_BASE;
 
 /* USER CODE END PV */
 
@@ -56,30 +56,30 @@ GPIO_TypeDef *GPIOA = (GPIO_TypeDef *)GPIOA_BASE;
 /* USER CODE BEGIN PUC */
 
 
-void APP_init() {
-  GPIO_InitTypeDef gpio_init_config;
+void app_init() {
+  GPIO_InitType gpio_init_config;
   gpio_init_config.mode = GPIO_MODE_OUTPUT;
   gpio_init_config.pull = GPIO_PULL_NONE;
   gpio_init_config.drive_strength = GPIO_DS_STRONG;
 
-  GPIO_init(GPIOA, &gpio_init_config, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+  gpio_init(GPIOA, &gpio_init_config, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 
   
-  GPIO_writePin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
+  gpio_write_pin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
 }
 
 
 
-void APP_main() {
+void app_main() {
   // uint64_t mhartid = READ_CSR("mhartid");
 
-  GPIO_writePin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
+  gpio_write_pin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 1);
 
   sleep(1);
   // printf("Hello world from hart %d: %d\n", mhartid, counter);
 
   
-  GPIO_writePin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
+  gpio_write_pin(GPIOA, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
   sleep(1);
   // printf("Hello world from hart %d: %d\n", mhartid, counter);
 
@@ -100,13 +100,13 @@ int main(int argc, char **argv) {
 
   /* Initialize all configured peripherals */  
   /* USER CODE BEGIN Init */
-  APP_init();
+  app_init();
   /* USER CODE END Init */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1) {
-    APP_main();
+    app_main();
     // return 0;
   }
   /* USER CODE END WHILE */

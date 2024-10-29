@@ -99,7 +99,7 @@ ssize_t _write(int fd, const void *ptr, size_t len) {
 
 void APP_init() {
   // set up UART registers
-  UART_InitTypeDef UART_init_config;
+  UART_InitType UART_init_config;
   UART_init_config.baudrate = 115200;
   UART_init_config.mode = UART_MODE_TX_RX;
   UART_init_config.stopbits = UART_STOPBITS_2;

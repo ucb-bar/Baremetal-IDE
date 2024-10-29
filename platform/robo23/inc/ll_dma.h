@@ -27,7 +27,7 @@ typedef struct {
   uint32_t RESERVED[4];   
   __IO uint64_t OPERAND_REG[8]; // 0x40  
   __IO uint64_t DEST_REG[8];    // 0x80
-} DMA_TypeDef;
+} DMA_Type;
 
 #ifdef __cplusplus
 }

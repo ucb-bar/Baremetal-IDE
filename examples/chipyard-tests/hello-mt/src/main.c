@@ -35,7 +35,7 @@ void __main(void) {
 
   if (mhartid >= n_cores) while (1);
 
-  const char* march = getMachineArchitecture(READ_CSR("marchid"));
+  const char* march = get_machine_architecture(READ_CSR("marchid"));
   for (size_t i = 0; i < n_cores; i++) {
     if (mhartid == i) {
       printf("Hello world from core %lu, a %s\n", mhartid, march);

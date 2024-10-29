@@ -19,9 +19,9 @@ typedef struct {
   __IO uint64_t UNCLUSTER_CLKSEL;   // 0x00110028  on reset: 0x00000000_00000000
   __IO uint64_t UNCLUSTER_CLKDIV;   // 0x00110030  on reset: 0x00000000_00000004
   __IO uint64_t LBWIF_CLKDIV;       // 0x00110038  on reset: 0x00000000_00000008
-} PRCI_TypeDef;
+} PRCI_Type;
 
-#define PRCI                     ((PRCI_TypeDef *)PRCI_BASE)
+#define PRCI                     ((PRCI_Type *)PRCI_BASE)
 
 
 

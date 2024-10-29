@@ -54,7 +54,7 @@ typedef struct {
   uint32_t RESERVED4[6];
   __IO uint32_t IE;
   __IO uint32_t IP;  
-} QSPI_TypeDef;
+} QSPI_Type;
 
 typedef struct {
   __IO uint32_t SCKDIV;
@@ -76,7 +76,7 @@ typedef struct {
   uint32_t RESERVED4[6];
   __IO uint32_t IE;
   __IO uint32_t IP;  
-} SPI_TypeDef;
+} SPI_Type;
 
 
 
@@ -97,20 +97,20 @@ typedef struct {
   SPI_Mode mode;
   SPI_CSMode csmode;
   uint32_t clock;
-} SPI_InitTypeDef;
+} SPI_InitType;
 
 #ifndef QSPI0_BASE
   #define QSPI0_BASE                0x10030000U
-  #define QSPI0                     ((QSPI0_TypeDef *)QSPI0_BASE)
+  #define QSPI0                     ((QSPI0_Type *)QSPI0_BASE)
 #endif
 
-void SPI_init(SPI_TypeDef *SPIx, SPI_InitTypeDef *SPI_init);
+void spi_init(SPI_Type *SPIx, SPI_InitType *SPI_init);
 
-Status SPI_receive(SPI_TypeDef *SPIx, uint8_t *data, uint16_t size, uint64_t timeout);
+Status spi_receive(SPI_Type *SPIx, uint8_t *data, uint16_t size, uint64_t timeout);
 
-Status SPI_transmit(SPI_TypeDef *SPIx, uint8_t *data, uint16_t size, uint64_t timeout);
+Status spi_transmit(SPI_Type *SPIx, uint8_t *data, uint16_t size, uint64_t timeout);
 
-Status SPI_transmitReceive(SPI_TypeDef *SPIx, uint8_t *tx_data, uint8_t *rx_data, uint16_t size, uint64_t timeout);
+Status spi_transmit_receive(SPI_Type *SPIx, uint8_t *tx_data, uint8_t *rx_data, uint16_t size, uint64_t timeout);
 
 
 

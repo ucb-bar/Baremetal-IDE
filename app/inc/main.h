@@ -71,8 +71,8 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */
-void APP_init();
-void APP_main();
+void app_init();
+void app_main();
 /* USER CODE END EFP */
 
 #ifdef __cplusplus

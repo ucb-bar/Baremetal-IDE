@@ -11,7 +11,7 @@ uint8_t counter = 0;
 
 
 void APP_init() {
-  GPIO_InitTypeDef GPIO_init_config;
+  GPIO_InitType GPIO_init_config;
   GPIO_init_config.mode = GPIO_MODE_OUTPUT;
   GPIO_init(GPIOA, &GPIO_init_config, GPIO_PIN_5);
 }

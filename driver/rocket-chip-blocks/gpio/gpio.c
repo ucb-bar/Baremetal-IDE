@@ -10,7 +10,7 @@
 
 #include "gpio.h"
 
-void GPIO_init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_init, GPIO_Pin pin) {
+void gpio_init(GPIO_Type *GPIOx, GPIO_InitType *GPIO_init, GPIO_Pin pin) {
   if (GPIO_init->mode == GPIO_MODE_INPUT) {
     CLEAR_BITS(GPIOx->IOF_EN, (uint32_t)pin);
     
@@ -53,11 +53,11 @@ void GPIO_init(GPIO_TypeDef *GPIOx, GPIO_InitTypeDef *GPIO_init, GPIO_Pin pin) {
   }  
 }
 
-uint8_t GPIO_readPin(GPIO_TypeDef *GPIOx, GPIO_Pin pin) {
+uint8_t gpio_read_pin(GPIO_Type *GPIOx, GPIO_Pin pin) {
   return READ_BITS(GPIOx->INPUT_VAL, (uint32_t)pin) ? 1 : 0;
 }
 
-void GPIO_writePin(GPIO_TypeDef *GPIOx, GPIO_Pin pin, uint8_t value) {
+void gpio_write_pin(GPIO_Type *GPIOx, GPIO_Pin pin, uint8_t value) {
   if (value) {
     SET_BITS(GPIOx->OUTPUT_VAL, (uint32_t)pin);
   }

@@ -48,7 +48,7 @@ typedef enum {
 #define I2C0_BASE               (I2C_BASE + 0x0000U)
 #define UART0_BASE              (UART_BASE + 0x0000U)
 
-#define UART0                   ((UART_TypeDef *)UART0_BASE)
+#define UART0                   ((UART_Type *)UART0_BASE)
 
 /**
  * System Clock Configuration
