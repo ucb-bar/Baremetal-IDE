@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "hal.h"
+#include "metal.h"
 
 
 /* Peripheral Struct Definition */

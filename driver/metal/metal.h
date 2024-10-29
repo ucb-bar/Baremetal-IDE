@@ -1,25 +1,16 @@
 /**
- * @file rv_common.h
- * @brief RISC-V Definitions
+ * @file metal.h
+ * @brief Baremetal programming helpers
+ *
+ * This file provides some common definitions for baremetal programming.
+ * It includes memory register attributes, bit operation definitions,
+ * and common enumerations for state and status values that is used by
+ * the Hardware Abstraction Layer (HAL) library.
  * 
- * This header file provides common definitions and operations for RISC-V core programming.
- * It includes memory register attributes, bit operation definitions, RISC-V specific definitions,
- * and common enumerations for state and status values.
- *
- * The memory register attributes define volatile permissions for read-only, write-only, and read/write access.
- * The bit operation definitions provide macros for setting, clearing, reading, and writing specific bits in a register.
- * The RISC-V specific definitions include macros for reading and writing control and status registers (CSRs),
- * as well as operations to swap, set, and clear specific bits in a CSR.
- * The common definitions include enumerations for state values (such as RESET and SET), and status values (such as OK and ERROR).
- *
- * @note This file should be included to access RISC-V core-specific definitions and perform common operations.
- *
- * @author -T.K.-
- * @date 2023-05-20
  */
  
-#ifndef __HAL_H
-#define __HAL_H
+#ifndef __METAL_H
+#define __METAL_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -65,4 +56,4 @@ typedef enum {
   TIMEOUT
 } Status;
 
-#endif /* __HAL_H */
+#endif  /* __METAL_H */

@@ -1,7 +1,7 @@
 #ifndef __SYSCON_POWEROFF_H
 #define __SYSCON_POWEROFF_H
 
-#include "hal.h"
+#include "metal.h"
 
 #define SYSCON_POWEROFF 0x100000
 #define FINISHER_PASS 0x5555

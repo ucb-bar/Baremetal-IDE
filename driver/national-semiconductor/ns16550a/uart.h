@@ -1,7 +1,7 @@
 #ifndef __UART_H
 #define __UART_H
 
-#include "hal.h"
+#include "metal.h"
 #include "uart_const.h"
 
 
