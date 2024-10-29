@@ -50,15 +50,23 @@ set(ARCH_FLAGS          -march=${ARCH} -mabi=${ABI} -mcmodel=${CMODEL})
 set(SPECS               "nosys.specs")
 set(SPEC_FLAGS          -specs=${SPECS})
 
+
+# convert CHIP to lowercase
+string(TOLOWER ${CHIP} CHIP)
+
 # linker script
 # HACK: ideally this should be handled by glossy, but currently i couldn't 
 # figure out a way to propagate the LINKER_SCRIPT variable to the compile and link commands
 if (NOT CHIP)
+  message(STATUS "Chip not specified, using default configuration")
+  set(CHIP "default")
+
   set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/glossy/glossy.ld")
 else()
   set(LINKER_SCRIPT       "${CMAKE_SOURCE_DIR}/platform/${CHIP}/${CHIP}.ld")
 endif()
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 
 add_compile_options(-O1)
 add_compile_options(-Wall -Wextra)

@@ -1,5 +1,6 @@
 #include <unistd.h>
 
+#include "chip_config.h"
 
 /**
  * @brief Sleep for a specified number of seconds
