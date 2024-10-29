@@ -6,7 +6,7 @@
 #include "atomic.h"
 #include "spinlock.h"
 #include "fesvr.h"
-#include "hal.h"
+#include "metal.h"
 
 
 #define HTIF_DEV_SHIFT      56

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "hal.h"
+#include "metal.h"
 
 #define SPI_CSMODE_AUTO                   0x00U
 #define SPI_CSMODE_HOLD                   0x02U

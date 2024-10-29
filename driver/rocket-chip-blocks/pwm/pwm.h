@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "hal.h"
+#include "metal.h"
 
 #define PWM_PWMSCALE_POS                        (0U)
 #define PWM_PWMSCALE_MSK                        (0x7U << PWM_PWMSCALE_POS)

@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "hal.h"
+#include "metal.h"
 
 #define UART_FIFO_DEPTH                         8
 
