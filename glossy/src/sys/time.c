@@ -1,8 +1,6 @@
 #include "time.h"
 
-#ifdef CLINT_BASE
-  #include "clint.h"
-#endif
+#include "chip_config.h"
 
 uint64_t sys_clk_freq = SYS_CLK_FREQ;
 uint64_t mtime_freq = MTIME_FREQ;

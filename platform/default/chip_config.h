@@ -6,6 +6,9 @@ extern "C" {
 #endif
 
 #include "riscv.h"
+#include "clint.h"
+#include "plic.h"
+#include "htif.h"
 
 
 // ================================
@@ -23,6 +26,10 @@ extern "C" {
 // ================================
 #define CLINT_BASE                  0x02000000
 #define PLIC_BASE                   0x0C000000
+
+#define CLINT                      ((CLINT_Type *)CLINT_BASE)
+#define PLIC                       ((PLIC_Type *)PLIC_BASE)
+#define PLIC_CC                 ((PLIC_ContextControl_Type *)(PLIC_BASE + 0x00200000U))
 
 
 #ifdef __cplusplus
