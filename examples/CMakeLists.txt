@@ -1,2 +1,2 @@
 add_subdirectory(blinky)
-add_subdirectory(embench/wikisort)
+add_subdirectory(embench)

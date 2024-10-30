@@ -1,6 +1,6 @@
 #include "trigger.h"
-#include "libwikisort.h"
 #include "rocketcore.h"
+#include "support.h"
 
 int __attribute__ ((used))
 main (int argc __attribute__ ((unused)),

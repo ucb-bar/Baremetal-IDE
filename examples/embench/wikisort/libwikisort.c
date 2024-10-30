@@ -15,14 +15,11 @@
    into public domain. */
 
 #include <string.h>
-// #include "support.h"
-#include <math.h>
+#include "support.h"
 
 /* This scale factor will be changed to equalise the runtime of the
    benchmarks. */
 #define LOCAL_SCALE_FACTOR 1
-#define WARMUP_HEAT 1
-#define CPU_MHZ 1
 
 #include <stdio.h>
 #include <stdlib.h>
