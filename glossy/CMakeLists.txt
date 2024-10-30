@@ -40,7 +40,6 @@ message(STATUS " Linker Script: ${LINKER_SCRIPT}")
 message(STATUS "===============================================")
 
 target_link_libraries(glossy PUBLIC chip-config)
-target_link_libraries(glossy PUBLIC rocketcore)
 
 
 set_target_properties(glossy PROPERTIES
