@@ -2,6 +2,7 @@
 #define __RV_ATOMIC_H
 
 #include <stdint.h>
+#include "metal.h"
 
 static inline unsigned long local_irq_save(void) {
   /* Interrupts are currently always disabled in M-mode */
@@ -25,12 +26,12 @@ static inline void mb_release(void) { fence(rw, w); }
 typedef int32_t atomic_t;
 
 static inline long atomic_load(const atomic_t *p) {
-    /* FIXME: Elide redundant sext.w for volatile variables */
-    return *((volatile const atomic_t *)p);
+  /* FIXME: Elide redundant sext.w for volatile variables */
+  return *((__I atomic_t *)p);
 }
 
 static inline void atomic_store(atomic_t *p, atomic_t v) {
-    *((volatile atomic_t *)p) = v;
+  *((__O atomic_t *)p) = v;
 }
 
 static inline long atomic_swap_acquire(atomic_t *p, atomic_t v) {
