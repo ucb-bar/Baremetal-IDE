@@ -27,12 +27,12 @@ jobs:
       run: |
         export RISCV="$GITHUB_WORKSPACE/riscv64-unknown-toolchain"
         export PATH="$RISCV/bin:$PATH"
-        cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
+        cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
         cmake --build ./build/ --target app
     - name: Make for BearlyML
       run: |
         export RISCV="$GITHUB_WORKSPACE/riscv64-unknown-toolchain"
         export PATH="$RISCV/bin:$PATH"
-        cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake -D CHIP=bearlyml
+        cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake -D CHIP=bearlyml
         cmake --build ./build/ --target app
 
