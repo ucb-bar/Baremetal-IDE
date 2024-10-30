@@ -1,5 +1,5 @@
-#ifndef __RV_ATOMIC_H
-#define __RV_ATOMIC_H
+#ifndef __ATOMIC_H
+#define __ATOMIC_H
 
 #include <stdint.h>
 #include "metal.h"
@@ -66,4 +66,4 @@ static inline void atomic_clear_release(atomic_t *p) {
   #endif
 }
 
-#endif /* __RV_ATOMIC_H */
+#endif /* __ATOMIC_H */

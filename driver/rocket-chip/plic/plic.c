@@ -1,5 +1,5 @@
 /**
- * @file hal_plic.c
+ * @file plic.c
  * @author -T.K.- / t_k_233@outlook.com
  * @brief 
  * @version 0.1

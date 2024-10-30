@@ -1,5 +1,5 @@
-#ifndef __LL_PLIC_H
-#define __LL_PLIC_H
+#ifndef __PLIC_H
+#define __PLIC_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,4 +43,4 @@ void plic_cc_complete_irq(PLIC_ContextControl_Type *plic_cc, uint32_t hart_id, u
 }
 #endif
 
-#endif /* __LL_PLIC_H */
+#endif /* __PLIC_H */
