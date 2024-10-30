@@ -25,14 +25,16 @@ jobs:
         tar -xf riscv64-unknown-toolchain.tar.xz
     - name: Make default
       run: |
+        rm -rf ./build/
         export RISCV="$GITHUB_WORKSPACE/riscv64-unknown-toolchain"
         export PATH="$RISCV/bin:$PATH"
-        cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
+        cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
         cmake --build ./build/ --target app
     - name: Make for BearlyML
       run: |
+        rm -rf ./build/
         export RISCV="$GITHUB_WORKSPACE/riscv64-unknown-toolchain"
         export PATH="$RISCV/bin:$PATH"
-        cmake . -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake -D CHIP=bearlyml
+        cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake -D CHIP=bearlyml
         cmake --build ./build/ --target app
 

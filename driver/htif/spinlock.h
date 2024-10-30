@@ -1,5 +1,5 @@
-#ifndef _CHIPYARD_SPINLOCK_H
-#define _CHIPYARD_SPINLOCK_H
+#ifndef __SPINLOCK_H
+#define __SPINLOCK_H
 
 #include "atomic.h"
 
@@ -14,11 +14,12 @@ static inline void spin_lock(spinlock_t *lock) {
     #ifdef __riscv_atomic
       while (atomic_load(&lock->lock));
     #endif
-  } while (atomic_swap_acquire(&lock->lock, -1));
+  }
+  while (atomic_swap_acquire(&lock->lock, -1));
 }
 
 static inline void spin_unlock(spinlock_t *lock) {
   atomic_clear_release(&lock->lock);
 }
 
-#endif /* _CHIPYARD_SPINLOCK_H */
+#endif /* __SPINLOCK_H */

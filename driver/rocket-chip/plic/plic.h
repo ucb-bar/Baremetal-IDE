@@ -1,5 +1,5 @@
-#ifndef __LL_PLIC_H
-#define __LL_PLIC_H
+#ifndef __PLIC_H
+#define __PLIC_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,28 +26,21 @@ typedef struct {
 } PLIC_ContextControl_Type;
 
 
-#ifndef PLIC_BASE
-  #define PLIC_BASE                 0x0C000000U
-  #define PLIC                      ((PLIC_Type *)PLIC_BASE)
-  #define PLIC_CC                   ((PLIC_ContextControl_Type *)(PLIC_BASE + 0x00200000U))
-#endif
+void plic_disable(PLIC_Type *plic, uint32_t hart_id, uint32_t irq_id);
 
+void plic_enable(PLIC_Type *plic, uint32_t hart_id, uint32_t irq_id);
 
-void plic_disable(uint32_t hart_id, uint32_t irq_id);
+void plic_set_priority(PLIC_Type *plic, uint32_t irq_id, uint32_t priority);
 
-void plic_enable(uint32_t hart_id, uint32_t irq_id);
+void plic_cc_set_priority_threshold(PLIC_ContextControl_Type *plic_cc, uint32_t hart_id, uint32_t priority);
 
-void plic_set_priority(uint32_t irq_id, uint32_t priority);
+uint32_t plic_cc_claim_irq(PLIC_ContextControl_Type *plic_cc, uint32_t hart_id);
 
-void plic_set_priority_threshold(uint32_t hart_id, uint32_t priority);
-
-uint32_t plic_claim_irq(uint32_t hart_id);
-
-void plic_complete_irq(uint32_t hart_id, uint32_t irq_id);
+void plic_cc_complete_irq(PLIC_ContextControl_Type *plic_cc, uint32_t hart_id, uint32_t irq_id);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __LL_PLIC_H */
+#endif /* __PLIC_H */

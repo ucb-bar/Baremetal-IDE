@@ -1,5 +1,5 @@
-#ifndef __LL_CLINT_H
-#define __LL_CLINT_H
+#ifndef __CLINT_H
+#define __CLINT_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,4 +47,4 @@ void clint_set_timer_interrupt_target(CLINT_Type *clint, uint32_t hartid, uint64
 }
 #endif
 
-#endif /* __LL_CLINT_H */
+#endif /* __CLINT_H */
