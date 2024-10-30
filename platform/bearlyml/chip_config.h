@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "riscv.h"
+#include "uart.h"
 
 
 // ================================
@@ -49,21 +50,21 @@ extern "C" {
 #define I2C1_BASE               (I2C_BASE + 0x1000U)
 
 /* Peripheral Structure Definition */
-// #define DEBUG_CONTROLLER        ((DEBUG_CONTROLLER_TypeDef *)DEBUG_CONTROLLER_BASE)
-// #define ERROR_DEVICE            ((ERROR_DEVICE_TypeDef *)ERROR_DEVICE_BASE)
-// #define BOOTSEL                 ((BOOTSEL_TypeDef *)BOOTSEL_BASE)
-#define RCC                     ((RCC_TypeDef *)RCC_BASE)
-#define PLL                     ((PLL_TypeDef *)PLL_BASE)
-#define CLINT                   ((CLINT_TypeDef *)CLINT_BASE)
-// #define CACHE_CONTROLLER        ((CACHE_TypeDef *)CACHE_CONTROLLER_BASE)
-#define PLIC                    ((PLIC_TypeDef *)PLIC_BASE)
-#define PLIC_CC                 ((PLIC_ContextControl_TypeDef *)(PLIC_BASE + 0x00200000U))
-#define GPIOA                   ((GPIO_TypeDef *)GPIOA_BASE)
-#define UART0                   ((UART_TypeDef *)UART0_BASE)
-#define QSPI0                   ((QSPI_TypeDef *)QSPI0_BASE)
-#define SPI1                    ((SPI_TypeDef *)SPI1_BASE)
-#define I2C0                    ((I2C_TypeDef *)I2C0_BASE)
-#define I2C1                    ((I2C_TypeDef *)I2C1_BASE)
+// #define DEBUG_CONTROLLER        ((DEBUG_CONTROLLER_Type *)DEBUG_CONTROLLER_BASE)
+// #define ERROR_DEVICE            ((ERROR_DEVICE_Type *)ERROR_DEVICE_BASE)
+// #define BOOTSEL                 ((BOOTSEL_Type *)BOOTSEL_BASE)
+#define RCC                     ((RCC_Type *)RCC_BASE)
+#define PLL                     ((PLL_Type *)PLL_BASE)
+#define CLINT                   ((CLINT_Type *)CLINT_BASE)
+// #define CACHE_CONTROLLER        ((CACHE_Type *)CACHE_CONTROLLER_BASE)
+#define PLIC                    ((PLIC_Type *)PLIC_BASE)
+#define PLIC_CC                 ((PLIC_ContextControl_Type *)(PLIC_BASE + 0x00200000U))
+#define GPIOA                   ((GPIO_Type *)GPIOA_BASE)
+#define UART0                   ((UART_Type *)UART0_BASE)
+#define QSPI0                   ((QSPI_Type *)QSPI0_BASE)
+#define SPI1                    ((SPI_Type *)SPI1_BASE)
+#define I2C0                    ((I2C_Type *)I2C0_BASE)
+#define I2C1                    ((I2C_Type *)I2C1_BASE)
 
 
 #ifdef __cplusplus
