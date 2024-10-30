@@ -1,10 +1,5 @@
 
-#ifdef TERMINAL_DEVICE_HTIF
-  #include "htif.h"
-#endif
-#ifdef TERMINAL_DEVICE_SYSCON_POWEROFF
-  #include "poweroff.h"
-#endif
+#include "chip_config.h"
 
 __attribute__((weak, noreturn)) void _exit(int code) {
   #if defined(TERMINAL_DEVICE_HTIF)

@@ -32,10 +32,8 @@ typedef struct {
   __IO uint64_t *fromhost;
 } HTIF_Type;
 
-#ifndef HTIF
-  extern HTIF_Type htif_handler;
-  #define HTIF (&htif_handler)
-#endif
+extern HTIF_Type htif_handler;
+#define HTIF (&htif_handler)
 
 long htif_syscall(uint64_t a0, uint64_t a1, uint64_t a2, unsigned long n);
 
