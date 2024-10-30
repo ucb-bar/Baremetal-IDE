@@ -15,6 +15,29 @@
 extern "C" {
 #endif
 
+#define READ_CSR(REG) ({                          \
+  unsigned long __tmp;                            \
+  asm volatile ("csrr %0, " REG : "=r"(__tmp));  \
+  __tmp; })
+
+#define WRITE_CSR(REG, VAL) ({                    \
+  asm volatile ("csrw " REG ", %0" :: "rK"(VAL)); })
+
+#define SWAP_CSR(REG, VAL) ({                     \
+  unsigned long __tmp;                            \
+  asm volatile ("csrrw %0, " REG ", %1" : "=r"(__tmp) : "rK"(VAL)); \
+  __tmp; })
+
+#define SET_CSR_BITS(REG, BIT) ({                 \
+  unsigned long __tmp;                            \
+  asm volatile ("csrrs %0, " REG ", %1" : "=r"(__tmp) : "rK"(BIT)); \
+  __tmp; })
+
+#define CLEAR_CSR_BITS(REG, BIT) ({               \
+  unsigned long __tmp;                            \
+  asm volatile ("csrrc %0, " REG ", %1" : "=r"(__tmp) : "rK"(BIT)); \
+  __tmp; })
+
 
 /* Core CSR Bit Field Definition */
 #define MIE_USIE_POS                  0x00U
@@ -68,6 +91,34 @@ extern "C" {
 #define MIP_MEIP_MSK                  (1U << MIP_MEIP_POS)
 #define MIP_SGEIP_POS                 0x0CU
 #define MIP_SGEIP_MSK                 (1U << MIP_SGEIP_POS)
+
+static inline size_t get_hart_id() {
+  return READ_CSR("mhartid");
+}
+
+static inline uint64_t get_cycles() {
+  return READ_CSR("mcycle");
+}
+
+static inline void disable_global_interrupt() {
+  CLEAR_CSR_BITS("mstatus", 1U << 3U);
+}
+
+static inline void enable_global_interrupt() {
+  SET_CSR_BITS("mstatus", 1U << 3U);
+}
+
+static inline void disable_irq(uint32_t IRQn) {
+  CLEAR_CSR_BITS("mie", 1U << IRQn);
+}
+
+static inline void enable_irq(uint32_t IRQn) {
+  SET_CSR_BITS("mie", 1U << IRQn);
+}
+
+static inline void clear_irq(uint32_t IRQn) {
+  CLEAR_CSR_BITS("mip", 1U << IRQn);
+}
 
 
 #ifdef __cplusplus

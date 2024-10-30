@@ -1,4 +1,6 @@
+#include "trigger.h"
 #include "libwikisort.h"
+#include "rocketcore.h"
 
 int __attribute__ ((used))
 main (int argc __attribute__ ((unused)),
@@ -8,13 +10,14 @@ main (int argc __attribute__ ((unused)),
   volatile int result;
   int correct;
 
-//   initialise_board ();
+  //   initialise_board ();
+  printf("Initialising benchmark\n");
   initialise_benchmark ();
   warm_caches (WARMUP_HEAT);
 
-  // start_trigger ();
+  start_trigger ();
   result = benchmark ();
-  // stop_trigger ();
+  stop_trigger ();
 
   /* bmarks that use arrays will check a global array rather than int result */
 
