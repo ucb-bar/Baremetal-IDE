@@ -94,7 +94,7 @@ add_executable(app
   app/src/main.c
 )
 
-target_include_directories(app PUBLIC app/inc)
+target_include_directories(app PUBLIC app/include)
 
 
 #################################
