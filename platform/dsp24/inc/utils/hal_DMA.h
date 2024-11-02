@@ -6,8 +6,7 @@
 extern "C" {
 #endif
 
-#include "hal.h"
-#include "chiptop.h"
+#include "chip_config.h"
 #include  "hal_mmio.h"
 
 // Address for general DMA registers

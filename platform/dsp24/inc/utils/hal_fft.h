@@ -6,9 +6,9 @@
 extern "C" {
 #endif
 
-#include "hal.h"
 #include "hal_DMA.h"
 #include  "hal_mmio.h"
+#include "chip_config.h"
 
 #define FFT_BUSY            FFT_BASE + 0x08L
 #define FFT_LENGTH          FFT_BASE + 0x18L

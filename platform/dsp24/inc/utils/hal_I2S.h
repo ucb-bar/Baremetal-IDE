@@ -6,9 +6,9 @@
 extern "C" {
 #endif
 
-#include "hal.h"
 #include "hal_DMA.h"
 #include  "hal_mmio.h"
+#include "chip_config.h"
 
 #define I2S_BASE                    0x10042000U
 #define I2S_STATUS                  I2S_BASE + 0x08
