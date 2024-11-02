@@ -104,7 +104,7 @@ target_include_directories(app PUBLIC app/include)
 add_subdirectory(driver)
 add_subdirectory(glossy)
 add_subdirectory(lib)
-add_subdirectory(examples)
+# add_subdirectory(examples)
 
 target_link_libraries(app PRIVATE 
   -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive
