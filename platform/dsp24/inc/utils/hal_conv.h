@@ -7,8 +7,8 @@
 extern "C" {
 #endif
 
-#include "hal.h"
 #include  "hal_mmio.h"
+#include "chip_config.h"
 
 
 // Addresses for Convolution

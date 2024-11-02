@@ -5,7 +5,6 @@
 extern "C" {
 #endif
 
-#include "hal.h"
 
 
 typedef struct {

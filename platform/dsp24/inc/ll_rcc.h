@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #include "riscv.h"
-#include "hal.h"
+#include "metal.h"
 
 
 typedef struct {

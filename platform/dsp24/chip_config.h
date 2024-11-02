@@ -44,6 +44,11 @@ extern "C" {
 #define QSPI_FLASH_BASE         0x20000000U
 #define DRAM_BASE               0x80000000U
 
+#define FFT_BASE                0x08700000U
+#define CONV_BASE               0x08800000U
+#define DMA_BASE                0x08810000U
+#define I2S_BASE                0x10042000U
+
 /* Peripheral Pointer Definition */
 #define GPIOA_BASE              (GPIO_BASE)
 #define UART0_BASE              (UART_BASE)
@@ -64,6 +69,8 @@ extern "C" {
 #define SPI1                    ((SPI_Type *)SPI1_BASE)
 #define I2C0                    ((I2C_Type *)I2C0_BASE)
 #define I2C1                    ((I2C_Type *)I2C1_BASE)
+
+
 
 
 #ifdef __cplusplus
