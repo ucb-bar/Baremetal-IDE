@@ -19,19 +19,14 @@ extern "C" {
 #define SYS_CLK_FREQ   16000000
 
 // CLINT time base frequency in Hz
-#define MTIME_FREQ     100000
+#define MTIME_FREQ     16000000
 
 
 // ================================
 //  MMIO devices
 // ================================
 #define DEBUG_CONTROLLER_BASE   0x00000000U
-#define ERROR_DEVICE_BASE       0x00003000U
-#define BOOTSEL_BASE            0x00004000U
-#define BOOT_SELECT_BASE        0x00004000U
 #define BOOTROM_BASE            0x00010000U
-#define LIBIF_ROM_BASE          0x00020000U
-#define LIBIF_RAW_BASE          0x00030000U
 #define RCC_BASE                0x00100000U
 #define CLINT_BASE              0x02000000U
 #define CACHE_CONTROLLER_BASE   0x02010000U
