@@ -7,6 +7,9 @@ extern "C" {
 
 #include "metal.h"
 
+#define PLIC_BASE_ADDRESS 0xC000000
+
+#define PLIC ((PLIC_Type *)(PLIC_BASE_ADDRESS + 0x0000))
 
 /* Peripheral Struct Definition */
 typedef struct {
