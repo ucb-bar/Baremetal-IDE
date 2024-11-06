@@ -1,0 +1,79 @@
+#ifndef __PMU_H
+#define __PMU_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define PMU_EVENT_MASK_OFFSET 8
+
+// PMU event set
+#define PMU_EVENT_SET0 0x0
+#define PMU_EVENT_SET1 0x1
+#define PMU_EVENT_SET2 0x2
+#define PMU_EVENT_SET3 0x3
+
+// Event Set 0 - core instructions
+#define PMU_EVENT0_EXCEPTION 0
+#define PMU_EVENT0_LOAD 1
+#define PMU_EVENT0_STORE 2
+#define PMU_EVENT0_AMO 3
+#define PMU_EVENT0_SYSTEM 4
+#define PMU_EVENT0_ARITH 5
+#define PMU_EVENT0_BRANCH 6
+#define PMU_EVENT0_JAL 7
+#define PMU_EVENT0_JALR 8
+#define PMU_EVENT0_MUL 9
+#define PMU_EVENT0_DIV 10
+#define PMU_EVENT0_FP_LOAD 11
+#define PMU_EVENT0_FP_STORE 12
+#define PMU_EVENT0_FP_ADD 13
+#define PMU_EVENT0_FP_MUL 14
+#define PMU_EVENT0_FP_DIV_SQRT 15
+#define PMU_EVENT0_FP_OTHER 16
+
+// Event Set 1 - stalls
+#define PMU_EVENT1_LOAD_USE_INTERLOCK 0
+#define PMU_EVENT1_LONG_LATENCY_INTERLOCK 1
+#define PMU_EVENT1_CSR_INTERLOCK 2
+#define PMU_EVENT1_ICACHE_BLOCKED 3
+#define PMU_EVENT1_DCACHE_BLOCKED 4
+#define PMU_EVENT1_BRANCH_MISPREDICTION 5
+#define PMU_EVENT1_CONTROL_FLOW_TARGET_MISPREDICTION 6
+#define PMU_EVENT1_FLUSH 7
+#define PMU_EVENT1_REPLAY 8
+
+// Event Set 2 - cache misses
+#define PMU_EVENT2_ICACHE_MISS 0
+#define PMU_EVENT2_DCACHE_MISS 1
+#define PMU_EVENT2_DCACHE_RELEASE 2
+#define PMU_EVENT2_ITLB_MISS 3
+#define PMU_EVENT2_DTLB_MISS 4
+#define PMU_EVENT2_L2_TLB_MISS 5
+
+#define PMU_EVENT(SET, EVENT) (((1 << (PMU_EVENT##SET##_##EVENT)) << PMU_EVENT_MASK_OFFSET) | (PMU_EVENT_SET##SET))
+
+#define STRINGIFY(X) #X
+#define MHPMEVENT(N) "mhpmevent" STRINGIFY(N)
+#define MHPMCOUNTER(N) "mhpmcounter" STRINGIFY(N)
+
+#define PMU_EVENT_ENABLE(EVENT, N) WRITE_CSR(MHPMEVENT(N), EVENT)
+#define PMU_EVENT_DISABLE(N) WRITE_CSR(MHPMEVENT(N), 0)
+
+#define PMU_COUNTER_READ(N) READ_CSR(MHPMCOUNTER(N))
+#define PMU_COUNTER_RESET(N) WRITE_CSR(MHPMCOUNTER(N), 0)
+#define PMU_COUNTER_READ_CLEAR(N) ({ \
+  uint64_t val = PMU_COUNTER_READ(N); \
+  PMU_COUNTER_RESET(N); \
+  val; })
+
+#define PMU_COUNTER_ENABLE(N) SET_CSR_BITS("mcounteren", 1U << N)
+
+#define PMU_COUNTER_DISABLE(N) CLEAR_CSR_BITS("mcounteren", 1U << N)
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __PMU_H */
