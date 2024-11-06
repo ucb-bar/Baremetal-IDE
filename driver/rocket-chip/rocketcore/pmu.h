@@ -65,9 +65,10 @@ extern "C" {
 #define PMU_COUNTER_READ_CLEAR(N) SWAP_CSR(MHPMCOUNTER(N), 0)
 
 #define PMU_COUNTER_ENABLE(N) SET_CSR_BITS("mcounteren", 1U << N)
-
 #define PMU_COUNTER_DISABLE(N) CLEAR_CSR_BITS("mcounteren", 1U << N)
 
+#define PMU_INHIBIT_ENABLE(N) SET_CSR_BITS("mcountinhibit", 1U << N)
+#define PMU_INHIBIT_DISABLE(N) CLEAR_CSR_BITS("mcountinhibit", 1U << N)
 
 #ifdef __cplusplus
 }
