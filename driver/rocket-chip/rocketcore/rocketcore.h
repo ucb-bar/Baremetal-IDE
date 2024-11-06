@@ -90,6 +90,14 @@ static inline void enable_global_interrupt() {
   SET_CSR_BITS("mstatus", 1U << 3U);
 }
 
+static inline void disable_timer_interrupt() {
+  CLEAR_CSR_BITS("mie", 1U << 7U);
+}
+
+static inline void enable_timer_interrupt() {
+  SET_CSR_BITS("mie", 1U << 7U);
+}
+
 static inline void disable_irq(uint32_t IRQn) {
   CLEAR_CSR_BITS("mie", 1U << IRQn);
 }
