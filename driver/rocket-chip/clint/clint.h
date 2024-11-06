@@ -7,10 +7,6 @@ extern "C" {
 
 #include "metal.h"
 
-#define CLINT_BASE_ADDRESS 0x2000000
-
-#define CLINT0 ((CLINT_Type *)(CLINT_BASE_ADDRESS + 0x0000))
-
 /* Peripheral Struct Definition */
 typedef struct {
   __IO uint32_t MSIP[4096];                     /** MSIP Registers (1 bit wide) */
