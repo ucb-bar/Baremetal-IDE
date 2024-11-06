@@ -1,5 +1,6 @@
 # Define the list of benchmarks
 set(BENCHMARKS
+    dummy
     wikisort
     nettle-sha256
     # Add other benchmarks here
