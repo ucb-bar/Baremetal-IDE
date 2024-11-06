@@ -11,7 +11,6 @@ main (int argc __attribute__ ((unused)),
   int correct;
 
   //   initialise_board ();
-  printf("Initialising benchmark\n");
   initialise_benchmark ();
   warm_caches (WARMUP_HEAT);
 
