@@ -29,6 +29,8 @@ option(BAREMETAL_BUILD_X86          "Build for x86 platform"                  OF
 
 option(CHIP                         "Build for a specific platform"           OFF )
 
+option(PROF_COV                     "Build with profiling and coverage"      OFF )
+
 #################################
 # Toolchain Targets
 #################################
@@ -71,6 +73,11 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 add_compile_options(-O1)
 add_compile_options(-Wall -Wextra)
 
+if (PROF_COV)
+  message(STATUS "Building with profiling and coverage")
+  add_compile_options(-fprofile-arcs -ftest-coverage)
+endif()
+
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
 add_compile_options(${ARCH_FLAGS})
@@ -110,6 +117,9 @@ target_link_libraries(app PRIVATE
   -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive
 )
 
+if (PROF_COV)
+  target_link_libraries(app PRIVATE gcov)
+endif()
 
 #################################
 # Library Installation
