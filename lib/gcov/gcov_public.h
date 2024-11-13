@@ -166,6 +166,10 @@ typedef FILE * GCOV_FILE_TYPE;
  */
 #define GCOV_OPT_OUTPUT_SERIAL_HEXDUMP
 
+/* Output gcda data as human readable format on serial port.
+*/
+#define GCOV_OPT_OUTPUT_HUMAN_READABLE
+
 /* Function to print a string without newline.
  * Not used if you don't define either GCOV_OPT_PRINT_STATUS
  * or GCOV_OPT_OUTPUT_SERIAL_HEXDUMP.

@@ -76,6 +76,7 @@ add_compile_options(-Wall -Wextra)
 if (PROF_COV)
   message(STATUS "Building with profiling and coverage")
   add_compile_options(-fprofile-arcs -ftest-coverage)
+  # add_compile_options(--coverage)
 endif()
 
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
@@ -90,6 +91,9 @@ add_link_options(-nostartfiles)
 add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
 add_link_options(-T ${LINKER_SCRIPT})
+if (PROF_COV)
+  add_link_options(-lgcov)
+endif()
 
 
 

@@ -81,9 +81,10 @@
  */
 #define GCOV_DATA_MAGIC		((gcov_unsigned_t) 0x67636461)
 #define GCOV_TAG_FUNCTION	((gcov_unsigned_t) 0x01000000)
-#define GCOV_TAG_FUNCTION_LENGTH	(3)
+#define GCOV_WORD_SIZE 4
+#define GCOV_TAG_FUNCTION_LENGTH	(3 * GCOV_WORD_SIZE)
 #define GCOV_TAG_COUNTER_BASE	((gcov_unsigned_t) 0x01a10000)
-#define GCOV_TAG_COUNTER_LENGTH(NUM) ((NUM) * 2)
+#define GCOV_TAG_COUNTER_LENGTH(NUM) ((NUM) * 2 * GCOV_WORD_SIZE)
 #define GCOV_TAG_FOR_COUNTER(count) (GCOV_TAG_COUNTER_BASE + ((gcov_unsigned_t) (count) << 17))
 
 /* Interface to access gcov_info data  */
