@@ -17,7 +17,7 @@ extern "C" {
 #define SYS_CLK_FREQ   16000000
 
 // CLINT time base frequency in Hz
-#define MTIME_FREQ     16000000
+#define MTIME_FREQ     16000
 
 
 // ================================

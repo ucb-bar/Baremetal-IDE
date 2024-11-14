@@ -1,11 +1,11 @@
 #include <stdint.h>
 
-uint32_t *GPIOA_OUTPUT_VAL = (uint32_t*) 0x1001000CUL;
-uint32_t *GPIOA_OUTPUT_EN  = (uint32_t*) 0x10010008UL;
-uint32_t *CLINT_MTIME      = (uint32_t*) 0x0200BFF8UL;
+volatile uint32_t *GPIOA_OUTPUT_VAL = (uint32_t*) 0x1001000CUL;
+volatile uint32_t *GPIOA_OUTPUT_EN  = (uint32_t*) 0x10010008UL;
+volatile uint64_t *CLINT_MTIME      = (uint64_t*) 0x0200BFF8UL;
 
-void delay(unsigned int ticks) {
-  unsigned int mtime_start;
+void delay(uint64_t ticks) {
+  uint64_t mtime_start = *CLINT_MTIME;
   while (*CLINT_MTIME - mtime_start < ticks);
 }
 
@@ -21,7 +21,6 @@ void main() {
             *GPIOA_OUTPUT_VAL = 0b0;
         }
         counter ++;
-        delay(4000000);
+        delay(20000);
     }
 }
-
