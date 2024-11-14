@@ -17,6 +17,8 @@
 ########################################################################################################################
 cmake_minimum_required(VERSION 3.10)
 
+set(CMAKE_C_COMPILER_WORKS 1)
+set(CMAKE_CXX_COMPILER_WORKS 1)
 project(baremetal-ide LANGUAGES ASM C CXX)
 
 
@@ -29,7 +31,8 @@ option(BAREMETAL_BUILD_X86          "Build for x86 platform"                  OF
 
 option(CHIP                         "Build for a specific platform"           OFF )
 
-option(PROF_COV                     "Build with profiling and coverage"      OFF )
+option(PROF_COV                     "Build with profiling and coverage"       OFF )
+option(USE_PGO                      "Build with profile guided optimization"  OFF )
 
 #################################
 # Toolchain Targets
@@ -46,7 +49,7 @@ set(CMAKE_EXECUTABLE_SUFFIX            ".elf")
 set(ARCH                "rv64imafd")
 set(ABI                 "lp64d")
 set(CMODEL              "medany")
-set(ARCH_FLAGS          -march=${ARCH} -mabi=${ABI} -mcmodel=${CMODEL})
+set(ARCH_FLAGS          --verbose -march=${ARCH} -mabi=${ABI} -mcmodel=${CMODEL})
 
 # spec
 set(SPECS               "nosys.specs")
@@ -76,7 +79,10 @@ add_compile_options(-Wall -Wextra)
 if (PROF_COV)
   message(STATUS "Building with profiling and coverage")
   add_compile_options(-fprofile-arcs -ftest-coverage)
-  # add_compile_options(--coverage)
+endif()
+
+if (USE_PGO)
+  add_compile_options(-fprofile-use)
 endif()
 
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
