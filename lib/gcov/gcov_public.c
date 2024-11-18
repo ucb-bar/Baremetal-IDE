@@ -111,14 +111,14 @@ void __gcov_init(struct gcov_info *info)
 {
     GcovInfo *newHead = NULL;
 
-#ifdef GCOV_OPT_PRINT_STATUS
-    GCOV_PRINT_STR("__gcov_init called for ");
-    GCOV_PRINT_STR(gcov_info_filename(info));
-    GCOV_PRINT_STR("\n");
-#ifdef GCOV_OPT_USE_STDLIB
-    fflush(stdout);
-#endif // GCOV_OPT_USE_STDLIB
-#endif // GCOV_OPT_PRINT_STATUS
+// #ifdef GCOV_OPT_PRINT_STATUS
+//     GCOV_PRINT_STR("__gcov_init called for ");
+//     GCOV_PRINT_STR(gcov_info_filename(info));
+//     GCOV_PRINT_STR("\n");
+// #ifdef GCOV_OPT_USE_STDLIB
+//     fflush(stdout);
+// #endif // GCOV_OPT_USE_STDLIB
+// #endif // GCOV_OPT_PRINT_STATUS
 
 #ifdef GCOV_OPT_USE_MALLOC
     newHead = malloc(sizeof(GcovInfo));

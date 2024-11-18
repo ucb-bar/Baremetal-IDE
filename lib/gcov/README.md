@@ -1,0 +1,2 @@
+This folder implements gcov instrumentation extraction from the actual embedded system, without requiring a file system, or an operating system, or standard C libraries.
+It is patched and modified from https://github.com/nasa-jpl/embedded-gcov under an apache-2.0 license. 
