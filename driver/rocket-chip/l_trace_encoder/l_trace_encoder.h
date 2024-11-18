@@ -8,7 +8,7 @@ typedef struct {
   uint32_t TR_TE_CTRL;
 } LTraceEncoderType;
 
-#define L_TRACE_ENCODER_BASE_ADDRESS 0x10000000
+#define L_TRACE_ENCODER_BASE_ADDRESS 0x3000000
 
 #define L_TRACE_ENCODER0 ((LTraceEncoderType *)(L_TRACE_ENCODER_BASE_ADDRESS + 0x0000))
 #define L_TRACE_ENCODER1 ((LTraceEncoderType *)(L_TRACE_ENCODER_BASE_ADDRESS + 0x1000))

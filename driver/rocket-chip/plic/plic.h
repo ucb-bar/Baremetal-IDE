@@ -7,7 +7,6 @@ extern "C" {
 
 #include "metal.h"
 
-
 /* Peripheral Struct Definition */
 typedef struct {
   __IO uint32_t priority_threshold;

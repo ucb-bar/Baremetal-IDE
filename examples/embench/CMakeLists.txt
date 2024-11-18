@@ -1,5 +1,6 @@
 # Define the list of benchmarks
 set(BENCHMARKS
+    dummy
     wikisort
     nettle-sha256
     # Add other benchmarks here
@@ -25,4 +26,7 @@ foreach(benchmark ${BENCHMARKS})
         PUBLIC l_trace_encoder
         PRIVATE -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive -lm
     )
+    if (PROF_COV)
+        target_link_libraries(${benchmark} PRIVATE gcov)
+    endif()
 endforeach()
