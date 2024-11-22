@@ -49,7 +49,7 @@ set(CMAKE_EXECUTABLE_SUFFIX            ".elf")
 set(ARCH                "rv64imafd")
 set(ABI                 "lp64d")
 set(CMODEL              "medany")
-set(ARCH_FLAGS          --verbose -march=${ARCH} -mabi=${ABI} -mcmodel=${CMODEL})
+set(ARCH_FLAGS          -march=${ARCH} -mabi=${ABI} -mcmodel=${CMODEL})
 
 # spec
 set(SPECS               "nosys.specs")
