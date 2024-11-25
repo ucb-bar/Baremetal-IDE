@@ -7,7 +7,7 @@
 
 int main(int argc, char **argv) {
   // enable LBR
-  asm volatile ("csrw %0, %1" :: "n"(CSR_LBR_CTRL), "i"(1));
+  asm volatile ("csrw %0, %1" :: "n"(CSR_LBR_CTRL), "i"(3));
   volatile int c;
   // do some dummy loops
   for (int i = 0; i < NUM_ITERS; i++) {
@@ -20,8 +20,7 @@ int main(int argc, char **argv) {
   // do a jump calling a dummy function
   volatile int d = dummy_function(c);
   // disable LBR
-  asm volatile ("csrw %0, %1" :: "n"(CSR_LBR_CTRL), "i"(0));
-  // read LBR0
+  asm volatile ("csrw %0, %1" :: "n"(CSR_LBR_CTRL), "i"(1));
   uint64_t src, dst;
   asm volatile ("csrr %0, %1" : "=r"(src) : "n"(CSR_LBR_SRC0));
   asm volatile ("csrr %0, %1" : "=r"(dst) : "n"(CSR_LBR_DST0));
