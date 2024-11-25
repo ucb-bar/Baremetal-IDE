@@ -2,6 +2,7 @@ set (TESTS
   pmu-test-load
   pmu-test-store
   pmu-test-inhibit
+  lbr-test
 )
 
 foreach(test ${TESTS})
