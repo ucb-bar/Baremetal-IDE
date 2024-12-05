@@ -7,6 +7,9 @@ OD = $(PREFIX)objdump
 DG = $(PREFIX)gdb
 SIZE = $(PREFIX)size
 
+# Can be used to change HART for gdb debugging
+PORT = 3333
+
 .PHONY: build
 dsp24:
 	cmake -S ./ -B ./build/ -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake -DCHIP=dsp24
@@ -30,7 +33,7 @@ ocd:
 # Example: make gdb BINARY=build/borai/boraiq.elf
 .PHONY: gdb
 gdb:
-        $(DG) $(BINARY) --eval-command="target extended-remote localhost:3333" --eval-command="monitor reset"
+        $(DG) $(BINARY) --eval-command="target extended-remote localhost:$(PORT)" --eval-command="monitor reset"
 
 # Example: make dump BINARY=build/borai/boraiq.elf
 .PHONY: dump
