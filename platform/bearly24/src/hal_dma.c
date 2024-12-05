@@ -1,6 +1,6 @@
 #include "hal_dma.h"
 
-static DMA_Status get_status(DMA_Type* DMAX) {
+DMA_Status get_status(DMA_Type* DMAX) {
   if (READ_BITS(DMAX->STATUS, DMA_BADMODE_MSK))
     return DMA_BADMODE;
   else if (READ_BITS(DMAX->STATUS, DMA_CNTERR_MSK))
