@@ -38,6 +38,9 @@ typedef enum {
   DMA_DENYW
 } DMA_Status;
 
+/* Returns the DMA_Status value corresponding with the given DMA engine's status register. */
+DMA_Status get_status(DMA_Type* DMAX);
+
 /* Returns whether the given DMA engine's last operation was completed successfully */
 static inline uint8_t dma_operation_complete(DMA_Type* DMAX) {
   return READ_BITS(DMAX->STATUS, DMA_COMPL_MSK) != 0;
