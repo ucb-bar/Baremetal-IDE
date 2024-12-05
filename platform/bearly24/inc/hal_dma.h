@@ -19,6 +19,11 @@ extern "C" {
 #include "metal.h"
 #include "ll_dma.h"
 
+#define DMA0                    ((volatile DMA_Type*) 0x8800000)
+#define DMA1                    ((volatile DMA_Type*) 0x8802000)
+#define DMA2                    ((volatile DMA_Type*) 0x8804000)
+#define DMA3                    ((volatile DMA_Type*) 0x8808000)
+
 typedef enum {
   MODE_COPY = 0x0,
   MODE_MAC  = 0x2
