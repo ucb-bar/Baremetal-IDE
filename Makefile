@@ -43,3 +43,11 @@ dump:
 .PHONY: clean
 clean:
 	rm -rf build
+
+.PHONY: checktsi
+checktsi:
+	uart_tsi +tty=$(TTY) +baudrate=921600 +no_hart0_msip +init_write=0x80001000:0xb0bacafe +init_read=0x80001000 none
+
+.PHONY: tsi
+tsi:
+	uart_tsi +tty=$(TTY) +baudrate=921600 $(BINARY)
