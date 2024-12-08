@@ -59,11 +59,11 @@ SECTIONS {
   PROVIDE(__boot_hart = 0);
   
   /* Default stack size */
-  __stack_size = DEFINED(__stack_size) ? __stack_size : 1K;
+  __stack_size = DEFINED(__stack_size) ? __stack_size : 128M;
   PROVIDE(__stack_size = __stack_size);
 
   /* Default heap size */
-  __heap_size = DEFINED(__heap_size) ? __heap_size : 3K;
+  __heap_size = DEFINED(__heap_size) ? __heap_size : 128M;
   PROVIDE(__heap_size = __heap_size);
   
   /*

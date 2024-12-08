@@ -32,7 +32,6 @@ extern "C" {
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
-#include <ctype.h>
 
 #include "riscv.h"
 
@@ -72,8 +71,8 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 /* USER CODE BEGIN EFP */
-void app_init();
-void app_main();
+void APP_init();
+void APP_main();
 /* USER CODE END EFP */
 
 #ifdef __cplusplus
