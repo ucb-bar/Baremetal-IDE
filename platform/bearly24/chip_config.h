@@ -11,6 +11,7 @@ extern "C" {
 #include "i2c.h"
 #include "uart.h"
 #include "gpio.h"
+#include "pwm.h"
 
 
 // ================================
@@ -37,11 +38,14 @@ extern "C" {
 #define QSPI_FLASH_BASE         0x20000000U
 #define DRAM_BASE               0x80000000U
 #define GPIO_BASE               0x10012000U
+#define PWM_BASE                0x10060000U
+  
 
 /* Peripheral Pointer Definition */
 #define UART0_BASE              (UART_BASE)
-#define UART1_BASE              (UART_BASE+0x00001000U)
-#define GPIOC_BASE              (GPIO_BASE)  
+#define GPIOC_BASE              (GPIO_BASE)
+#define PWM0_BASE                (0x10060000U)
+
 
 /* Peripheral Structure Definition */
 #define RCC                     ((RCC_Type *)RCC_BASE)
@@ -50,8 +54,8 @@ extern "C" {
 #define PLIC                    ((PLIC_Type *)PLIC_BASE)
 #define PLIC_CC                 ((PLIC_ContextControl_Type *)(PLIC_BASE + 0x00200000U))
 #define UART0                   ((UART_Type *)UART0_BASE)
-#define UART1                   ((UART_Type *)UART1_BASE)
 #define GPIOC                   ((GPIO_Type *)GPIOC_BASE)
+#define PWM0                    ((PWM_Type *)PWM0_BASE)
 
 
 #ifdef __cplusplus
