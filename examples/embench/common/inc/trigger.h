@@ -7,30 +7,49 @@
 #include "pmu.h"
 
 // use timer interrupt to trigger the profiler
-#define TIMER_INTERRUPT
+// #define TIMER_INTERRUPT
 // use PMU reading to report the profile
-// #define USE_PMU_READING
+#define USE_PMU_READING
 // use LBR to report the trace
-#define USE_LBR
+// #define USE_LBR
 // report the total time of the benchmark
 #define REPORT_TOTAL_TIME
-// use trace encoder to report the trace
-// #define USE_L_TRACE
+// use trace encoder RTL Print to report the trace
+#define USE_L_TRACE
+// use trace encoder DMA to report the trace
+#define USE_L_TRACE_DMA
+// use trace encoder RTL Print to report the trace
+// #define USE_L_TRACE_PRINT
 
 /* timer interrupt interval in milliseconds 
   only used when TIMER_INTERRUPT is defined
 */
 #define TIMER_INTERRUPT_INTERVAL 100
 
-static inline void start_trigger(void) {
-  #ifdef USE_L_TRACE
-    LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
-    l_trace_encoder_start(encoder);
-  #endif
+#ifdef USE_L_TRACE_DMA
+  static uint8_t dma_buffer[512 * 1024];
+#endif
 
+static inline void start_trigger(void) {
   #ifdef REPORT_TOTAL_TIME
     uint64_t curr_time = clint_get_time(CLINT);
     printf("start trigger at %lld\n", curr_time);
+  #endif
+
+  LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
+  LTraceSinkDmaType *sink_dma = l_trace_sink_dma_get(get_hart_id());
+  
+  #ifdef USE_L_TRACE_DMA
+    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer);
+    l_trace_encoder_configure_target(encoder, TARGET_DMA);
+  #endif
+
+  #ifdef USE_L_TRACE_PRINT
+    l_trace_encoder_configure_target(encoder, TARGET_PRINT);
+  #endif
+
+  #ifdef USE_L_TRACE
+    l_trace_encoder_start(encoder);
   #endif
 
   #ifdef USE_PMU_READING
@@ -88,6 +107,11 @@ static inline void stop_trigger(void) {
   #ifdef REPORT_TOTAL_TIME
     int64_t curr_time = clint_get_time(CLINT);
     printf("stop trigger at %lld\n", curr_time);
+  #endif
+
+  #ifdef USE_L_TRACE_DMA
+    LTraceSinkDmaType *sink_dma = l_trace_sink_dma_get(get_hart_id());
+    l_trace_sink_dma_read(sink_dma, dma_buffer);
   #endif
 }
 
