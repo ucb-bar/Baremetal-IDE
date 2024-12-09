@@ -36,7 +36,8 @@ void pwm_stop(PWM_Type *PWMx, uint32_t idx) {
 void pwm_set_frequency(PWM_Type *PWMx, uint32_t idx, uint32_t freq) {
   // TODO: implementation
   // PWM frequency = System clock / 2^pwmscale
-  uint16_t pwmscale = log2_bitwise(sys_clk_freq / freq);
+  uint16_t pwmscale = (log2_bitwise( (int) (((double) sys_clk_freq / (double) freq))) * 65536); //65535 = 2^16-1
+
   pwm_set_scale(PWMx, pwmscale);
 }
 
@@ -50,7 +51,7 @@ uint32_t pwm_get_frequency(PWM_Type *PWMx, uint32_t idx) {
 void pwm_set_duty_cycle(PWM_Type *PWMx, uint32_t idx, uint32_t duty, int phase_corr) {
   // TODO: implementation
 
-  uint32_t cmpvalue = duty * 655; //pwm_get_frequency(PWMx, idx)
+  uint32_t cmpvalue = duty * ((double) 65535/ (double) 100); //pwm_get_frequency(PWMx, idx)
   pwm_set_compare_value(PWMx, idx, cmpvalue);
 }
 

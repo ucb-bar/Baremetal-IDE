@@ -97,8 +97,8 @@ void app_init() {
     angleStepCountBuffer[i] = 0;
   }
   pwm_enable(PWM0_BASE);
-  pwm_set_frequency(PWM0_BASE, 0, 10000);
-  pwm_set_duty_cycle(PWM0_BASE, 0, 100, 0);
+  pwm_set_frequency(PWM0_BASE, 0, 1000);
+  pwm_set_duty_cycle(PWM0_BASE, 0, 50, 0);
   
 }
 
