@@ -40,10 +40,10 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-#define ANGLE_ENCODER_PIN_A 0
-#define ANGLE_ENCODER_PIN_B 1
-#define MOTOR_ENCODER_PIN_A 2
-#define MOTOR_ENCODER_PIN_B 3
+#define ANGLE_ENCODER_PIN_A 3
+#define ANGLE_ENCODER_PIN_B 2
+#define MOTOR_ENCODER_PIN_A 1
+#define MOTOR_ENCODER_PIN_B 0
 
 #define SIZE      10
 #define MAX_SPEED 50
@@ -97,8 +97,10 @@ void app_init() {
     angleStepCountBuffer[i] = 0;
   }
   pwm_enable(PWM0_BASE);
-  pwm_set_frequency(PWM0_BASE, 0, 1000);
-  pwm_set_duty_cycle(PWM0_BASE, 0, 50, 0);
+  pwm_set_frequency(PWM0_BASE, 0, 444);
+  pwm_get_frequency(PWM0_BASE, 0);
+  //pwm_set_duty_cycle(PWM0_BASE, 0, 1, 1000, 0);
+  pwm_set_duty_cycle(PWM0_BASE, 1, 50, 1000, 0);
   
 }
 
@@ -246,18 +248,18 @@ void app_main() {
 
     if ((ang < 45 && ang > -45) &&
         (motorPosition < 23 && motorPosition > -23)) {
-      set_motor(motor_speed);
+      //set_motor(motor_speed);
     } else {
-      set_motor(0);
+      //set_motor(0);
     }
 
     if (counter == 10000) { //5000
-      printf("motor encoder is %d \r\n", motorPosition);
+      // printf("motor encoder is %d \r\n", motorPosition);
       // printf("angle encoder is %d \r\n", angleStepCount);
-      printf("angle is %7.4f \r\n", ang);
-      printf("pid target is %4.2f \r\n", target);
-      printf("dt is %8.7f \r\n", dt);
-      printf("motor speed is %7.4f \r\n", motor_speed);
+      // printf("angle is %7.4f \r\n", ang);
+      // printf("pid target is %4.2f \r\n", target);
+      // printf("dt is %8.7f \r\n", dt);
+      // printf("motor speed is %7.4f \r\n", motor_speed);
       counter = 0;
     }
   }
