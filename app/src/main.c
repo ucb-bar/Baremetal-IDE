@@ -177,8 +177,10 @@ void readMotorEncoder() {
 }
 
 float calculateAngle(int stepCount) {
-  float rawAngle = (stepCount / encoderCPR) * 360.0 / gearRatio;
-  rawAngle = fmod(rawAngle, 360.0);
+  //printf("angle encoder is %d \r\n", stepCount);
+  float rawAngle = ((float) stepCount / encoderCPR) * (float) (360.0 / gearRatio);
+  //printf("raw angle is %9.4f \r\n", rawAngle);
+  rawAngle = (float) fmod(rawAngle, 360.0);
   if (rawAngle < 0)
     rawAngle += 360.0;
   // Adjust the angle so that the downward position is 180 degrees
@@ -254,12 +256,12 @@ void app_main() {
     }
 
     if (counter == 10000) { //5000
-      // printf("motor encoder is %d \r\n", motorPosition);
-      // printf("angle encoder is %d \r\n", angleStepCount);
-      // printf("angle is %7.4f \r\n", ang);
-      // printf("pid target is %4.2f \r\n", target);
-      // printf("dt is %8.7f \r\n", dt);
-      // printf("motor speed is %7.4f \r\n", motor_speed);
+      printf("motor encoder is %d \r\n", motorPosition);
+      printf("angle encoder is %d \r\n", angleStepCount);
+      printf("angle is %7.4f \r\n", ang);
+      printf("pid target is %4.2f \r\n", target);
+      printf("dt is %8.7f \r\n", dt);
+      printf("motor speed is %7.4f \r\n", motor_speed);
       counter = 0;
     }
   }

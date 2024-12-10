@@ -37,11 +37,11 @@ void pwm_set_frequency(PWM_Type *PWMx, uint32_t idx, uint32_t freq) {
   // TODO: implementation
   // PWM frequency = System clock / 2^pwmscale
   uint16_t pwmscale = (int) (log2_bitwise( (int) (((double) sys_clk_freq / ((double) freq*65535))))) + 1; //65535 = 2^16-1
-  printf("PWM SCALE %d", pwmscale);
+  //printf("PWM SCALE %d", pwmscale);
   pwm_set_scale(PWMx, pwmscale);
 
   uint16_t cmp0 = ((double) sys_clk_freq / (double) freq) / (1<<pwmscale);
-  printf("CMP0 %d", cmp0);
+  //printf("CMP0 %d", cmp0);
   pwm_set_compare_value(PWMx, 0, cmp0);
 }
 
@@ -61,7 +61,7 @@ void pwm_set_duty_cycle(PWM_Type *PWMx, uint32_t idx, uint32_t duty, uint32_t fr
   } else {
     cmpvalue = ((double) duty/100) * PWMx->PWM_CMP0;
   }
-  printf("CMP Value %d", cmpvalue);
+  //printf("CMP Value %d", cmpvalue);
   pwm_set_compare_value(PWMx, idx, cmpvalue);
 }
 
