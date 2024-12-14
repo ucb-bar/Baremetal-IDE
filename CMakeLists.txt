@@ -32,6 +32,7 @@ option(BAREMETAL_BUILD_X86          "Build for x86 platform"                  OF
 option(CHIP                         "Build for a specific platform"           OFF )
 
 option(PROF_COV                     "Build with profiling and coverage"       OFF )
+option(GCNO_ONLY                    "Only build gcno files"                   OFF )
 option(USE_PGO                      "Build with profile guided optimization"  OFF )
 
 #################################
@@ -81,9 +82,15 @@ if (PROF_COV)
   add_compile_options(-fprofile-arcs -ftest-coverage)
 endif()
 
+if (GCNO_ONLY)
+  message(STATUS "Building only gcno files")
+  add_compile_options(-ftest-coverage)
+endif()
+
 if (USE_PGO)
   add_compile_options(-fprofile-use)
 endif()
+add_compile_options(-fno-builtin)
 
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
@@ -97,9 +104,12 @@ add_link_options(-nostartfiles)
 add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
 add_link_options(-T ${LINKER_SCRIPT})
+# add_link_options(-rtlib=compiler-rt)
+# add_link_options(-Wl,--rtlib-path=/scratch/iansseijelly/riscv-llvm-install/lib/linux/libclang_rt.builtins-riscv64.a)
 if (PROF_COV)
   add_link_options(-lgcov)
 endif()
+
 
 
 
@@ -112,6 +122,10 @@ add_executable(app
 )
 
 target_include_directories(app PUBLIC app/include)
+
+# add std lib path
+include_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/include)
+link_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/lib)
 
 
 #################################

@@ -1,4 +1,17 @@
 # Define the list of benchmarks
+option (EMBENCH_ENABLE_TRACE_PRINT "Enable trace print for benchmarks" OFF)
+option (EMBENCH_ENABLE_TRACE_DMA "Enable trace dma for benchmarks" OFF)
+
+if (EMBENCH_ENABLE_TRACE_PRINT)
+    add_definitions(-DUSE_L_TRACE)
+    add_definitions(-DUSE_L_TRACE_PRINT)
+endif()
+
+if (EMBENCH_ENABLE_TRACE_DMA)
+    add_definitions(-DUSE_L_TRACE)
+    add_definitions(-DUSE_L_TRACE_DMA)
+endif()
+
 set(BENCHMARKS
     dummy
     wikisort
