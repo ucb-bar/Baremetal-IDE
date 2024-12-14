@@ -43,6 +43,9 @@ trap_vector:
   SREG x30, 30*REGBYTES(sp)
   SREG x31, 31*REGBYTES(sp)
 
+  /* disable LBR during the trap */
+  csrrci a0, 0x401, 0x02
+
   /* Invoke higher-level trap handler */
   csrr a0, mepc
   csrr a1, mcause
@@ -50,6 +53,9 @@ trap_vector:
   mv a3, sp
   call trap_handler
   csrw mepc, a0
+
+  /* restore LBR after the trap */
+  csrrsi a0, 0x401, 0x02
 
   /* Remain in M-mode after return */
   li t0, MSTATUS_MPP

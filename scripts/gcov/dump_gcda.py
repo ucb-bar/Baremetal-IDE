@@ -1,6 +1,5 @@
 import re
 import os
-
 import argparse
 
 # Regular expressions to match file path and hex data lines
