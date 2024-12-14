@@ -4,12 +4,13 @@ set (TESTS
   pmu-test-inhibit
   lbr-test
   ltrace-dma-test
+  sort
 )
 
 foreach(test ${TESTS})
   add_executable(${test} src/${test}.c)
   target_link_libraries(${test} 
-    PUBLIC l_trace_encoder
+  PUBLIC l_trace_encoder 
   PRIVATE -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive
   )
 endforeach()
