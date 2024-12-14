@@ -9,15 +9,15 @@
 // use timer interrupt to trigger the profiler
 // #define TIMER_INTERRUPT
 // use PMU reading to report the profile
-#define USE_PMU_READING
+// #define USE_PMU_READING
 // use LBR to report the trace
 // #define USE_LBR
 // report the total time of the benchmark
 #define REPORT_TOTAL_TIME
 // use trace encoder RTL Print to report the trace
-#define USE_L_TRACE
+// #define USE_L_TRACE
 // use trace encoder DMA to report the trace
-#define USE_L_TRACE_DMA
+// #define USE_L_TRACE_DMA
 // use trace encoder RTL Print to report the trace
 // #define USE_L_TRACE_PRINT
 

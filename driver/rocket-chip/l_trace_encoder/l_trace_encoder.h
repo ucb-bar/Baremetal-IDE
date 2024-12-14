@@ -1,6 +1,8 @@
 #ifndef __L_TRACE_ENCODER_H
 #define __L_TRACE_ENCODER_H
 
+#include <stdio.h>
+
 #include "metal.h"
 #include "rocketcore.h"
 
