@@ -75,7 +75,8 @@ popd
 # post-process the sampled LBR record
 pushd /scratch/iansseijelly/chipyard/software/baremetal-ide/scripts/test_all/test 
 python3 /scratch/iansseijelly/chipyard/software/baremetal-ide/scripts/perf/dump_lbr.py /scratch/iansseijelly/chipyard/software/baremetal-ide/scripts/test_all/test/sample-lbr-vanilla.log
-/scratch/iansseijelly/autofdo/build/create_gcov --binary /scratch/iansseijelly/chipyard/software/baremetal-ide/build/examples/embench/wikisort.elf --profile /scratch/iansseijelly/chipyard/software/baremetal-ide/scripts/perf/lbr_branch.txt --profiler text --gcov_version=2
+mv ./lbr_branch.txt $HERE/test/lbr_sampling_branch.txt
+/scratch/iansseijelly/autofdo/build/create_gcov --binary /scratch/iansseijelly/chipyard/software/baremetal-ide/build/examples/embench/wikisort.elf --profile $HERE/test/lbr_sampling_branch.txt --profiler text --gcov_version=2
 popd
 
 # perform LBR AutoFDO
