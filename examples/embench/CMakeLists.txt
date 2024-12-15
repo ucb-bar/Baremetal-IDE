@@ -12,6 +12,11 @@ if (EMBENCH_ENABLE_TRACE_DMA)
     add_definitions(-DUSE_L_TRACE_DMA)
 endif()
 
+if (EMBENCH_ENABLE_LBR)
+    add_definitions(-DTIMER_INTERRUPT)
+    add_definitions(-DUSE_LBR)
+endif()
+
 set(BENCHMARKS
     dummy
     wikisort

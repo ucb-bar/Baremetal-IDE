@@ -34,7 +34,8 @@ option(CHIP                         "Build for a specific platform"           OF
 option(PROF_COV                     "Build with profiling and coverage"       OFF )
 option(GCNO_ONLY                    "Only build gcno files"                   OFF )
 option(USE_PGO                      "Build with profile guided optimization"  OFF )
-
+# Define the variable with a default empty value
+set(AFDO_PATH "" CACHE STRING "Path to autofdo profile data")
 #################################
 # Toolchain Targets
 #################################
@@ -92,6 +93,12 @@ if (USE_PGO)
 endif()
 add_compile_options(-fno-builtin)
 
+# Check if the variable is not empty and add compiler options accordingly
+if(NOT "${AFDO_PATH}" STREQUAL "")
+    message(STATUS "Using AutoFDO profile from: ${AFDO_PATH}")
+    add_compile_options(-fauto-profile=${AFDO_PATH})
+endif()
+
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
 add_compile_options(${ARCH_FLAGS})
@@ -110,9 +117,6 @@ if (PROF_COV)
   add_link_options(-lgcov)
 endif()
 
-
-
-
 #################################
 # Build
 #################################
@@ -126,7 +130,6 @@ target_include_directories(app PUBLIC app/include)
 # add std lib path
 include_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/include)
 link_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/lib)
-
 
 #################################
 # Dependencies
