@@ -32,6 +32,8 @@ extern "C" {
 #define CACHE_CONTROLLER_BASE   0x02010000U
 #define SCRATCH_BASE            0x08000000U
 #define PLIC_BASE               0x0C000000U
+#define CLOCK_SELECTOR_BASE     0x00130000U
+#define PLL_BASE                0x00140000U
 #define UART_BASE               0x10020000U
 #define QSPI_FLASH_BASE         0x20000000U
 #define DRAM_BASE               0x80000000U
@@ -41,6 +43,7 @@ extern "C" {
 
 /* Peripheral Structure Definition */
 #define RCC                     ((RCC_Type *)RCC_BASE)
+#define CLOCK_SELECTOR          ((ClockSel_Type*)CLOCK_SELECTOR_BASE)
 #define PLL                     ((PLL_Type *)PLL_BASE)
 #define CLINT                   ((CLINT_Type *)CLINT_BASE)
 #define PLIC                    ((PLIC_Type *)PLIC_BASE)
