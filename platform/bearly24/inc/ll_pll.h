@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include "metal.h"
+
 typedef struct {
   __IO uint32_t SEL;                                    // 0x00
 } ClockSel_Type;
