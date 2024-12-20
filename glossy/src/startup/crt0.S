@@ -167,10 +167,8 @@ bss_init_loop:
 
 bss_init_exit:
 
-  /* Call global constructors */
-  la a0, __libc_fini_array
+  /* Register cleanup function if the program ever exits */
   call atexit
-  call __libc_init_array
 
 _start_primary:
   /* Call main function */
