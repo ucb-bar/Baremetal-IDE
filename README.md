@@ -7,7 +7,10 @@
 > **WARNING⚠️**
 > Baremetal-IDE is still under heavy development at the moment, so we don't guarantee the stability and backward-compatibility among versions.
 
-Baremetal-IDE is an all-in-one tool for baremetal-level C/C++ program developments. It is part of the Chipyard ecosystem.
+Baremetal-IDE is an all-in-one tool for baremetal-level C program developments. It is part of the Chipyard ecosystem.
+
+> **NOTE**
+> The scope of Baremetal-IDE is reduced to only support C programming language without C++ support. To use advanced object-oriented programming and other high-level features, please consider the soon coming Rust port, [Baremetal-RS]().
 
 Baremetal-IDE features peripheral configuration, code generation, code compilation, and debugging tools for multiple RISC-V SoCs. With the board support package, user can use either the hardware-abstraction layer (HAL) functions to quickly configure and use the various supported peripheral devices, or can use the low-level (LL) macro definitions to generate code with minimal memory footprint and high performance. The modularity of the framework structure also allows fast integration of new SoCs. 
 
