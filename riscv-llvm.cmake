@@ -2,19 +2,19 @@
 # RISCV Toolchain
 #################################
 option(RISCV                "Build for RISC-V"                  ON)
-option(USE_LLVM              "Use LLVM toolchain"                 ON)
+
 set(CMAKE_SYSTEM_NAME       "Generic" CACHE STRING "")
 set(CMAKE_SYSTEM_PROCESSOR  "riscv"   CACHE STRING "")
 
 set(TOOLCHAIN_PREFIX        "riscv64-unknown-elf-")
 
-set(MYRISCV                 "/scratch/iansseijelly/riscv-toolchain-build")
+set(MYRISCV                 "/scratch/iansseijelly/riscv-llvm-install")
 
 set(CMAKE_AR                "llvm-ar")
 set(CMAKE_ASM_COMPILER      "${MYRISCV}/bin/clang")
 set(CMAKE_C_COMPILER        "${MYRISCV}/bin/clang")
 set(CMAKE_CXX_COMPILER      "${MYRISCV}/bin/clang++")
-set(CMAKE_LINKER            "lld")
+set(CMAKE_LINKER            "${MYRISCV}/bin/lld")
 set(CMAKE_OBJCOPY           "llvm-objcopy")
 set(CMAKE_OBJDUMP           "llvm-objdump")
 set(CMAKE_SIZE              "llvm-size")
