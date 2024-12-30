@@ -56,7 +56,7 @@ popd
 # must not remove build directory, as .gcda files are needed
 # perform trace PGO
 echo "--- Performing trace PGO ---"
-cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake -D PROF_COV=OFF -D USE_PGO=ON
+cmake -S ./ -B ./build/ -D CMAKE_BUILD_TYPE=Debug PROF_COV=OFF -D USE_PGO=ON -D EMBENCH_ENABLE_TRACE_PRINT=ON -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake
 cmake --build ./build/ --target wikisort
 pushd /scratch/iansseijelly/chipyard/sims/vcs
 make run-binary CONFIG=WithLTraceEncoderRocketConfig BINARY=/scratch/iansseijelly/chipyard/software/baremetal-ide/build/examples/embench/wikisort.elf LOADMEM=1
