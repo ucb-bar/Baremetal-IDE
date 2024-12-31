@@ -41,8 +41,14 @@ static inline LTraceSinkDmaType *l_trace_sink_dma_get(uint32_t hart_id) {
   return (LTraceSinkDmaType *)(L_TRACE_SINK_DMA_BASE_ADDRESS + hart_id * 0x1000);
 }
 
-void l_trace_encoder_start(LTraceEncoderType *encoder);
-void l_trace_encoder_stop(LTraceEncoderType *encoder);
+static inline void l_trace_encoder_start(LTraceEncoderType *encoder) {
+  SET_BITS(encoder->TR_TE_CTRL, 0x1 << 1);
+}
+
+static inline void l_trace_encoder_stop(LTraceEncoderType *encoder) {
+  CLEAR_BITS(encoder->TR_TE_CTRL, 0x1 << 1);
+}
+
 void l_trace_encoder_configure_target(LTraceEncoderType *encoder, uint64_t target);
 void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, uint64_t dma_addr);
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer);
