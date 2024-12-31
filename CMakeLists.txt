@@ -34,7 +34,9 @@ option(CHIP                         "Build for a specific platform"           OF
 option(PROF_COV                     "Build with profiling and coverage"       OFF )
 option(GCNO_ONLY                    "Only build gcno files"                   OFF )
 option(USE_PGO                      "Build with profile guided optimization"  OFF )
-
+option(OPT_INFO                     "Build with optimization information"      OFF )
+# Define the variable with a default empty value
+set(AFDO_PATH "" CACHE STRING "Path to autofdo profile data")
 #################################
 # Toolchain Targets
 #################################
@@ -74,8 +76,9 @@ endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 
-add_compile_options(-O1)
+add_compile_options(-O0)
 add_compile_options(-Wall -Wextra)
+add_compile_options(-Wno-error=coverage-mismatch)
 
 if (PROF_COV)
   message(STATUS "Building with profiling and coverage")
@@ -90,7 +93,16 @@ endif()
 if (USE_PGO)
   add_compile_options(-fprofile-use)
 endif()
-add_compile_options(-fno-builtin)
+
+if (OPT_INFO)
+  add_compile_options(-fopt-info)
+endif()
+
+# Check if the variable is not empty and add compiler options accordingly
+if(NOT "${AFDO_PATH}" STREQUAL "")
+    message(STATUS "Using AutoFDO profile from: ${AFDO_PATH}")
+    add_compile_options(-fauto-profile=${AFDO_PATH})
+endif()
 
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
@@ -110,9 +122,6 @@ if (PROF_COV)
   add_link_options(-lgcov)
 endif()
 
-
-
-
 #################################
 # Build
 #################################
@@ -126,7 +135,6 @@ target_include_directories(app PUBLIC app/include)
 # add std lib path
 include_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/include)
 link_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/lib)
-
 
 #################################
 # Dependencies
