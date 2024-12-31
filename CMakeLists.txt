@@ -76,7 +76,7 @@ endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 
-add_compile_options(-O2)
+add_compile_options(-O0)
 add_compile_options(-Wall -Wextra)
 add_compile_options(-Wno-error=coverage-mismatch)
 

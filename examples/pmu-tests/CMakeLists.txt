@@ -4,7 +4,7 @@ set (TESTS
   pmu-test-inhibit
   lbr-test
   ltrace-dma-test
-  trig-sin
+  speedscope-test
   sort
 )
 
