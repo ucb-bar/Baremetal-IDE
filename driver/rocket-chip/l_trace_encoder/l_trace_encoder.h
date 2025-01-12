@@ -9,6 +9,8 @@
 typedef struct {
   uint32_t TR_TE_CTRL;
   uint32_t TR_TE_TARGET;
+  uint32_t TR_TE_HPM_COUNTER;
+  uint32_t TR_TE_HPM_TIME;
 } LTraceEncoderType;
 
 typedef struct {
@@ -52,4 +54,6 @@ static inline void l_trace_encoder_stop(LTraceEncoderType *encoder) {
 void l_trace_encoder_configure_target(LTraceEncoderType *encoder, uint64_t target);
 void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, uint64_t dma_addr);
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer);
+void l_trace_encoder_configure_hpm_counter_en(LTraceEncoderType *encoder, uint32_t hpm_counter);
+void l_trace_encoder_configure_hpm_counter_time(LTraceEncoderType *encoder, uint32_t time);
 #endif /* __L_TRACE_ENCODER_H */
