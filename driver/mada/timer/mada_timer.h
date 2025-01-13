@@ -14,7 +14,6 @@ register map
 0x18: capture and control 2 (rw)
 0x1c: capture and control 3 (rw)
 */
-
 typedef struct {
     uint32_t MD_TM_CSR;
     uint32_t MD_TM_COUNTER_VAL;
