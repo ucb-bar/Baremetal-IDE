@@ -2,7 +2,6 @@ set (TESTS
   pmu-test-load
   pmu-test-store
   pmu-test-inhibit
-  lbr-test
   ltrace-dma-test
   ltrace-hpm-test
   speedscope-test

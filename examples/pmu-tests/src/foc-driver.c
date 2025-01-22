@@ -9,8 +9,9 @@
 #define NUM_SAMPLES 60 // 0 to 2pi, 60 steps
 
 #define BUS_VOLTAGE 3.3f // 3V3
-#define SOC_FREQ 25 // 25 MHz
-#define TIMER_PRESCALER 1000 // x cycle is 1 timer tick
+#define SOC_FREQ 25000000 // 25 MHz
+#define TIMER_FREQ 1000 // 1000 Hz
+#define TIMER_PRESCALER (SOC_FREQ / TIMER_FREQ)
 #define TIMER_AUTORELOAD 1000 // x timer ticks up + x timer ticks down = 1 pwm cycle
 
 void FOC_invParkTransform(float *v_alpha, float *v_beta, float v_q, float v_d, float sin_theta, float cos_theta) {
