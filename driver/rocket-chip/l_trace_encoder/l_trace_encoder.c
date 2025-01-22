@@ -18,15 +18,14 @@ void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer) {
   printf("\n");
 }
 
-void l_trace_encoder_start(LTraceEncoderType *encoder) {
-  SET_BITS(encoder->TR_TE_CTRL, 0x1 << 1);
-}
-
 void l_trace_encoder_configure_target(LTraceEncoderType *encoder, uint64_t target) {
   encoder->TR_TE_TARGET = target;
 }
 
-void l_trace_encoder_stop(LTraceEncoderType *encoder) {
-  CLEAR_BITS(encoder->TR_TE_CTRL, 0x1 << 1);
+void l_trace_encoder_configure_hpm_counter_en(LTraceEncoderType *encoder, uint32_t hpm_counter) {
+  encoder->TR_TE_HPM_COUNTER = hpm_counter;
 }
 
+void l_trace_encoder_configure_hpm_counter_time(LTraceEncoderType *encoder, uint32_t time) {
+  encoder->TR_TE_HPM_TIME = time;
+}
