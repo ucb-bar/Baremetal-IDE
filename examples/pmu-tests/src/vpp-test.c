@@ -3,7 +3,7 @@
 #include "riscv_encoding.h"
 #include "l_trace_encoder.h"
 #include "math.h"
-#include "mada_timer.h"
+// #include "mada_timer.h"
 
 #define NUM_ITERS 60 // 0 to 2pi, 60 steps
 
