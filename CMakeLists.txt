@@ -134,10 +134,6 @@ add_executable(app
 
 target_include_directories(app PUBLIC app/include)
 
-# add std lib path
-include_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/include)
-link_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/lib)
-
 #################################
 # Dependencies
 #################################
