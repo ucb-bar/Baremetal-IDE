@@ -46,7 +46,7 @@
 #define MOTOR_ENCODER_PIN_B 0
 
 #define SIZE      10
-#define MAX_SPEED 50
+#define MAX_SPEED 10
 
 volatile int angleStepCount = 0;
 volatile uint8_t angleLastEncoded = 0;
@@ -59,7 +59,7 @@ long motorPositionBuffer[SIZE];
 long angleStepCountBuffer[SIZE];
 int bufferIndex = 0;
 float angularSpeed;
-const float encoderCPR = 8192;
+const float encoderCPR = 192;
 const float gearRatio = 1.0;
 volatile float ang = 0.0;
 uint64_t curr_time = 0;
@@ -70,7 +70,16 @@ volatile float last_theta = 0.0;
 volatile float x_dot;
 volatile float theta_dot;
 volatile float target;
-volatile float motor_speed = 0;
+volatile float motor_speed = 0.0;
+uint8_t zero_buffer[11] = "v 0 0.0000\n";
+uint8_t data_buffer[11] = "v 0 0.0000\n";
+uint8_t long_data_buffer[34] = "w axis0.controller.input_pos 0.00\n";
+uint8_t clear_errors[3]= {'s', 'v', '\n'};
+uint8_t state_control[26]= "w axis0.requested_state 8\n";
+uint8_t mode_control[41]= "w axis0.controller.config.control_mode 2\n";
+uint8_t read_state[24]= "r axis0.requested_state\n";
+uint8_t read_state2[24]= "00000000000000000000000\n";
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -87,20 +96,46 @@ void app_init() {
   gpio_init_config.pull = GPIO_PULL_NONE;
   gpio_init_config.drive_strength = GPIO_DS_STRONG;
 
+  GPIO_InitType gpio2_init_config;
+  gpio2_init_config.mode = GPIO_MODE_OUTPUT;
+  gpio_init_config.pull = GPIO_PULL_NONE;
+  gpio_init_config.drive_strength = GPIO_DS_STRONG;
+
   gpio_init(GPIOC, &gpio_init_config, GPIO_PIN_0);
+  gpio_init(GPIOA, &gpio2_init_config, GPIO_PIN_1);
+  gpio_init(GPIOC, &gpio_init_config, GPIO_PIN_1);
   gpio_init(GPIOC, &gpio_init_config, GPIO_PIN_2);
   gpio_init(GPIOC, &gpio_init_config, GPIO_PIN_3);
-  gpio_init(GPIOC, &gpio_init_config, GPIO_PIN_4);
   for (int i = 0; i < size; i++) {
     // timeBuffer[i] = *CLINT_MTIME; CLINT->MTIME
     motorPositionBuffer[i] = 0;
     angleStepCountBuffer[i] = 0;
   }
+  //uart_transmit(UART1, clear_errors, 3, 100000);
+  //uart_transmit(UART1, read_state, 24, 100000);
+  //uart_receive(UART1, read_state2, 24, 100000);
+  //printf(read_state2);
+  //uart_transmit(UART1, mode_control, 41, 100000);
+  //msleep(300);
+  //uart_transmit(UART1, clear_errors, 3, 1000000);
   pwm_enable(PWM0_BASE);
-  pwm_set_frequency(PWM0_BASE, 0, 444);
+  pwm_set_frequency(PWM0_BASE, 0, 1000);
   pwm_get_frequency(PWM0_BASE, 0);
-  //pwm_set_duty_cycle(PWM0_BASE, 0, 1, 1000, 0);
+  //pwm_set_duty_cycle(PWM0_BASE, 0, 50, 1000, 0);
   pwm_set_duty_cycle(PWM0_BASE, 1, 50, 1000, 0);
+
+  // CLOCK_SELECTOR->SEL = 0;
+  // PLL->PLLEN = 0;
+  // PLL->MDIV_RATIO = 1;
+  // PLL->RATIO = 10;  // 500MHz
+  // PLL->FRACTION = 0;
+  // PLL->ZDIV0_RATIO = 1;
+  // PLL->ZDIV1_RATIO = 1;
+  // PLL->LDO_ENABLE = 1;
+  // PLL->PLLEN = 1;
+  // PLL->POWERGOOD_VNN = 1;
+  // PLL->PLLFWEN_B = 1;
+  // CLOCK_SELECTOR->SEL = 1;
   
 }
 
@@ -113,7 +148,7 @@ uint8_t readGPIO(int pin) {
     }
   }
   if (pin == 1) {
-    if (gpio_read_pin(GPIOC, GPIO_PIN_4) == 1) {
+    if (gpio_read_pin(GPIOC, GPIO_PIN_1) == 1) {
       return 1;
     } else {
       return 0;
@@ -138,10 +173,10 @@ uint8_t readGPIO(int pin) {
 
 void readAngleEncoder() {
   volatile uint8_t pinA = readGPIO(ANGLE_ENCODER_PIN_A);
-  // printf("Angle pinA %d \r\n", pinA);
+  //printf("Angle pinA %d \r\n", pinA);
   // fflush(stdout);
   volatile uint8_t pinB = readGPIO(ANGLE_ENCODER_PIN_B);
-  // printf("Angle pinB %d \r\n", pinB);
+  //printf("Angle pinB %d \r\n", pinB);
   // fflush(stdout);
   uint8_t encoded = (pinA << 1) | pinB;
   uint8_t sum = (angleLastEncoded << 2) | encoded;
@@ -184,7 +219,7 @@ float calculateAngle(int stepCount) {
   if (rawAngle < 0)
     rawAngle += 360.0;
   // Adjust the angle so that the downward position is 180 degrees
-  float adjustedAngle = rawAngle + 180.0;
+  float adjustedAngle = rawAngle;
   if (adjustedAngle >= 360.0)
     adjustedAngle -= 360.0;
   // Convert to -180 to 180 range
@@ -211,21 +246,33 @@ void update_state() {
 
 float pd_controller(float curr_theta, float curr_x, float curr_dtheta,
                     float curr_dx) {
-  const float kp_theta = -0.012;
+  const float kp_theta = 15;
   // const float kd_theta = -0.015;
-  const float kd_theta = -0.0012;
-  const float kp_x = 0.0024;
+  const float kd_theta = 2;
+  const float kp_x = 0.001; //0.001;
   // const float kd_x = -0.01;
-  const float kd_x = 0.0008;
+  const float kd_x = 0.00001;
+  //const float ki_x = -0.05;
 
   float p_term_theta = kp_theta * (-curr_theta);
   float d_term_theta = kd_theta * curr_dtheta;
 
   float p_term_x = kp_x * (-curr_x);
+  //float i_term_x = ki_x * (motorPosition);
   float d_term_x = kd_x * curr_dx;
 
   float control_output_theta = p_term_theta - d_term_theta;
   float control_output_x = p_term_x - d_term_x;
+
+  if (counter == 1000) {
+    printf("p_theta is %4.2f \r\n", p_term_theta);
+    printf("p_err is %7.5f \r\n", (motor_speed-curr_dx));
+    //printf("d_theta is %7.6f \r\n", d_term_theta);
+    printf("p_x is %4.2f \r\n", p_term_x);
+    //printf("d_x is %7.6f \r\n", d_term_x);
+    //printf("theta_control is %4.2f \r\n", control_output_theta);
+    //printf("x_control is %4.2f \r\n", control_output_x);
+  }
 
   return control_output_theta + control_output_x;
 }
@@ -233,12 +280,26 @@ float pd_controller(float curr_theta, float curr_x, float curr_dtheta,
 void set_motor(float speed) {
   speed = speed > MAX_SPEED ? MAX_SPEED : speed;
   speed = speed < -MAX_SPEED ? -MAX_SPEED : speed;
-  //pwm_set_duty_cycle(PWM0_BASE, 0, speed, 0);
+  motor_speed = speed;
+  if (speed == 0) {
+    uart_transmit(UART1, zero_buffer, 11, 10000);
+    //printf("0 Speed");
+    //pwm_set_duty_cycle(PWM0_BASE, 0, speed, 0);
+  } else {
+    //printf("input speed");
+    gcvt(speed/250, 3, long_data_buffer+29);
+    gcvt(speed, 6, data_buffer+4);
+    long_data_buffer[33] = '\n';
+    data_buffer[10] = '\n';
+    uart_transmit(UART1, data_buffer, 11, 10000);
+    //pwm_set_duty_cycle(PWM0_BASE, 0, speed, 0);
+  }
 }
 
 void app_main() {
   last_time = CLINT->MTIME;
   while (1) {
+    gpio_write_pin(GPIOA, GPIO_PIN_1, 0);
     readMotorEncoder();
     readAngleEncoder();
     counter++;
@@ -246,21 +307,25 @@ void app_main() {
     update_state();
     float fmotorPosition = (float) motorPosition;
     target = pd_controller(ang, fmotorPosition, theta_dot, x_dot);
+    //printf("motor speed is %7.4f \r\n", motor_speed);
     motor_speed = motor_speed + dt * target;
 
-    if ((ang < 45 && ang > -45) &&
-        (motorPosition < 23 && motorPosition > -23)) {
-      //set_motor(motor_speed);
+    if ((ang < 0.0 && ang > -0.75)) {
+      set_motor(0);
+      motor_speed = 0;
+      //fmotorPosition = 0.0;
+      //target = 0;
+      //motorPosition = 0;
     } else {
-      //set_motor(0);
+      set_motor(motor_speed);
     }
 
-    if (counter == 10000) { //5000
+    if (counter == 1000) { //5000
       printf("motor encoder is %d \r\n", motorPosition);
-      printf("angle encoder is %d \r\n", angleStepCount);
+      //printf("angle encoder is %d \r\n", angleStepCount);
       printf("angle is %7.4f \r\n", ang);
-      printf("pid target is %4.2f \r\n", target);
-      printf("dt is %8.7f \r\n", dt);
+      //printf("pid target is %4.2f \r\n", target);
+      //printf("dt is %8.7f \r\n", dt);
       printf("motor speed is %7.4f \r\n", motor_speed);
       counter = 0;
     }
@@ -286,6 +351,13 @@ int main(int argc, char **argv) {
   UART0_init_config.mode = UART_MODE_TX_RX;
   UART0_init_config.stopbits = UART_STOPBITS_2;
   uart_init(UART0, &UART0_init_config);
+
+  UART_InitType UART1_init_config;
+  UART1_init_config.baudrate = 115200;
+  UART1_init_config.mode = UART_MODE_TX_RX;
+  UART1_init_config.stopbits = UART_STOPBITS_1;
+  //UART1_init_config.stopbits = UART_STOPBITS_2;
+  uart_init(UART1, &UART1_init_config);
 
   // Initialize PWM0 for Motor Control
   PWM_InitType PWM_init_config;
