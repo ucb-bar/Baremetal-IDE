@@ -7,17 +7,19 @@
 #include "rocketcore.h"
 
 typedef struct {
-  uint32_t TR_TE_CTRL;
-  uint32_t TR_TE_TARGET;
-  uint32_t TR_TE_HPM_COUNTER;
-  uint32_t TR_TE_HPM_TIME;
+  __IO uint32_t TR_TE_CTRL; //0x00
+  __I uint32_t TR_TE_INFO; //0x04
+  __IO uint32_t TR_TE_BUBBLE[6]; //0x08-0x1C
+  __IO uint32_t TR_TE_TARGET; //0x20
+  __IO uint32_t TR_TE_HPM_COUNTER; //0x24
+  __IO uint32_t TR_TE_HPM_TIME; //0x28
 } LTraceEncoderType;
 
 typedef struct {
-  uint32_t TR_SK_DMA_FLUSH;
-  uint32_t TR_SK_DMA_FLUSH_DONE;
-  uint64_t TR_SK_DMA_ADDR;
-  uint64_t TR_SK_DMA_COUNT;
+  __IO uint32_t TR_SK_DMA_FLUSH;
+  __I uint32_t TR_SK_DMA_FLUSH_DONE;
+  __IO uint64_t TR_SK_DMA_ADDR;
+  __I uint64_t TR_SK_DMA_COUNT;
 } LTraceSinkDmaType;
 
 #define TARGET_PRINT 0x0

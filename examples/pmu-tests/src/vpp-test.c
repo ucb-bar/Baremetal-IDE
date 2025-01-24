@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
   for (int i = 0; i < NUM_ITERS; i++) {
     float vq = 2 * M_PI * i / NUM_ITERS;
     float vd = 0;
-    float v_alpha, v_beta, v_a, v_b, v_c;
+    volatile float v_a, v_b, v_c;
     for (int j = 0; j < 2; j++) {
       FOC_update(&v_a, &v_b, &v_c, vq, vd);
     }
