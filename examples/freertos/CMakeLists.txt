@@ -35,6 +35,7 @@ if (USE_FREERTOS)
   target_link_libraries(freertos_demo
     PUBLIC freertos_kernel freertos_config
     PUBLIC chip-config
+    PUBLIC l_trace_encoder
   )
 
   target_link_libraries(freertos_demo PRIVATE 

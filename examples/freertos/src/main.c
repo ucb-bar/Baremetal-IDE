@@ -27,6 +27,7 @@
 /* FreeRTOS kernel includes. */
 #include <FreeRTOS.h>
 #include <task.h>
+#include "l_trace_encoder.h"
 
 /* Run a simple demo just prints 'Blink' */
 #define DEMO_BLINKY    1
@@ -52,13 +53,23 @@ int main( void )
 {
     int ret;
 
+    printf("Hello, world from main!\n");
+
     prvSetupSpike();
+
+    // LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
+    // l_trace_encoder_configure_target(encoder, TARGET_PRINT);
+    // l_trace_encoder_start(encoder);
+
+    printf("Hello, world from main2!\n");
 
     #if defined( DEMO_BLINKY )
         ret = main_blinky();
     #else
     #error "Please add or select demo."
     #endif
+
+    // l_trace_encoder_stop(encoder);
 
     return ret;
 }

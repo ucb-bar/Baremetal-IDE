@@ -39,7 +39,7 @@
 
 /* The rate at which data is sent to the queue.  The 200ms value is converted
  * to ticks using the pdMS_TO_TICKS() macro. */
-#define mainQUEUE_SEND_FREQUENCY_MS        pdMS_TO_TICKS( 1000 )
+#define mainQUEUE_SEND_FREQUENCY_MS        pdMS_TO_TICKS( 1 )
 
 /* The maximum number items the queue can hold.  The priority of the receiving
  * task is above the priority of the sending task, so the receiving task will
@@ -53,6 +53,10 @@
 
 /* The queue used by both tasks. */
 static QueueHandle_t xQueue = NULL;
+// static volatile BaseType_t xTasksCompleted = pdFALSE;
+
+// #define NUM_ITERS 10
+// static int iter_count = 0;
 
 /*-----------------------------------------------------------*/
 
@@ -84,6 +88,12 @@ static void prvQueueSendTask( void * pvParameters )
          * it shouldn't need to block as the queue should always be empty at
          * this point in the code. */
         xQueueSend( xQueue, &ulValueToSend, 0U );
+
+        // iter_count++;
+        // if (iter_count >= NUM_ITERS) {
+        //     xTasksCompleted = pdTRUE;
+        //     vTaskSuspend(NULL);
+        // }
     }
 }
 
@@ -109,13 +119,22 @@ static void prvQueueReceiveTask( void * pvParameters )
                  pcTaskGetName( xTaskGetCurrentTaskHandle() ),
                  ulReceivedValue );
         vSendString( buf );
+
+        // iter_count++;
+        // if (iter_count >= NUM_ITERS) {
+        //     xTasksCompleted = pdTRUE;
+        //     vTaskSuspend(NULL);
+        // }
     }
 }
 
 /*-----------------------------------------------------------*/
 
+
 int main_blinky( void )
 {
+    printf("Hello, world from blinky!\n");
+
     vSendString( "Hello FreeRTOS!" );
 
     /* Create the queue. */

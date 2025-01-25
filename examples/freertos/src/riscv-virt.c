@@ -48,15 +48,18 @@ void vSendString( const char *s )
 {
 	portENTER_CRITICAL();
 
-	if (use_htif) {
-		while (*s) {
-      htif_syscall(0, (uintptr_t)s, 1, FESVR_write);
-			// htif_putc(*s);
-			s++;
-		}
-    htif_syscall(0, (uintptr_t)"\n", 1, FESVR_write);
-		// htif_putc('\n');
-	}
+	printf("%s\n", s);
+
+	// if (use_htif) {
+	// 	while (*s) {
+  //     htif_syscall(0, (uintptr_t)s, 1, FESVR_write);
+	// 		// htif_putc(*s);
+	// 		s++;
+	// 	}
+  //   htif_syscall(0, (uintptr_t)"\n", 1, FESVR_write);
+	// 	// htif_putc('\n');
+	// }
+	// htif_syscall(0, (uintptr_t)"\n", 1, FESVR_write);
 
 	portEXIT_CRITICAL();
 }
