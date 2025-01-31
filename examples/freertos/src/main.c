@@ -32,6 +32,8 @@
 /* Run a simple demo just prints 'Blink' */
 #define DEMO_BLINKY    1
 
+#define USE_TRACE 1
+
 extern void freertos_risc_v_trap_handler( void );
 
 void vApplicationMallocFailedHook( void );
@@ -53,15 +55,12 @@ int main( void )
 {
     int ret;
 
-    printf("Hello, world from main!\n");
-
     prvSetupSpike();
-
-    // LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
-    // l_trace_encoder_configure_target(encoder, TARGET_PRINT);
-    // l_trace_encoder_start(encoder);
-
-    printf("Hello, world from main2!\n");
+    #ifdef USE_TRACE
+        LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
+        l_trace_encoder_configure_target(encoder, TARGET_PRINT);
+        l_trace_encoder_start(encoder);
+    #endif
 
     #if defined( DEMO_BLINKY )
         ret = main_blinky();
@@ -69,7 +68,9 @@ int main( void )
     #error "Please add or select demo."
     #endif
 
-    // l_trace_encoder_stop(encoder);
+    #ifdef USE_TRACE
+        l_trace_encoder_stop(encoder);
+    #endif
 
     return ret;
 }

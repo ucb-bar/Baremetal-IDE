@@ -133,9 +133,7 @@ static void prvQueueReceiveTask( void * pvParameters )
 
 int main_blinky( void )
 {
-    printf("Hello, world from blinky!\n");
-
-    vSendString( "Hello FreeRTOS!" );
+    printf("mainQUEUE_SEND_FREQUENCY_MS in ticks: %d\n", mainQUEUE_SEND_FREQUENCY_MS);
 
     /* Create the queue. */
     xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( unsigned long ) );
