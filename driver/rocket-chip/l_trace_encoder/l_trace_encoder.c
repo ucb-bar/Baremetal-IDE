@@ -7,7 +7,7 @@ void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, uint64_t dma_a
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer) {
   sink_dma->TR_SK_DMA_FLUSH = 1;
   while (sink_dma->TR_SK_DMA_FLUSH_DONE == 0) {
-    ;
+    // printf("waiting for flush done\n");
   }
   // printf("[l_trace_sink_dma_read] flush done\n");
   uint64_t count = sink_dma->TR_SK_DMA_COUNT;

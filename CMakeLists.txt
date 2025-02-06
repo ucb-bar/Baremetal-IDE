@@ -35,6 +35,8 @@ option(PROF_COV                     "Build with profiling and coverage"       OF
 option(GCNO_ONLY                    "Only build gcno files"                   OFF )
 option(USE_PGO                      "Build with profile guided optimization"  OFF )
 option(OPT_INFO                     "Build with optimization information"      OFF )
+
+option(USE_FREERTOS                 "Build with FreeRTOS"                     OFF )
 # Define the variable with a default empty value
 set(AFDO_PATH "" CACHE STRING "Path to autofdo profile data")
 #################################
@@ -131,10 +133,6 @@ add_executable(app
 )
 
 target_include_directories(app PUBLIC app/include)
-
-# add std lib path
-include_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/include)
-link_directories(/scratch/iansseijelly/chipyard/.conda-env/riscv-tools/riscv64-unknown-elf/lib)
 
 #################################
 # Dependencies
