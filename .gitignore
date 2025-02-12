@@ -1,4 +1,9 @@
 .vscode/
 build/
+<<<<<<< HEAD
 *.log
 *.afdo
+=======
+
+dump.txt
+>>>>>>> 3d47025 (platform done for dsp24/bearly24)

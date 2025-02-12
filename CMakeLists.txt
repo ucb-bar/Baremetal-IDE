@@ -80,6 +80,7 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 
 add_compile_options(-O1)
 add_compile_options(-Wall -Wextra)
+<<<<<<< HEAD
 add_compile_options(-Wno-error=coverage-mismatch)
 
 if (PROF_COV)
@@ -105,6 +106,9 @@ if(NOT "${AFDO_PATH}" STREQUAL "")
     message(STATUS "Using AutoFDO profile from: ${AFDO_PATH}")
     add_compile_options(-fauto-profile=${AFDO_PATH})
 endif()
+=======
+add_compile_options(-s)
+>>>>>>> 3d47025 (platform done for dsp24/bearly24)
 
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
@@ -114,6 +118,7 @@ add_compile_options(${SPEC_FLAGS})
 add_link_options(-static)
 # add_link_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_link_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
+add_link_options(-nostartfiles)
 add_link_options(-nostartfiles)
 add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})

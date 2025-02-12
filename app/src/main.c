@@ -15,6 +15,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "chip_config.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -39,8 +40,6 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
-uint8_t counter = 0;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,9 +61,9 @@ void app_init() {
 void app_main() {
   uint64_t mhartid = READ_CSR("mhartid");
 
-  printf("Hello world from hart %d: %d\n", mhartid, counter);
-
-  // sleep(1);
+  while(1) {
+    printf("sadly unalive myself from hart : %d\r\n", mhartid);
+  }
 }
 /* USER CODE END PUC */
 
@@ -76,8 +75,14 @@ int main(int argc, char **argv) {
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Configure the system clock */
+  /* Configure the system clock */
+  
   /* USER CODE BEGIN SysInit */
-
+  UART_InitType UART_init_config;
+  UART_init_config.baudrate = 115200;
+  UART_init_config.mode = UART_MODE_TX_RX;
+  UART_init_config.stopbits = UART_STOPBITS_2;
+  uart_init(UART0, &UART_init_config);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */  
