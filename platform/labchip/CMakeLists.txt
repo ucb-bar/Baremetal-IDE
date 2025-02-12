@@ -2,8 +2,6 @@
 # Baremetal Platform Configuration for default chip
 ########################################################################################################################
 
-file(GLOB_RECURSE PLATFORM_FILES 
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c )
 add_library(chip-config STATIC chip.c ${PLATFORM_FILES})
 
 # set terminal device (printf, scanf, etc.) to HTIF
@@ -18,9 +16,3 @@ target_include_directories(chip-config PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${PLAT
 target_link_libraries(chip-config PUBLIC rocketcore)
 target_link_libraries(chip-config PUBLIC clint)
 target_link_libraries(chip-config PUBLIC uart)
-target_link_libraries(chip-config PUBLIC spi)
-target_link_libraries(chip-config PUBLIC i2c)
-target_link_libraries(chip-config PUBLIC gpio)
-target_link_libraries(chip-config PUBLIC pwm)
-
-

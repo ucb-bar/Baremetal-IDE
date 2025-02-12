@@ -78,7 +78,7 @@ endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 
-add_compile_options(-O1)
+add_compile_options(-O0)
 add_compile_options(-Wall -Wextra)
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -145,10 +145,11 @@ target_include_directories(app PUBLIC app/include)
 add_subdirectory(driver)
 add_subdirectory(glossy)
 add_subdirectory(lib)
-# add_subdirectory(examples)
+add_subdirectory(lab)
+add_subdirectory(encoders1)
 
 target_link_libraries(app PRIVATE 
-  -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive
+  -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive m
 )
 
 if (PROF_COV)
