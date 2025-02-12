@@ -36,7 +36,10 @@ extern "C" {
 #define PLIC_BASE               0x0C000000U
 #define CLOCK_SELECTOR_BASE     0x00130000U
 #define PLL_BASE                0x00140000U
+
+#define GPIO_BASE               0x10010000U
 #define UART_BASE               0x10020000U
+#define PWM_BASE                0x10060000U
 #define QSPI_FLASH_BASE         0x20000000U
 #define DRAM_BASE               0x80000000U
 
