@@ -75,7 +75,6 @@ int main(int argc, char **argv) {
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Configure the system clock */
-  CLOCK_SELECTOR->SEL = 0; // Switch away from previous run's PLL
   /* Configure the system clock */
   
   /* USER CODE BEGIN SysInit */
