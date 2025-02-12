@@ -12,6 +12,7 @@ extern "C" {
 #include "uart.h"
 #include "gpio.h"
 #include "pwm.h"
+#include "pll.h"
 
 
 // ================================

@@ -75,6 +75,18 @@ int main(int argc, char **argv) {
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Configure the system clock */
+  CLOCK_SELECTOR->SEL = 0; // Switch away from previous run's PLL
+  PLL->PLLEN = 0; // Disable PLL
+  PLL->MDIV_RATIO = 1;
+  PLL->RATIO = 10;  // 500MHz (50MHz * 10)
+  PLL->FRACTION = 0;
+  PLL->ZDIV0_RATIO = 1;
+  PLL->ZDIV1_RATIO = 1;
+  PLL->LDO_ENABLE = 1;
+  PLL->PLLEN = 1; // Enable PLL with new settings
+  PLL->POWERGOOD_VNN = 1; // Specify power is, indeed, good
+  PLL->PLLFWEN_B = 1;
+  CLOCK_SELECTOR->SEL = 1; // Switch main clock mux to PLL
   /* Configure the system clock */
   
   /* USER CODE BEGIN SysInit */
