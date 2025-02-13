@@ -7,7 +7,7 @@ void reg_write8(uintptr_t addr, uint8_t data) {
 
 uint8_t reg_read8(uintptr_t addr) {
 	volatile uint8_t *ptr = (volatile uint8_t *) addr;
-	return *ptr;
+	return *ptr & 0xFF;
 }
 
 void reg_write16(uintptr_t addr, uint16_t data) {
@@ -17,7 +17,7 @@ void reg_write16(uintptr_t addr, uint16_t data) {
 
 uint16_t reg_read16(uintptr_t addr) {
 	volatile uint16_t *ptr = (volatile uint16_t *) addr;
-	return *ptr;
+	return *ptr & 0xFFFF;
 }
 
 void reg_write32(uintptr_t addr, uint32_t data) {
@@ -27,7 +27,7 @@ void reg_write32(uintptr_t addr, uint32_t data) {
 
 uint32_t reg_read32(uintptr_t addr) {
 	volatile uint32_t *ptr = (volatile uint32_t *) addr;
-	return *ptr;
+	return *ptr & 0xFFFFFFFF;
 }
 
 void reg_write64(unsigned long addr, uint64_t data) {
