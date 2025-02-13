@@ -1,4 +1,3 @@
-
 #include "test_dma.h"
 
 int checkval(int i, long unsigned int  poll, long unsigned int ref, long unsigned int addr) {

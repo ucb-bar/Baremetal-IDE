@@ -1,5 +1,5 @@
-#ifndef __LIB_H
-#define __LIB_H
+#ifndef __TEST_DMA
+#define __TEST_DMA
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,4 +33,4 @@ int test_width();
 }
 #endif
 
-#endif /* __LIB_H */
+#endif /* __TEST_DMA */
