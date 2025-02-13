@@ -15,7 +15,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "test_dma.h"
 #include "chip_config.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -62,60 +61,9 @@ void app_init() {
 void app_main() {
   uint64_t mhartid = READ_CSR("mhartid");
 
-
-  // Perform basic DMA tests
-  if(test_basic() == 1) {
-    printf("\n\n-----------------------------------\r\n");
-    printf("TEST BASIC FAILED\r\n");
-    printf("-----------------------------------\r\n");
-    while(1);
+  while(1) {
+    printf("Hello from hart : %d\r\n", mhartid);
   }
-  printf("\n\n-----------------------------------\r\n");
-  printf("TEST BASIC PASS\r\n");
-  printf("-----------------------------------\r\n");
-
-  // Perform stride DMA tests
-  if(test_stride() == 1) {
-    printf("\n\n-----------------------------------\r\n");
-    printf("TEST STRIDE FAILED\r\n");
-    printf("-----------------------------------\r\n");
-    while(1);
-  }
-
-  printf("\n\n-----------------------------------\r\n");
-  printf("TEST STRIDE PASS\r\n");
-  printf("-----------------------------------\r\n");
-
-  // Perform combined DMA tests
-  if(test_combined() == 1) {
-    printf("\n\n-----------------------------------\r\n");
-    printf("TEST COMBINED FAILED\r\n");
-    printf("-----------------------------------\r\n");
-    while(1);
-  }
-  printf("\n\n-----------------------------------\r\n");
-  printf("TEST COMBINED PASS\r\n");
-  printf("-----------------------------------\r\n");
-
-
-  // Perform width DMA tests
-  if(test_width() == 1) {
-    printf("\n\n-----------------------------------\r\n");
-    printf("TEST WIDTH FAILED\r\n");
-    printf("-----------------------------------\r\n");
-    while(1);
-  }
-  printf("\n\n-----------------------------------\r\n");
-  printf("TEST WIDTH PASS\r\n");
-  printf("-----------------------------------\r\n");
-
-
-
-  printf("\n\n-----------------------------------\r\n");
-  printf("   ALL TESTS PASSED\r\n");
-  printf("-----------------------------------\r\n");
-  while(1);
-
 }
 /* USER CODE END PUC */
 
