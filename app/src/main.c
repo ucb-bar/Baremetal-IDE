@@ -62,7 +62,7 @@ void app_main() {
   uint64_t mhartid = READ_CSR("mhartid");
 
   while(1) {
-    printf("sadly unalive myself from hart : %d\r\n", mhartid);
+    printf("Hello from hart : %d\r\n", mhartid);
   }
 }
 /* USER CODE END PUC */

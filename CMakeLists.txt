@@ -78,10 +78,8 @@ endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 
-add_compile_options(-O1)
+add_compile_options(-O0)
 add_compile_options(-Wall -Wextra)
-<<<<<<< HEAD
-<<<<<<< HEAD
 add_compile_options(-Wno-error=coverage-mismatch)
 
 if (PROF_COV)
@@ -118,7 +116,6 @@ add_link_options(-static)
 # add_link_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_link_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
 add_link_options(-nostartfiles)
-add_link_options(-nostartfiles)
 add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
 add_link_options(-T ${LINKER_SCRIPT})
@@ -145,7 +142,6 @@ target_include_directories(app PUBLIC app/include)
 add_subdirectory(driver)
 add_subdirectory(glossy)
 add_subdirectory(lib)
-# add_subdirectory(examples)
 
 target_link_libraries(app PRIVATE 
   -L${CMAKE_BINARY_DIR}/glossy -Wl,--whole-archive glossy -Wl,--no-whole-archive
