@@ -32,6 +32,7 @@ extern "C" {
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "riscv.h"
 
@@ -46,6 +47,7 @@ extern "C" {
 // #include "hal_i2c.h"
 // #include "hal_plic.h"
 // #include "hal_uart.h"
+//#include "ll_pll.h"
 
 /* USER CODE END Includes */
 
