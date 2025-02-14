@@ -1,4 +1,5 @@
 set (TESTS
+  trace-hello
   pmu-test-load
   pmu-test-store
   pmu-test-inhibit
