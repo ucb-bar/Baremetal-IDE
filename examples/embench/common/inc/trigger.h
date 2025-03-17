@@ -13,13 +13,15 @@
 // use LBR to report the trace
 // #define USE_LBR
 // report the total time of the benchmark
-#define REPORT_TOTAL_TIME
+// #define REPORT_TOTAL_TIME
 // use trace encoder RTL Print to report the trace
 // #define USE_L_TRACE
 // use trace encoder DMA to report the trace
 // #define USE_L_TRACE_DMA
 // use trace encoder RTL Print to report the trace
 // #define USE_L_TRACE_PRINT
+// use trace encoder bp mode to report the trace
+#define USE_L_TRACE_BP
 
 /* timer interrupt interval in milliseconds 
   only used when TIMER_INTERRUPT is defined
@@ -46,6 +48,10 @@ static inline void start_trigger(void) {
 
   #ifdef USE_L_TRACE_PRINT
     l_trace_encoder_configure_target(encoder, TARGET_PRINT);
+  #endif
+
+  #ifdef USE_L_TRACE_BP
+    l_trace_encoder_configure_branch_mode(encoder, BRANCH_MODE_PREDICT);
   #endif
 
   #ifdef USE_L_TRACE
