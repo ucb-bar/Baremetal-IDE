@@ -9,9 +9,13 @@
 typedef struct {
   __IO uint32_t TR_TE_CTRL; //0x00
   __I uint32_t TR_TE_INFO; //0x04
-  __IO uint32_t TR_TE_BUBBLE[6]; //0x08-0x1C
+  __IO uint32_t TR_TE_BUBBLE0[6]; //0x08-0x1C
   __IO uint32_t TR_TE_TARGET; //0x20
   __IO uint32_t TR_TE_BRANCH_MODE; //0x24
+  __IO uint32_t TR_TE_BUBBLE1[2]; //0x28-0x2C
+  __IO uint32_t TR_HPM_TARGET; //0x30
+  __IO uint32_t TR_HPM_ENABLE; //0x34
+  __IO uint32_t TR_HPM_INTERVAL; //0x38
 } LTraceEncoderType;
 
 typedef struct {
@@ -61,6 +65,7 @@ static inline void l_trace_encoder_stop(LTraceEncoderType *encoder) {
 
 static inline void l_trace_encoder_configure_target(LTraceEncoderType *encoder, uint64_t target) {
   encoder->TR_TE_TARGET = target;
+  encoder->TR_HPM_TARGET = target;
 }
 
 static inline void l_trace_encoder_configure_branch_mode(LTraceEncoderType *encoder, uint64_t branch_mode) {
@@ -69,6 +74,18 @@ static inline void l_trace_encoder_configure_branch_mode(LTraceEncoderType *enco
 
 static inline void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, uint64_t dma_addr, int bypass) {
   sink_dma->TR_SK_DMA_ADDR = bypass ? (SBUS_BYPASS_ADDRESS|dma_addr) : dma_addr;
+}
+
+static inline void l_trace_encoder_enable_hpm(LTraceEncoderType *encoder, uint32_t mask) {
+  encoder->TR_HPM_ENABLE = mask;
+}
+
+static inline void l_trace_encoder_disable_hpm(LTraceEncoderType *encoder) {
+  encoder->TR_HPM_ENABLE = 0;
+}
+
+static inline void l_trace_encoder_configure_hpm_interval(LTraceEncoderType *encoder, uint32_t interval) {
+  encoder->TR_HPM_INTERVAL = interval;
 }
 
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer);

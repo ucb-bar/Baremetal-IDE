@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
   PMU_EVENT_ENABLE(PMU_EVENT(0, LOAD), 3);
   LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
   l_trace_encoder_configure_target(encoder, TARGET_PRINT);
-  l_trace_encoder_configure_hpm_counter_en(encoder, 1 << 3);
-  l_trace_encoder_configure_hpm_counter_time(encoder, 1000); // report every 1000 cycles
+  l_trace_encoder_enable_hpm(encoder, 1 << 3);
+  l_trace_encoder_configure_hpm_interval(encoder, 100); // report every 100 cycles
   PMU_COUNTER_RESET(3);
   l_trace_encoder_start(encoder);
   // do some dummy loop with load
