@@ -11,8 +11,7 @@ typedef struct {
   __I uint32_t TR_TE_INFO; //0x04
   __IO uint32_t TR_TE_BUBBLE[6]; //0x08-0x1C
   __IO uint32_t TR_TE_TARGET; //0x20
-  __IO uint32_t TR_TE_HPM_COUNTER; //0x24
-  __IO uint32_t TR_TE_HPM_TIME; //0x28
+  __IO uint32_t TR_TE_BRANCH_MODE; //0x24
 } LTraceEncoderType;
 
 typedef struct {
@@ -22,9 +21,19 @@ typedef struct {
   __I uint64_t TR_SK_DMA_COUNT;
 } LTraceSinkDmaType;
 
+// Trace Sink Targets
 #define TARGET_PRINT 0x0
 #define TARGET_DMA 0x1
 #define L_TRACE_ENCODER_BASE_ADDRESS 0x3000000
+
+// Trace Branch Mode
+#define BRANCH_MODE_TARGET    0x0
+#define BRANCH_MODE_RESERVED0 0x1
+#define BRANCH_MODE_PREDICT   0x2
+#define BRANCH_MODE_RESERVED1 0x3
+
+// SBUS Bypass 
+#define SBUS_BYPASS_ADDRESS 0x1000000000
 
 #define L_TRACE_ENCODER0 ((LTraceEncoderType *)(L_TRACE_ENCODER_BASE_ADDRESS + 0x0000))
 #define L_TRACE_ENCODER1 ((LTraceEncoderType *)(L_TRACE_ENCODER_BASE_ADDRESS + 0x1000))
@@ -53,9 +62,17 @@ static inline void l_trace_encoder_stop(LTraceEncoderType *encoder) {
   CLEAR_BITS(encoder->TR_TE_CTRL, 0x1 << 1);
 }
 
-void l_trace_encoder_configure_target(LTraceEncoderType *encoder, uint64_t target);
-void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, uint64_t dma_addr);
+static inline void l_trace_encoder_configure_target(LTraceEncoderType *encoder, uint64_t target) {
+  encoder->TR_TE_TARGET = target;
+}
+
+static inline void l_trace_encoder_configure_branch_mode(LTraceEncoderType *encoder, uint64_t branch_mode) {
+  encoder->TR_TE_BRANCH_MODE = branch_mode;
+}
+
+static inline void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, uint64_t dma_addr, int bypass) {
+  sink_dma->TR_SK_DMA_ADDR = bypass ? (SBUS_BYPASS_ADDRESS|dma_addr) : dma_addr;
+}
+
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer);
-void l_trace_encoder_configure_hpm_counter_en(LTraceEncoderType *encoder, uint32_t hpm_counter);
-void l_trace_encoder_configure_hpm_counter_time(LTraceEncoderType *encoder, uint32_t time);
 #endif /* __L_TRACE_ENCODER_H */
