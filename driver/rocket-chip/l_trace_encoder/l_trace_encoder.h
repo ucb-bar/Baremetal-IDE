@@ -46,6 +46,8 @@ typedef struct {
 #define L_TRACE_SINK_DMA2 ((LTraceSinkDmaType *)(L_TRACE_SINK_DMA_BASE_ADDRESS + 0x2000))
 #define L_TRACE_SINK_DMA3 ((LTraceSinkDmaType *)(L_TRACE_SINK_DMA_BASE_ADDRESS + 0x3000))
 
+#define SBUS_BYPASS_ADDRESS 0x1000000000
+
 static inline LTraceEncoderType *l_trace_encoder_get(uint32_t hart_id) {
   return (LTraceEncoderType *)(L_TRACE_ENCODER_BASE_ADDRESS + hart_id * 0x1000);
 }

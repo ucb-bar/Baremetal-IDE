@@ -21,6 +21,7 @@ set(BENCHMARKS
     dummy
     wikisort
     nettle-sha256
+    huffbench
     # Add other benchmarks here
 )
 
@@ -47,5 +48,4 @@ foreach(benchmark ${BENCHMARKS})
     if (PROF_COV)
         target_link_libraries(${benchmark} PRIVATE gcov)
     endif()
-    target_link_libraries(${benchmark} PRIVATE lbr)
 endforeach()
