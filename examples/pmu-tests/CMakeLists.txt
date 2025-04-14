@@ -7,6 +7,7 @@ set (TESTS
   speedscope-test
   vpp-test
   sort
+  trace-hello
 )
 
 foreach(test ${TESTS})
