@@ -21,14 +21,19 @@ typedef struct {
   __I uint64_t TR_SK_DMA_COUNT;
 } LTraceSinkDmaType;
 
+// Trace Sink Targets
 #define TARGET_PRINT 0x0
 #define TARGET_DMA 0x1
 #define L_TRACE_ENCODER_BASE_ADDRESS 0x3000000
 
-#define BRANCH_MODE_TARGET 0x0
-#define BRANCH_MODE_HISTORY 0x1
-#define BRANCH_MODE_PREDICT 0x2
-#define BRANCH_MODE_RESERVED 0x3
+// Trace Branch Mode
+#define BRANCH_MODE_TARGET    0x0
+#define BRANCH_MODE_RESERVED0 0x1
+#define BRANCH_MODE_PREDICT   0x2
+#define BRANCH_MODE_RESERVED1 0x3
+
+// SBUS Bypass 
+#define SBUS_BYPASS_ADDRESS 0x1000000000
 
 #define L_TRACE_ENCODER0 ((LTraceEncoderType *)(L_TRACE_ENCODER_BASE_ADDRESS + 0x0000))
 #define L_TRACE_ENCODER1 ((LTraceEncoderType *)(L_TRACE_ENCODER_BASE_ADDRESS + 0x1000))
@@ -72,5 +77,4 @@ static inline void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, 
 }
 
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer);
-
 #endif /* __L_TRACE_ENCODER_H */
