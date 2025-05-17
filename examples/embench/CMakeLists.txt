@@ -12,10 +12,16 @@ if (EMBENCH_ENABLE_TRACE_DMA)
     add_definitions(-DUSE_L_TRACE_DMA)
 endif()
 
+if (EMBENCH_ENABLE_LBR)
+    add_definitions(-DTIMER_INTERRUPT)
+    add_definitions(-DUSE_LBR)
+endif()
+
 set(BENCHMARKS
     dummy
     wikisort
     nettle-sha256
+    huffbench
     # Add other benchmarks here
 )
 
@@ -42,5 +48,4 @@ foreach(benchmark ${BENCHMARKS})
     if (PROF_COV)
         target_link_libraries(${benchmark} PRIVATE gcov)
     endif()
-    target_link_libraries(${benchmark} PRIVATE lbr)
 endforeach()

@@ -35,3 +35,6 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
+# add std lib path
+include_directories("$ENV{RISCV}/riscv64-unknown-elf/include")
+link_directories("$ENV{RISCV}/riscv64-unknown-elf/lib")

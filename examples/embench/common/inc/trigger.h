@@ -24,7 +24,7 @@
 /* timer interrupt interval in milliseconds 
   only used when TIMER_INTERRUPT is defined
 */
-#define TIMER_INTERRUPT_INTERVAL 100
+#define TIMER_INTERRUPT_INTERVAL 25 
 
 #ifdef USE_L_TRACE_DMA
   static uint8_t dma_buffer[512 * 1024];
@@ -40,7 +40,7 @@ static inline void start_trigger(void) {
   LTraceSinkDmaType *sink_dma = l_trace_sink_dma_get(get_hart_id());
   
   #ifdef USE_L_TRACE_DMA
-    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer);
+    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer, 1);
     l_trace_encoder_configure_target(encoder, TARGET_DMA);
   #endif
 
@@ -96,17 +96,18 @@ void machine_timer_interrupt_callback() {
 #endif
 
 static inline void stop_trigger(void) {
-  #ifdef USE_LBR
-    lbr_dump_records();
-  #endif
-  #ifdef USE_L_TRACE
-    LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
-    l_trace_encoder_stop(encoder);
-  #endif
-
   #ifdef REPORT_TOTAL_TIME
     int64_t curr_time = clint_get_time(CLINT);
     printf("stop trigger at %lld\n", curr_time);
+  #endif
+
+  #ifdef USE_LBR
+    lbr_dump_records();
+  #endif
+
+  #ifdef USE_L_TRACE
+    LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
+    l_trace_encoder_stop(encoder);
   #endif
 
   #ifdef USE_L_TRACE_DMA
