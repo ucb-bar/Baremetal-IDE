@@ -8,21 +8,17 @@ set(CMAKE_SYSTEM_PROCESSOR  "riscv"   CACHE STRING "")
 
 set(TOOLCHAIN_PREFIX        "riscv64-unknown-elf-")
 
-set(MYRISCV                 "/scratch/iansseijelly/riscv-llvm-install")
+set(MYRISCV                 "$ENV{RISCV}")
 
-set(CMAKE_AR                "llvm-ar")
+set(CMAKE_AR                "${MYRISCV}/bin/llvm-ar")
 set(CMAKE_ASM_COMPILER      "${MYRISCV}/bin/clang")
 set(CMAKE_C_COMPILER        "${MYRISCV}/bin/clang")
 set(CMAKE_CXX_COMPILER      "${MYRISCV}/bin/clang++")
 set(CMAKE_LINKER            "${MYRISCV}/bin/lld")
-set(CMAKE_OBJCOPY           "llvm-objcopy")
-set(CMAKE_OBJDUMP           "llvm-objdump")
-set(CMAKE_SIZE              "llvm-size")
-
-set(CMAKE_FIND_ROOT_PATH    "${MYRISCV}/")
-set(CMAKE_INCLUDE_PATH      "${MYRISCV}/include/")
-set(CMAKE_LIBRARY_PATH      "${MYRISCV}/lib/")
-set(CMAKE_PROGRAM_PATH      "${MYRISCV}/bin/")
+set(CMAKE_RANLIB            "${MYRISCV}/bin/llvm-ranlib")
+set(CMAKE_OBJCOPY           "${MYRISCV}/bin/llvm-objcopy")
+set(CMAKE_OBJDUMP           "${MYRISCV}/bin/llvm-objdump")
+set(CMAKE_SIZE              "${MYRISCV}/bin/llvm-size")
 
 # tell me the cc compiler cmake found
 message(STATUS "CC: ${CMAKE_C_COMPILER}")
@@ -35,6 +31,10 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
+add_link_options(-rtlib=libgcc)
+
 # add std lib path
 include_directories("$ENV{RISCV}/riscv64-unknown-elf/include")
 link_directories("$ENV{RISCV}/riscv64-unknown-elf/lib")
+# for libgcc
+link_directories("${MYRISCV}/lib/gcc/riscv64-unknown-elf/15.1.0")
