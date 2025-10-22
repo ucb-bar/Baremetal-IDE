@@ -118,7 +118,7 @@ add_link_options(-nostartfiles)
 add_link_options(${ARCH_FLAGS})
 add_link_options(${SPEC_FLAGS})
 add_link_options(-T ${LINKER_SCRIPT})
-add_link_options(-rtlib=libgcc)
+# only enable this if using the LLVM toolchain
 
 if (PROF_COV)
   add_link_options(-lgcov)
