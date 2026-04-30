@@ -12,15 +12,17 @@ typedef struct {
   __IO uint32_t TR_TE_BUBBLE[6]; //0x08-0x1C
   __IO uint32_t TR_TE_TARGET; //0x20
   __IO uint32_t TR_TE_BRANCH_MODE; //0x24
+  __IO uint64_t TR_TE_STALL; //0x28
+  __IO uint32_t TR_TE_SYNC_PERIOD; // 0x30
 } LTraceEncoderType;
 
 typedef struct {
-  __IO uint64_t TR_SK_DMA_ADDR;
-  __I uint64_t TR_SK_DMA_COUNT;
-  __IO uint64_t TR_SK_DMA_MAX_SIZE;
-  __IO uint32_t TR_SK_DMA_RESET;
-  __IO uint32_t TR_SK_DMA_MODE;
-  __IO uint32_t TR_SK_DMA_WRAP_COUNT;
+  __IO uint64_t TR_SK_DMA_ADDR; // 0x00
+  __I uint64_t TR_SK_DMA_COUNT; // 0x08
+  __IO uint64_t TR_SK_DMA_MAX_SIZE; // 0x10
+  __IO uint32_t TR_SK_DMA_RESET; // 0x18
+  __IO uint32_t TR_SK_DMA_MODE; // 0x1C
+  __IO uint32_t TR_SK_DMA_WRAP_COUNT; // 0x20
   __IO uint32_t TR_SK_DMA_SRC_READY_STALLED_COUNT;
 } LTraceSinkDmaType;
 
@@ -34,6 +36,10 @@ typedef struct {
 #define BRANCH_MODE_RESERVED0 0x1
 #define BRANCH_MODE_PREDICT   0x2
 #define BRANCH_MODE_RESERVED1 0x3
+
+// Trace DMA Mode
+#define DMA_MODE_OVERFLOW    0
+#define DMA_MODE_RING 1
 
 // SBUS Bypass 
 #define SBUS_BYPASS_ADDRESS 0x1000000000
@@ -75,9 +81,33 @@ static inline void l_trace_encoder_configure_branch_mode(LTraceEncoderType *enco
   encoder->TR_TE_BRANCH_MODE = branch_mode;
 }
 
+static inline void l_trace_encoder_configure_sync_period(LTraceEncoderType *encoder, uint32_t period) {
+  encoder->TR_TE_SYNC_PERIOD = period;
+}
+
+static inline void l_trace_sink_dma_configure_mode(LTraceSinkDmaType *sink_dma, uint32_t mode) {
+  sink_dma->TR_SK_DMA_MODE = mode;
+}
+
 static inline void l_trace_sink_dma_configure_addr_and_size(LTraceSinkDmaType *sink_dma, uint64_t dma_addr, uint64_t dma_size, int bypass) {
   sink_dma->TR_SK_DMA_ADDR = bypass ? (SBUS_BYPASS_ADDRESS|dma_addr) : dma_addr;
   sink_dma->TR_SK_DMA_MAX_SIZE = dma_size;
+}
+
+static inline void l_trace_sink_dma_reset(LTraceSinkDmaType *sink_dma) {
+  sink_dma->TR_SK_DMA_RESET = 1;
+}
+
+static inline uint64_t l_trace_sink_dma_get_count(LTraceSinkDmaType *sink_dma) {
+  return sink_dma->TR_SK_DMA_COUNT;
+}
+
+static inline uint32_t l_trace_sink_dma_get_wrap_count(LTraceSinkDmaType *sink_dma) {
+  return sink_dma->TR_SK_DMA_WRAP_COUNT;
+}
+
+static inline uint64_t l_trace_encoder_get_stall(LTraceEncoderType *encoder) {
+  return encoder->TR_TE_STALL;
 }
 
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer);
