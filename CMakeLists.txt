@@ -78,7 +78,7 @@ endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
 
-add_compile_options(-O1)
+add_compile_options(-O0)
 add_compile_options(-Wall -Wextra)
 add_compile_options(-Wno-error=coverage-mismatch)
 
@@ -105,6 +105,7 @@ if(NOT "${AFDO_PATH}" STREQUAL "")
     message(STATUS "Using AutoFDO profile from: ${AFDO_PATH}")
     add_compile_options(-fauto-profile=${AFDO_PATH})
 endif()
+add_compile_options(-s)
 
 # add_compile_options(-ffunction-sections -fdata-sections -fno-common -fno-builtin-printf -fno-pie)
 # add_compile_options(-Wall -Wextra -Warray-bounds -Wno-unused-parameter -Wcast-qual)
