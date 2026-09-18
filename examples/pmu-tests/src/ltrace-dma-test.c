@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
   LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
   #ifdef USE_L_TRACE_DMA
     LTraceSinkDmaType *sink_dma = l_trace_sink_dma_get(get_hart_id());
-    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer);
+    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer, 1);
     l_trace_encoder_configure_target(encoder, TARGET_DMA);
   #else
     l_trace_encoder_configure_target(encoder, TARGET_PRINT);
