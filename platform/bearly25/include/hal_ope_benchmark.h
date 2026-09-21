@@ -1,5 +1,5 @@
-#ifndef HAL_OPE_H
-#define HAL_OPE_H
+#ifndef HAL_OPE_BENCHMARK_H
+#define HAL_OPE_BENCHMARK_H
 
 #ifdef __cplusplus
 extern "C" {
