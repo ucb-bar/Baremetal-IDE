@@ -10,23 +10,23 @@ extern "C" {
 #include  "hal_mmio.h"
 
 // Address for general DMA registers
-#define DMA_CLOCKGATE       DMA_BASE + 0x3
-#define DMA_SET             DMA_BASE + 0x100
+#define DMA_CLOCKGATE       (DMA_BASE + 0x3)
+#define DMA_SET             (DMA_BASE + 0x100)
 
 // Addresses for each DMA channel
-#define DMA_SET_LOGD        DMA_SET + 0x1
-#define DMA_READY           DMA_SET + 0x2
-#define DMA_COUNT           DMA_SET + 0x4
+#define DMA_SET_LOGD        (DMA_SET + 0x1)
+#define DMA_READY           (DMA_SET + 0x2)
+#define DMA_COUNT           (DMA_SET + 0x4)
 
-#define DMA_SET_READ        DMA_SET + 0x8
-#define DMA_SET_WRITE       DMA_SET + 0x10
-#define DMA_SET_C           DMA_SET + 0x18
+#define DMA_SET_READ        (DMA_SET + 0x8)
+#define DMA_SET_WRITE       (DMA_SET + 0x10)
+#define DMA_SET_C           (DMA_SET + 0x18)
 
-#define DMA_SET_LEN         DMA_SET + 0x20
-#define DMA_INC_READ        DMA_SET + 0x22
-#define DMA_INC_WRITE       DMA_SET + 0x24
+#define DMA_SET_LEN         (DMA_SET + 0x20)
+#define DMA_INC_READ        (DMA_SET + 0x22)
+#define DMA_INC_WRITE       (DMA_SET + 0x24)
 
-#define DMA_SET_D           DMA_SET + 0x2
+#define DMA_SET_D           (DMA_SET + 0x2)
 
 int DMA_count(int num);
 

@@ -13,12 +13,12 @@ extern "C" {
 
 // Addresses for Convolution
 #define CONV_BASE 0x08800000U
-#define CONV_OUTPUT_ADDR     CONV_BASE + 0x20
-#define CONV_KERNEL_ADDR     CONV_BASE + 0x40
-#define CONV_START_ADDR      CONV_BASE + 0x6C
-#define CONV_LENGTH_ADDR     CONV_BASE + 0x78
-#define CONV_DILATION_ADDR   CONV_BASE + 0x7C
-#define CONV_ISFLOAT_ADDR    CONV_BASE + 0x8E
+#define CONV_OUTPUT_ADDR     (CONV_BASE + 0x20)
+#define CONV_KERNEL_ADDR     (CONV_BASE + 0x40)
+#define CONV_START_ADDR      (CONV_BASE + 0x6C)
+#define CONV_LENGTH_ADDR     (CONV_BASE + 0x78)
+#define CONV_DILATION_ADDR   (CONV_BASE + 0x7C)
+#define CONV_ISFLOAT_ADDR    (CONV_BASE + 0x8E)
 
 #define READ_CHECK_ADDR   0x0880008D
 

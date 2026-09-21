@@ -10,13 +10,13 @@ extern "C" {
 #include  "hal_mmio.h"
 #include "chip_config.h"
 
-#define FFT_BUSY            FFT_BASE + 0x08L
-#define FFT_LENGTH          FFT_BASE + 0x18L
-#define FFT_INPUT           FFT_BASE + 0x20L
-#define FFT_INPUT_READY     FFT_BASE + 0x28L
-#define FFT_OUTPUT          FFT_BASE + 0x30L
-#define FFT_OUTPUT_VALID    FFT_BASE + 0x38L
-#define FFT_RESET           FFT_BASE + 0x40L
+#define FFT_BUSY            (FFT_BASE + 0x08L)
+#define FFT_LENGTH          (FFT_BASE + 0x18L)
+#define FFT_INPUT           (FFT_BASE + 0x20L)
+#define FFT_INPUT_READY     (FFT_BASE + 0x28L)
+#define FFT_OUTPUT          (FFT_BASE + 0x30L)
+#define FFT_OUTPUT_VALID    (FFT_BASE + 0x38L)
+#define FFT_RESET           (FFT_BASE + 0x40L)
 
 void reset_fft();
 
