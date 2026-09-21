@@ -49,14 +49,4 @@ checktsi:
 tsi-run:
 	uart_tsi +tty=$(TTY) +baudrate=921600 $(BINARY)
 
-.PHONY: vcs-run
-vcs-run:
-	echo "Running VCS tests within $(CY_DIR)"
-	(cd $(CY_DIR)/sims/vcs && make run-binary CONFIG=$(CONFIG) LOADMEM=1 BINARY=$(BINARY))
 
-BINARY_REL := $(patsubst $(realpath ../../sims/vcs)/%,%,$(abspath $(BINARY)))
-
-.PHONY: run
-run:
-	srun -p ee194 --pty make -C ../../sims/vcs run-binary LOADMEM=1 CONFIG=$(CONFIG) BINARY=$(BINARY_REL)
-# 	(cd $(CY_DIR)/sims/vcs && make run-binary-debug-hex CONFIG=$(CONFIG) LOADMEM=1 BINARY=$(BINARY))
