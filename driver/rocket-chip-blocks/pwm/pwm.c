@@ -57,7 +57,7 @@ void pwm_set_duty_cycle(PWM_Type *PWMx, uint32_t idx, uint32_t duty, uint32_t fr
   uint16_t pwmscale = READ_BITS(PWMx->PWM_CFG, PWM_PWMSCALE_MSK);
   uint32_t cmpvalue = 0;
   if (READ_BITS(PWMx->PWM_CFG, PWM_PWMZEROCMP_MSK) == 0){
-     cmpvalue = ((double) duty/100) * ((double) sys_clk_freq / (double) freq) / (1<<pwmscale);
+    cmpvalue = ((double) duty / 100.0) * ((double) sys_clk_freq / (double) freq) / (1<<pwmscale);
   } else {
     cmpvalue = ((double) duty/100) * PWMx->PWM_CMP0;
   }
