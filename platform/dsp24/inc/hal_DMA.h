@@ -7,7 +7,7 @@ extern "C" {
 #endif
 
 #include "chip_config.h"
-#include  "hal_mmio.h"
+#include <stdint.h>
 
 // Address for general DMA registers
 #define DMA_CLOCKGATE       (DMA_BASE + 0x3)
