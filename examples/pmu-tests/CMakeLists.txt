@@ -3,8 +3,17 @@ set (TESTS
   pmu-test-load
   pmu-test-store
   pmu-test-inhibit
+  ltrace-dma-basic-test
+  ltrace-dma-branch-predict-test
+  ltrace-dma-branch-target-test
+  ltrace-dma-overflow-test
+  ltrace-dma-print-test
+  ltrace-dma-ring-test
+  ltrace-dma-stop-test
+  ltrace-dma-workload-test
   ltrace-dma-test
   ltrace-hpm-test
+  ltrace-sync-test
   speedscope-test
   vpp-test
   sort

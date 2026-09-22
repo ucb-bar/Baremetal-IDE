@@ -4,7 +4,8 @@
 #include "l_trace_encoder.h"
 #include "math.h"
 #define USE_L_TRACE_DMA
-__attribute__((aligned(64), section(".noinit"))) static volatile uint8_t dma_buffer[512 * 1024];
+#define DMA_SIZE (512 * 1024)
+__attribute__((aligned(64), section(".noinit"))) static volatile uint8_t dma_buffer[DMA_SIZE];
 
 #define NUM_ITERS 60 // 0 to 2pi, 60 steps
 
@@ -36,7 +37,8 @@ int main(int argc, char **argv) {
   LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
   #ifdef USE_L_TRACE_DMA
     LTraceSinkDmaType *sink_dma = l_trace_sink_dma_get(get_hart_id());
-    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer, 1);
+    l_trace_sink_dma_configure_addr_and_size(sink_dma, (uint64_t)dma_buffer, DMA_SIZE, 0);
+    printf("DMA buffer address: %p\n", dma_buffer);
     l_trace_encoder_configure_target(encoder, TARGET_DMA);
   #else
     l_trace_encoder_configure_target(encoder, TARGET_PRINT);
