@@ -10,7 +10,6 @@ extern "C" {
 #include "chip_config.h"
 #include <stdint.h>
 
-#define I2S_BASE                    0x10042000U
 #define I2S_STATUS                  (I2S_BASE + 0x08)
 
 #define I2S_WATERMARK_RX_L          (I2S_BASE + 0x102)

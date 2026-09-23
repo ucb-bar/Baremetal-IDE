@@ -23,5 +23,6 @@ target_link_libraries(chip-config PUBLIC i2c)
 target_link_libraries(chip-config PUBLIC gpio)
 target_link_libraries(chip-config PUBLIC pwm)
 target_link_libraries(chip-config PUBLIC intel-pll)
+target_link_libraries(chip-config PUBLIC rocc)
 
 

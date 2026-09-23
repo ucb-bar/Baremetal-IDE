@@ -13,6 +13,7 @@ extern "C" {
 #include "gpio.h"
 #include "pwm.h"
 #include "pll.h"
+#include "hal_qt.h"
 
 
 // ================================

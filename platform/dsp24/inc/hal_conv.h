@@ -12,7 +12,6 @@ extern "C" {
 
 
 // Addresses for Convolution
-#define CONV_BASE 0x08800000U
 #define CONV_OUTPUT_ADDR     (CONV_BASE + 0x20)
 #define CONV_KERNEL_ADDR     (CONV_BASE + 0x40)
 #define CONV_START_ADDR      (CONV_BASE + 0x6C)
