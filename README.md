@@ -41,3 +41,26 @@ cmake --build ./build/ --target app
 
 ```
 
+
+## Optional native TilePMU platform metadata
+
+Pass three explicit paths to CMake:
+
+- `TILE_PMU_MANIFEST=/path/to/design.pmu.json`
+- `TILE_PMU_PLATFORM_JSON=/path/to/design.json`
+- `TILE_PMU_SOFTWARE_DIR=/path/to/pmu/software`
+
+The two JSON files must come from the same hardware elaboration. The software
+directory contains `pmu_mmio.h`, `tile_pmu.h`, and `generate_platform_header.py`;
+in Chipyard it is `generators/pmu/software`. Baremetal-IDE does not assume a
+particular checkout layout. Missing inputs are rejected during configuration.
+
+The selected `chip-config` exports a generated `tile_pmu_platform.h` in the build
+directory, with the MMIO address, symbolic event IDs, and an X-macro list of IDs,
+names, and units. `TILE_PMU_SOURCE` defaults to `boom_tile_0`. This also enables
+the `tile-pmu-test` target in `examples/pmu-tests`.
+
+The native MMIO PMU is separate from the existing architectural CSR PMU examples.
+See the README in the supplied PMU software directory for accessor usage. In
+Chipyard, run `python3 tools/pmu/test-software.py` from the Chipyard root to build
+and execute the full-core test. Builds without PMU metadata are unchanged.

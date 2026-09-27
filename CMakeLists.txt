@@ -77,6 +77,7 @@ else()
 endif()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/platform/${CHIP})
+include(${CMAKE_SOURCE_DIR}/platform/tile_pmu.cmake)
 
 add_compile_options(-O1)
 add_compile_options(-Wall -Wextra)
