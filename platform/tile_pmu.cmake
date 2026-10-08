@@ -1,13 +1,12 @@
-# Optional native TilePMU metadata, exported by the selected platform.
-set(TILE_PMU_MANIFEST "" CACHE FILEPATH "Finalized Chipyard .pmu.json")
+# Optional tile PMU metadata, exported by the selected platform.
+set(TILE_PMU_MANIFEST "" CACHE FILEPATH "The tile's Chipyard event list, <config>.<source>.pmu.json")
 set(TILE_PMU_PLATFORM_JSON "" CACHE FILEPATH "Matching Chipyard device-tree .json")
-set(TILE_PMU_SOURCE "boom_tile_0" CACHE STRING "PMU source in the manifest/device tree")
 set(TILE_PMU_SOFTWARE_DIR "" CACHE PATH "TilePMU ABI headers and platform header generator")
 
 if(TILE_PMU_MANIFEST OR TILE_PMU_PLATFORM_JSON)
   foreach(input TILE_PMU_MANIFEST TILE_PMU_PLATFORM_JSON TILE_PMU_SOFTWARE_DIR)
     if(NOT ${input})
-      message(FATAL_ERROR "${input} is required for native TilePMU support")
+      message(FATAL_ERROR "${input} is required for tile PMU support")
     endif()
     # Relative user inputs are relative to the Baremetal-IDE source directory,
     # not to an assumed Chipyard checkout or the generated build directory.
@@ -26,7 +25,7 @@ if(TILE_PMU_MANIFEST OR TILE_PMU_PLATFORM_JSON)
   add_custom_command(OUTPUT "${tile_pmu_header}"
     COMMAND "${PYTHON_EXECUTABLE}" "${TILE_PMU_SOFTWARE_DIR}/generate_platform_header.py"
       --manifest "${TILE_PMU_MANIFEST}" --platform "${TILE_PMU_PLATFORM_JSON}"
-      --source "${TILE_PMU_SOURCE}" --output "${tile_pmu_header}"
+      --output "${tile_pmu_header}"
     DEPENDS "${TILE_PMU_MANIFEST}" "${TILE_PMU_PLATFORM_JSON}"
       "${TILE_PMU_SOFTWARE_DIR}/generate_platform_header.py"
     VERBATIM)

@@ -19,7 +19,7 @@ foreach(test ${TESTS})
   )
 endforeach()
 
-# Native TilePMU MMIO test; distinct from the architectural CSR PMU examples.
+# Tile PMU MMIO test; distinct from the architectural CSR PMU examples.
 if(TILE_PMU_MANIFEST)
   add_executable(tile-pmu-test src/tile-pmu-test.c)
   target_link_libraries(tile-pmu-test PRIVATE
