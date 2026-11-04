@@ -4,9 +4,11 @@
 #include "l_trace_encoder.h"
 #include "math.h"
 #define USE_L_TRACE_DMA
-__attribute__((aligned(64), section(".noinit"))) static volatile uint8_t dma_buffer[512 * 1024];
 
-#define NUM_ITERS 60 // 0 to 2pi, 60 steps
+#define USE_L_TRACE_DMA_MAX_SIZE 512
+__attribute__((aligned(64), section(".noinit"))) static volatile uint8_t dma_buffer[USE_L_TRACE_DMA_MAX_SIZE];
+
+#define NUM_ITERS 5 // 0 to 2pi, 60 steps
 
 void FOC_invParkTransform(float *v_alpha, float *v_beta, float v_q, float v_d, float sin_theta, float cos_theta) {
   *v_alpha  = -(sin_theta * v_q) + (cos_theta * v_d);
@@ -36,7 +38,8 @@ int main(int argc, char **argv) {
   LTraceEncoderType *encoder = l_trace_encoder_get(get_hart_id());
   #ifdef USE_L_TRACE_DMA
     LTraceSinkDmaType *sink_dma = l_trace_sink_dma_get(get_hart_id());
-    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer, 1);
+    l_trace_sink_dma_configure_addr(sink_dma, (uint64_t)dma_buffer, 0);
+    l_trace_sink_dma_configure_max_size(sink_dma, USE_L_TRACE_DMA_MAX_SIZE);
     l_trace_encoder_configure_target(encoder, TARGET_DMA);
   #else
     l_trace_encoder_configure_target(encoder, TARGET_PRINT);
@@ -47,8 +50,10 @@ int main(int argc, char **argv) {
   }
 
   // warmup
-  // float v_a = 0, v_b = 0, v_c = 0;
-  // FOC_update(&v_a, &v_b, &v_c, 0, 0);
+  float v_a = 0;
+  float v_b = 0;
+  float v_c = 0;
+  FOC_update(&v_a, &v_b, &v_c, 0, 0);
   printf("Starting trace encoder\n");
 
   for (int i = 0; i < NUM_ITERS; i++) {
@@ -59,6 +64,9 @@ int main(int argc, char **argv) {
       FOC_update(&v_a, &v_b, &v_c, vq, vd);
     }
   }
+
+  // uint64_t stall_count = l_trace_encoder_get_stall_count(encoder);
+  // printf("Stall count: %lld\n", stall_count);
 
   l_trace_encoder_stop(encoder);
   #ifdef USE_L_TRACE_DMA
