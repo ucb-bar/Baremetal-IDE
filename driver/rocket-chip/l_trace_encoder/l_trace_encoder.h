@@ -15,10 +15,12 @@ typedef struct {
 } LTraceEncoderType;
 
 typedef struct {
-  __IO uint32_t TR_SK_DMA_FLUSH;
-  __I uint32_t TR_SK_DMA_FLUSH_DONE;
-  __IO uint64_t TR_SK_DMA_ADDR;
-  __I uint64_t TR_SK_DMA_COUNT;
+  __IO uint32_t TR_SK_DMA_FLUSH; //0x00
+  __I uint32_t TR_SK_DMA_FLUSH_DONE; //0x04
+  __IO uint64_t TR_SK_DMA_ADDR; //0x08
+  __I uint64_t TR_SK_DMA_COUNT; //0x10
+  __IO uint64_t TR_SK_DMA_MAX_SIZE; //0x18
+  __IO uint32_t TR_SK_DMA_RESET; //0x20
 } LTraceSinkDmaType;
 
 // Trace Sink Targets
@@ -74,6 +76,14 @@ static inline void l_trace_encoder_configure_branch_mode(LTraceEncoderType *enco
 
 static inline void l_trace_sink_dma_configure_addr(LTraceSinkDmaType *sink_dma, uint64_t dma_addr, int bypass) {
   sink_dma->TR_SK_DMA_ADDR = bypass ? (SBUS_BYPASS_ADDRESS|dma_addr) : dma_addr;
+}
+
+static inline void l_trace_sink_dma_configure_max_size(LTraceSinkDmaType *sink_dma, uint64_t max_size) {
+  sink_dma->TR_SK_DMA_MAX_SIZE = max_size;
+}
+
+static inline void l_trace_sink_dma_reset(LTraceSinkDmaType *sink_dma) {
+  sink_dma->TR_SK_DMA_RESET = 1;
 }
 
 void l_trace_sink_dma_read(LTraceSinkDmaType *sink_dma, uint8_t *buffer);
