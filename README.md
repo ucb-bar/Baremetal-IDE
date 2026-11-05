@@ -41,3 +41,29 @@ cmake --build ./build/ --target app
 
 ```
 
+### Compiling for penguin26 (EE194/290 tapeout chip)
+
+```bash
+make build CHIP=penguin26 PLATFORM=SIMS TARGET=hello_world
+make build CHIP=penguin26 PLATFORM=SIMS TARGET=atlas-tests
+make build CHIP=penguin26 PLATFORM=SIMS RVV_TYPE=2 TARGET=saturn-bmarks
+```
+
+The same with cmake directly: `cmake -S ./ -B ./build/ -D CMAKE_TOOLCHAIN_FILE=./riscv-gcc.cmake -D CHIP=penguin26 -D PLATFORM=SIMS` then `cmake --build ./build/ --target hello_world` (`PLATFORM` defaults to `CHIP`).
+
+`PLATFORM=SIMS` prints over HTIF (Chipyard RTL simulation, `EE290SimConfig`); `PLATFORM=CHIP` prints over UART0 (115200 baud; the platform runs `uart_init` before `main`). The Atlas NPU tests are generated from `generators/atlas-npu` and need a Python with numpy, torch and numba (`EXTRA_CMAKE_ARGS="-DPENGUIN26_TESTS_ATLAS_PYTHON=<python>"`); the Saturn benchmarks are built from `generators/saturn/benchmarks`.
+
+### Writing a new penguin26 test
+
+Copy `penguin26-tests/atlas_example/` (a minimal Atlas NPU test: loads a program into Atlas IMEM with `hal_atlas`, runs it, checks the result, prints PASS/FAIL and returns 0/1), rename the target in its `CMakeLists.txt`, and add the directory to `penguin26-tests/CMakeLists.txt`:
+
+```cmake
+add_subdirectory(my_test)
+```
+
+Build it, then run it in Chipyard's VCS simulation (`main()` returning 0 passes the simulation):
+
+```bash
+make build CHIP=penguin26 PLATFORM=SIMS TARGET=my_test
+make -C $chipyard/sims/vcs run-binary CONFIG=EE290SimConfig LOADMEM=1 BINARY=$PWD/build/penguin26-tests/my_test/my_test.elf
+```

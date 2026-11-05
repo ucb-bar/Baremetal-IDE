@@ -44,7 +44,12 @@ trap_vector:
   SREG x31, 31*REGBYTES(sp)
 
   /* disable LBR during the trap */
+  /* CSR 0x401 (LBR control) is not implemented on every core (e.g. Shuttle / Rocket);
+   * there the access is itself an illegal instruction and the trap recurses forever.
+   * Platforms without it define GLOSSY_NO_LBR_CSR (see platform/penguin26/CMakeLists.txt). */
+#ifndef GLOSSY_NO_LBR_CSR
   csrrci a0, 0x401, 0x02
+#endif
 
   /* Invoke higher-level trap handler */
   csrr a0, mepc
@@ -55,7 +60,9 @@ trap_vector:
   csrw mepc, a0
 
   /* restore LBR after the trap */
+#ifndef GLOSSY_NO_LBR_CSR
   csrrsi a0, 0x401, 0x02
+#endif
 
   /* Remain in M-mode after return */
   li t0, MSTATUS_MPP
