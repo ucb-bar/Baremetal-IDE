@@ -53,6 +53,8 @@ The same with cmake directly: `cmake -S ./ -B ./build/ -D CMAKE_TOOLCHAIN_FILE=.
 
 `PLATFORM=SIMS` prints over HTIF (Chipyard RTL simulation, `EE290SimConfig`); `PLATFORM=CHIP` prints over UART0 (115200 baud; the platform runs `uart_init` before `main`). The Atlas NPU tests are generated from `generators/atlas-npu` and need a Python with numpy, torch and numba (`EXTRA_CMAKE_ARGS="-DPENGUIN26_TESTS_ATLAS_PYTHON=<python>"`); the Saturn benchmarks are built from `generators/saturn/benchmarks`.
 
+To build a binary for the chip itself (UART console, tohost exit for the bringup host), including from another build system, see [docs/penguin26-chip-binaries.md](docs/penguin26-chip-binaries.md).
+
 ### Writing a new penguin26 test
 
 Copy `penguin26-tests/atlas_example/` (a minimal Atlas NPU test: loads a program into Atlas IMEM with `hal_atlas`, runs it, checks the result, prints PASS/FAIL and returns 0/1), rename the target in its `CMakeLists.txt`, and add the directory to `penguin26-tests/CMakeLists.txt`:

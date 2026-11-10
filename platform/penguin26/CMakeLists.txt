@@ -24,6 +24,20 @@ else()
   target_link_options(chip-config PUBLIC -Wl,--wrap=main)
 endif()
 
+# Opt-in tohost exit for PLATFORM=CHIP (see src/uart_stdio.c): lets the TSI host (the bringup FPGA, or
+# the tethered FireSim image) see main()'s return value. Default OFF: no change.
+option(PENGUIN26_EXIT_TOHOST "penguin26: PLATFORM=CHIP programs also report main()'s return value through tohost" OFF)
+if (PENGUIN26_EXIT_TOHOST)
+  if (PLATFORM_UPPER STREQUAL "SIMS")
+    message(FATAL_ERROR "PENGUIN26_EXIT_TOHOST is for PLATFORM=CHIP (SIMS already exits through HTIF)")
+  endif()
+  target_compile_definitions(chip-config PUBLIC -D PENGUIN26_EXIT_TOHOST)
+endif()
+
+# UART0 baud rate for PLATFORM=CHIP stdio (see src/uart_stdio.c).
+set(PENGUIN26_UART_BAUDRATE "115200" CACHE STRING "penguin26: UART0 baud rate for PLATFORM=CHIP stdio")
+target_compile_definitions(chip-config PUBLIC -D PENGUIN26_UART_BAUDRATE=${PENGUIN26_UART_BAUDRATE})
+
 # Shuttle has no LBR CSR (0x401): keep glossy's trap vector from touching it, otherwise every
 # trap re-traps inside trap_vector and recurses until the stack overwrites memory.
 target_compile_definitions(chip-config PUBLIC -D GLOSSY_NO_LBR_CSR)
