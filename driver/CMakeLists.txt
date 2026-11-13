@@ -11,6 +11,7 @@ add_subdirectory(rocket-chip/clint)
 add_subdirectory(rocket-chip/plic)
 add_subdirectory(rocket-chip/rocketcore)
 add_subdirectory(rocket-chip/l_trace_encoder)
+add_subdirectory(rocket-chip/rocc)
 
 add_subdirectory(rocket-chip-blocks/gpio)
 add_subdirectory(rocket-chip-blocks/i2c)
